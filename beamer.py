@@ -2,6 +2,8 @@ import re
 
 from tale.cyk import *
 
+# Constants
+
 BEGIN = '\\begin'
 END = '\\end'
 LEFT_CURLY = '{'
@@ -9,8 +11,10 @@ RIGHT_CURLY = '}'
 LEFT_SQUARE = '['
 RIGHT_SQUARE = ']'
 BACKSLASH = '\\'
+
 NEWLINE = '\n'
 BREAK = '\n\n'
+
 UNDERSCORE = '_'
 UNDERSCORES = '_' * 66
 STAR = '*'
@@ -20,8 +24,10 @@ SUBSECTION = '###'
 SHORT_THICK_BAR = '=='
 THICK_BAR = '=' * 44
 DOUBLE = '  '
+EXPLICITE_TAB = '@TAB@'
+EXPLICIT_NEWLINE = '@NEWLINE@'
 
-SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, UNDERSCORES]
+SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, UNDERSCORES, EXPLICIT_NEWLINE, EXPLICIT_TAB]
 
 underscores = re.compile('_____[_]+')
 iwales = re.compile('=====[=]+')
