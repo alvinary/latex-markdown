@@ -188,18 +188,6 @@ break -> newline [newline]  := : 'BREAK'   := x : '\n\n'
 break -> newline [break]    := : 'BREAK'   := x : '\n\n'
 '''
 
-# Images
-# Setting titles for frames
-
-'''for i in range(6):
-    n itemize -> (n + 1) items
-
-    n item -> nIndent bullet text
-    n item -> nIndent bullet text (n+1)subitems
-
-Y a la remil poronga
-'''
-
 # Text preprocessing
 
 '''
