@@ -34,8 +34,8 @@ SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, 
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
 
-TEXT_TOKEN = 'text'
-SPECIAL_TOKEN = 'special'
+TEXT_TOKEN = 'texttoken'
+SPECIAL_TOKEN = 'specialtoken'
 
 # Handle generic latex macros
 
@@ -168,6 +168,8 @@ dslGrammar = f'''
 
 newline -> {EXPLICIT_NEWLINE}                := x : x
 
+thinbar -> {THIN_BAR}                        := x : x
+
 titleMark -> #                               := x : x 
 sectionMark -> ##                            := x : x
 subsectionMark -> ###                        := x : x 
@@ -181,6 +183,10 @@ subsection -> [subsectionMark] text [break]  := x : subsection(x)
 
 italics -> [wiggle] text [wiggle]            := x : italics(x)
 bold -> [doubleStar] text [doubleStar]       := x : bold(x)
+
+text -> HI                                   := x : x
+
+text -> texttoken                            := x : x
 
 text -> text [newline] text                  := x, y : x + NEWLINE + y
 
@@ -232,7 +238,8 @@ def preprocess(text):
             tokens.append(pretoken)
             currentText = ''
         else:
-            currentText += ' '
+            if currentText:
+                currentText += ' '
             currentText += pretoken
     
     return tokens
@@ -358,15 +365,15 @@ basicExample = '''
 
 # HI
 
-My mom is a mom
+HI
 
 _____________________
 
-Cats are by definition furry creatures, but some cats are not furry.
+HI
 
 _____________________
 
-I love you
+HI
 
 '''        
         
