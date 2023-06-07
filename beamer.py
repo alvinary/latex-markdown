@@ -1,6 +1,6 @@
 import re
 
-from tale.cyk import *
+from tale.cyk import parserFromGrammar
 
 # Constants
 
@@ -166,14 +166,14 @@ assert resultItems == testItems
 dslGrammar = f'''
 := &&
 
-newline -> {EXPLICIT_NEWLINE}     := x : x
+newline -> {EXPLICIT_NEWLINE}                := x : x
 
-titleMark -> #                    := x : x 
-sectionMark -> ##                 := x : x
-subsectionMark -> ###             := x : x 
+titleMark -> #                               := x : x 
+sectionMark -> ##                            := x : x
+subsectionMark -> ###                        := x : x 
 
-doubleStar -> **                  := x : x
-wiggle -> ~                       := x : x
+doubleStar -> **                             := x : x
+wiggle -> ~                                  := x : x
 
 title -> [titleMark] text [break]            := x : title(x)
 section -> [sectionMark] text [break]        := x : section(x)
@@ -182,10 +182,22 @@ subsection -> [subsectionMark] text [break]  := x : subsection(x)
 italics -> [wiggle] text [wiggle]            := x : italics(x)
 bold -> [doubleStar] text [doubleStar]       := x : bold(x)
 
-paragraph -> text [break]                    := x : x + '\n\n'
+text -> text [newline] text                  := x, y : x + NEWLINE + y
 
-break -> newline [newline]                   := : 'BREAK'   := x : '\n\n'
-break -> newline [break]                     := : 'BREAK'   := x : '\n\n'
+paragraph -> text [break]                    := x : x + BREAK
+
+break -> newline [newline]                   := x : BREAK
+break -> newline [break]                     := x : BREAK
+
+contentItem -> paragraph                     := x : x
+contentItem -> title                         := x, y : x + y
+content -> contentItem content               := x, y : x + BREAK + y
+content -> contentItem                       := x : x
+
+frame -> [break] content                     := x : frame(x)
+
+frames -> frame                              := x : x
+frames -> frame [thinbar] frames             := x, xs : x + BREAK + xs
 '''
 
 # Text preprocessing
@@ -335,11 +347,31 @@ def tagTokens(token):
     
 def toBeamer(markdown):
     tokens = preprocess(markdown)
-    values = parserFromGrammar(dslGrammar, tag=tagTokens).value(tokens)
+    grammar = parserFromGrammar(dslGrammar, tag=tagTokens)
+    parse = grammar.parse(tokens)
+    parse.showSpans()
+    values = grammar.value(tokens)
     if values:
         return values.pop(0)
         
+basicExample = '''
+
+# HI
+
+My mom is a mom
+
+_____________________
+
+Cats are by definition furry creatures, but some cats are not furry.
+
+_____________________
+
+I love you
+
+'''        
+        
 example = '''
+
 # BEAMER MARKDOWN
 
 Write Beamer Slides With A Clean DSL
@@ -400,4 +432,4 @@ You can always do stuff wrong
 _________________________________________
 '''
     
-print(toBeamer(example))
+print(toBeamer(basicExample))
