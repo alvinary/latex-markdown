@@ -75,7 +75,7 @@ def beginEnd(name, content, squares=[], curly=[]):
         listing.remove('')
     return NEWLINE.join(listing)
 
-# Handle common beamer macros
+# Common beamer macros
 
 def frame(content):
     return beginEnd('frame', content)
@@ -109,17 +109,17 @@ def beamerDocument(_titleframe, content):
     content = beginEnd('document', content)
     return BREAK.join([_class, _titleFrame, titleFrame(), content])
 
+def box(subtitle, text):
+    return beginEnd('block', text, curly=[subtitle])
+
+# Common latex macros
+
 def item(text, bullet=''):
     return f'{BACKSLASH}item{bullet} {text}'
 
 def itemize(items, bullet=''):
     bulletPoints = indent(BREAK.join(items))
     return beginEnd('itemize', bulletPoints)
-    
-def box(subtitle, text):
-    return beginEnd('block', text, curly=[subtitle])
-
-# Common latex macros
 
 def bold(text):
     return macro('textbf', text)
