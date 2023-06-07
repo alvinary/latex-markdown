@@ -179,13 +179,13 @@ title -> [titleMark] text [break]            := x : title(x)
 section -> [sectionMark] text [break]        := x : section(x)
 subsection -> [subsectionMark] text [break]  := x : subsection(x)
 
-italics -> [wiggle] text [wiggle]
-bold -> [doubleStar] text [doubleStar]
+italics -> [wiggle] text [wiggle]            := x : italics(x)
+bold -> [doubleStar] text [doubleStar]       := x : bold(x)
 
-paragraph -> text [break]
+paragraph -> text [break]                    := x : x + '\n\n'
 
-break -> [newline] [newline]  := : 'BREAK' 
-break -> [newline] [break]    := : 'BREAK'
+break -> newline [newline]  := : 'BREAK'   := x : '\n\n'
+break -> newline [break]    := : 'BREAK'   := x : '\n\n'
 '''
 
 # Images
@@ -352,13 +352,13 @@ def toBeamer(markdown):
         return values.pop(0)
         
 example = '''
-BEAMER MARKDOWN
+# BEAMER MARKDOWN
 
 Write Beamer Slides With A Clean DSL
 
 ____________________________________
 
-What Is Beamer Markdown?
+## What Is Beamer Markdown?
 
 * Markdown is a plain text format that makes it
   easy to write human-readable rich text
