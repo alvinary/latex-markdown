@@ -24,13 +24,16 @@ SUBSECTION = '###'
 SHORT_THICK_BAR = '=='
 THICK_BAR = '=' * 44
 DOUBLE = '  '
-EXPLICITE_TAB = '@TAB@'
+EXPLICIT_TAB = '@TAB@'
 EXPLICIT_NEWLINE = '@NEWLINE@'
 
 SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, THIN_BAR, EXPLICIT_NEWLINE, EXPLICIT_TAB]
 
 underscores = re.compile('_____[_]+')
-iwales = re.compile('=====[=]+')
+thickBar = re.compile('=====[=]+')
+
+TEXT_TOKEN = 'text'
+SPECIAL_TOKEN = 'special'
 
 # Handle generic latex macros
 
@@ -169,10 +172,67 @@ Y a la remil poronga
 # Text preprocessing
 
 '''
-* Replace _____ with bar
-* Replace tabs and newlines with TAB and NEWLINE
+* Replace ______+ with BAR and ====+ with THICK_BAR
+* Replace tabs and newlines with EXPLICIT_TAB and EXPLICIT_NEWLINE
 * Group all non-punctuation spans as 'text'
 * Remove empty lines
+'''
+
+def preprocess(text):
+    
+    text = text.replace('\n', f' {EXPLICIT_NEWLINE} ')
+    text = text.replace('\t', f' {EXPLICIT_TAB} ')
+    
+    pretokens = text.split()
+    tokens = []
+    currentText = ''
+    
+    for pretoken in pretokens:
+        
+        if underscores.match(pretoken):
+            pretoken = THIN_BAR
+        
+        if thickBar.match(pretoken):
+            pretoken = THICK_BAR
+            
+        if pretoken in SPECIAL_TOKENS:
+            if currentText:
+                tokens.append(currentText)
+            tokens.append(pretoken)
+            currentText = ''
+        else:
+            currentText += ' '
+            currentText += pretoken
+    
+    return tokens
+
+testText = '''# Common Words for Kitchen Items
+
+____________
+
+## Kitchen Items
+
+If you are standing in a kitchen, you may find one or several of these items:
+
+* A big plastic box that humms and has a door
+
+* A small plastic box with a round door or
+a lid that can be opened from above, with a strange cylinder with holes
+
+== Note ======
+
+The plastic things are all connected to a power supply, do not fiddle with them haphazardly
+
+=======
+
+_____________________
+
+* The first item is called A FRIDGE
+* The second item is a WASHING MACHINE
+
+Both items are types of appliances
+
+
 '''
 
 # Math
@@ -245,39 +305,14 @@ integral from () to () of ()
 :institution
 
 '''
-
-def preprocess(text):
-    pretokens = text.split()
-    tokens = []
-    currentText = []
-    for pretoken in tokens:
-        if underscores.match(pretoken):
-            tokens.append(UNDERSCORES)
-        if iwales.match(pretoken):
-            tokens.append(IWALES)
-        if pretoken in nonText:
-            if currentText:
-                tokens.append(currentText)
-            tokens.append(pretoken)
-            currentText = ''
-        else:
-            currentText += ' '
-            currentText += pretoken
-    return tokens
     
 def tagTokens(token):
-    
-    if allCaps.match(token):
-        return 'ALLCAPS'
-    
-    if capitalized.match(token):
-        return 'CAPITALIZED'
 
     if token in SPECIAL_TOKENS:
-        return TOKEN
+        return SPECIAL_TOKEN 
 
     else:
-        return 'TEXT'
+        return TEXT_TOKEN
     
 def toBeamer(markdown):
     tokens = preprocess(markdown)
