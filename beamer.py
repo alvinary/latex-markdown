@@ -16,7 +16,7 @@ NEWLINE = '\n'
 BREAK = '\n\n'
 
 UNDERSCORE = '_'
-UNDERSCORES = '_' * 66
+THIN_BAR = '_' * 66
 STAR = '*'
 TITLE = '#'
 SECTION = '##'
@@ -27,7 +27,7 @@ DOUBLE = '  '
 EXPLICITE_TAB = '@TAB@'
 EXPLICIT_NEWLINE = '@NEWLINE@'
 
-SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, UNDERSCORES, EXPLICIT_NEWLINE, EXPLICIT_TAB]
+SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, THIN_BAR, EXPLICIT_NEWLINE, EXPLICIT_TAB]
 
 underscores = re.compile('_____[_]+')
 iwales = re.compile('=====[=]+')
@@ -144,14 +144,10 @@ resultTitle = singleMacro('title')
 
 resultItems = beginEnd('itemize', '\n'.join([item(f'This is item {str(i)}') for i in [1, 2, 3]]))
 
-print(resultItems)
-
 assert resultTitle == testTitle
 assert resultItems == testItems
 
 # DSL
-
-nonText = [TAB, NEWLINE, STAR, UNDERSCORES, UNDERSCORE]
 
 dslGrammar = '''
 := @
