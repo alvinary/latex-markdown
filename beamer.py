@@ -26,8 +26,10 @@ THICK_BAR = '=' * 44
 DOUBLE = '  '
 EXPLICIT_TAB = '@TAB@'
 EXPLICIT_NEWLINE = '@NEWLINE@'
+DOUBLE_STAR = '**'
+WIGGLE = '~'
 
-SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, THIN_BAR, EXPLICIT_NEWLINE, EXPLICIT_TAB]
+SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, THIN_BAR, EXPLICIT_NEWLINE, EXPLICIT_TAB, DOUBLE_STAR, WIGGLE]
 
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
@@ -117,6 +119,15 @@ def box(subtitle, text):
 
 # Common latex macros
 
+def title(titleText):
+    return macto('title', titleText)
+
+def section(sectionTitle):
+    return macro('section', sectionTitle)
+    
+def subsection(subsectionTitle):
+    return macro('section', subsectionTitle)
+
 def item(text, bullet=''):
     return f'{BACKSLASH}item{bullet} {text}'
 
@@ -152,9 +163,29 @@ assert resultItems == testItems
 
 # DSL
 
-dslGrammar = '''
+dslGrammar = f'''
 := @
 
+newline -> {EXPLICIT_NEWLINE}     := x : x
+
+titleMark -> #                    := x : x 
+sectionMark -> ##                 := x : x
+subsectionMark -> ###             := x : x 
+
+doubleStar -> **                  := x : x
+wiggle -> ~                       := x : x
+
+title -> [titleMark] text [break]            := x : title(x)
+section -> [sectionMark] text [break]        := x : section(x)
+subsection -> [subsectionMark] text [break]  := x : subsection(x)
+
+italics -> [wiggle] text [wiggle]
+bold -> [doubleStar] text [doubleStar]
+
+paragraph -> text [break]
+
+break -> [newline] [newline]  := : 'BREAK' 
+break -> [newline] [break]    := : 'BREAK'
 '''
 
 # Images
@@ -379,33 +410,6 @@ You can always do stuff wrong
 ==============================================
 
 _________________________________________
-'''
-
-basic = '''
-
-leftTitle -> ~#
-rightTitle -> #~
-
-leftSection -> ~-
-rightSection -> -~
-
-leftSubsection -> ~+
-rightSubsection -> +~
-
-leftInline -> -[ 
-rightInline -> ]- 
-
-leftBlock -> =[
-rightBlock -> ]=
-
-line -> text newline
-
-title -> [leftTitle] text [rightTitle]
-title -> [] []
-section -> [] []
-subsection -> [] []
-paragraph -> 
-
 '''
     
 print(toBeamer(example))
