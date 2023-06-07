@@ -31,8 +31,6 @@ SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, 
 
 underscores = re.compile('_____[_]+')
 iwales = re.compile('=====[=]+')
-allCaps = re.compile('(([A-Z]+)\s)+[?:]?')
-capitalized = re.compile('(([A-Z][a-z]*)\s)+[?:]?')
 
 # Handle generic latex macros
 
