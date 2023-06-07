@@ -164,7 +164,7 @@ assert resultItems == testItems
 # DSL
 
 dslGrammar = f'''
-:= @
+:= &&
 
 newline -> {EXPLICIT_NEWLINE}     := x : x
 
@@ -184,8 +184,8 @@ bold -> [doubleStar] text [doubleStar]       := x : bold(x)
 
 paragraph -> text [break]                    := x : x + '\n\n'
 
-break -> newline [newline]  := : 'BREAK'   := x : '\n\n'
-break -> newline [break]    := : 'BREAK'   := x : '\n\n'
+break -> newline [newline]                   := : 'BREAK'   := x : '\n\n'
+break -> newline [break]                     := : 'BREAK'   := x : '\n\n'
 '''
 
 # Text preprocessing
