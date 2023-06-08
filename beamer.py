@@ -777,14 +777,15 @@ subsectionMark -> ###                        := x : x
 doubleStar -> **                             := x : x
 wiggle -> ~                                  := x : x
 
-title -> [titleMark] text [break]            := x : title(x)
-section -> [sectionMark] text [break]        := x : section(x)
-subsection -> [subsectionMark] text [break]  := x : subsection(x)
+title -> [titleMark] line                    := x : title(x)
+section -> [sectionMark] line                := x : section(x)
+subsection -> [subsectionMark] line          := x : subsection(x)
 
 italics -> [wiggle] text [wiggle]            := x : italics(x)
 bold -> [doubleStar] text [doubleStar]       := x : bold(x)
 
 text -> texttoken                            := x : x
+line -> texttoken [break]                    := x : x
 
 text -> text [newline] text                  := x, y : x + NEWLINE + y
 
@@ -795,6 +796,8 @@ break -> [newline] break                     := x : x
 
 contentItem -> paragraph                     := x : x
 contentItem -> title                         := x : x
+contentItem -> section                       := x : x
+
 content -> contentItem content               := x, y : x + NEWLINE + NEWLINE + y
 content -> contentItem                       := x : x
 
@@ -953,24 +956,37 @@ def tagTokens(token):
 def toBeamer(markdown):
     tokens = preprocess(markdown)
     grammar = parserFromGrammar(dslGrammar, tag=tagTokens)
+    parse = grammar.parse(tokens)
     values = grammar.value(tokens)
     if values:
         return values.pop(0)
+    else:
+        for span in parse.readable:
+            print(span)
         
 basicExample = '''
 
-# Your family
+# A super long example
 
-Your mom, if any
+## Anatomy of a Serial Procrastinator
 
-_____________________
+Pee poo pee pee poo. Ala ala momola
+soco choco me eme asasaa lllaaa aaaa
+ssldsdl . asdad. asdasdadasd.
 
-Your dad, if any
+asaskasaksdasdasd
 
-_____________________
+## asmakdjasdlkajsdla
 
-Your siblings, if any
+asdasd sadasdas vksjadlkq dkqjdc asdkj KAJ DS
+sadasd as dad asdadad.
 
+adasda ddasd a.
+
+adasdadasd. asdasfasf.af fafafaf.
+afsfaf. fafafafa.
+
+aaaa.
 '''        
         
 example = '''
