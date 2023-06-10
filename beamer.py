@@ -751,6 +751,11 @@ def italics(text):
 
 def typewriter(text):
     return macro('texttt', [text])
+    
+# bibtex
+
+def citation(reference):
+    return macro('citation', [reference])
 
 # Small tests
 
@@ -780,10 +785,13 @@ thinbar -> {THIN_BAR}                        := x : x
 
 titleMark -> #                               := x : x 
 sectionMark -> ##                            := x : x
-subsectionMark -> ###                        := x : x 
+subsectionMark -> ###                        := x : x
 
 doubleStar -> **                             := x : x
 wiggle -> ~                                  := x : x
+
+leftCitation -> [.                           := x : x
+rightCitation -> .]                          := x : x 
 
 title -> [titleMark] line                    := x : title(x)
 section -> [sectionMark] line                := x : section(x)
@@ -796,6 +804,9 @@ text -> texttoken                            := x : x
 line -> texttoken [break]                    := x : x
 
 text -> text [newline] text                  := x, y : x + NEWLINE + y
+text -> text citation text                   := x, y, z : x + y + z
+
+citation -> [leftCitation] text [rightCitation]   := x : citation(x)
 
 paragraph -> text [break]                    := x : x + BREAK
 
