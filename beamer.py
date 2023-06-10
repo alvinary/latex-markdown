@@ -713,6 +713,14 @@ def box(subtitle, text):
 
 # Common latex macros
 
+def document(documentClass, content):
+    _documentClass = macro('documentclass', [documentClass])
+    _documentContent = beginEnd('document', content)
+    return f"{_documentClass}{BREAK}{_documentContent}"
+    
+def article(content):
+    return document('article', content)
+
 def title(titleText):
     return macro('title', [titleText])
     
