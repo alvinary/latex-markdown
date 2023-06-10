@@ -797,22 +797,22 @@ line -> texttoken [break]                    := x : x
 
 text -> text [newline] text                  := x, y : x + NEWLINE + y
 
-paragraph -> text [break]                    := x : x + NEWLINE + NEWLINE
+paragraph -> text [break]                    := x : x + BREAK
 
-break -> newline [newline]                   := x : NEWLINE + NEWLINE
+break -> newline [newline]                   := x : BREAK
 break -> [newline] break                     := x : x
 
 contentItem -> paragraph                     := x : x
 contentItem -> title                         := x : x
 contentItem -> section                       := x : x
 
-content -> contentItem content               := x, y : x + NEWLINE + NEWLINE + y
+content -> contentItem content               := x, y : x + BREAK + y
 content -> contentItem                       := x : x
 
 frame -> [break] content                     := x : frame(x)
 
 frames -> frame                              := x : x
-frames -> frame [thinbar] frames             := x, xs : x + NEWLINE + NEWLINE + xs
+frames -> frame [thinbar] frames             := x, xs : x + BREAK + xs
 '''
 
 # Text preprocessing
