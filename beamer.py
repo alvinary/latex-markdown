@@ -757,6 +757,8 @@ def typewriter(text):
 def citation(reference):
     return macro('citation', [reference])
 
+# Math
+
 # Small tests
 
 testTitle = '\\title'
@@ -824,6 +826,38 @@ frame -> [break] content                     := x : frame(x)
 
 frames -> frame                              := x : x
 frames -> frame [thinbar] frames             := x, xs : x + BREAK + xs
+
+mhat -> letter [hat]                    := x : '\\hat{' + x + '}'
+mbar -> letter [bar]                    := x : '\\bar{' + x + '}'
+mtilde -> letter [tilde]                := x : '\\tilde{' + x + '}'
+mcheck -> letter [check]                := x : '\\check{' + x + '}'
+mring -> letter [ring]                  := x : '\\mathring{' + x + '}'
+mvector -> letter [vector]              := x : '\\vec{' + x + '}'
+
+_not -> not                                  := x : x
+_notin -> [_not] in                          := x : '\\notin'
+
+
+_in -> in                                    := x : '\\in'
+_empty -> {}                                 := x : '\\emptyset'
+
+_forall -> all                               := x : '\\forall' 
+_exists -> some                              := x : '\\exists'
+_and -> and                                  := x : '\\land'
+_or -> or                                    := x : '\\lor'
+
+_lvert -> |                                  := x : '\\lvert' 
+_rvert -> |                                  := x : '\\rvert'
+_vert -> |                                   := x : '\\vert'
+
+cardinal -> _lvert expression _rvert         := x, y, z : x + y + z
+
+expression -> set                            := x : x
+expression -> fol                            := x : x
+expression -> operation                      := x : x
+
+inlineExpression -> [leftEq] expression [rightEq]  := x : '$' + x + '$' 
+blockExpression  -> [break] equation [break]       := x : beginEnd('equation', [x]) 
 '''
 
 # Text preprocessing
@@ -1069,5 +1103,12 @@ You can always do stuff wrong
 
 _________________________________________
 '''
+
+mathTests = ['( ab over ba ) equals 1',
+    'for all x : x not in {}',
+    'sum from 1 to n of f(x)',
+    'sum over { x : g(x) in S } of h(x, g(x))',
+    ''
+]
     
 print(toBeamer(basicExample))
