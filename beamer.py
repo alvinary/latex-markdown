@@ -839,7 +839,7 @@ _notin -> [_not] in                          := x : '\\notin'
 
 
 _in -> in                                    := x : '\\in'
-_empty -> {}                                 := x : '\\emptyset'
+_empty -> {'{}'}                                 := x : '\\emptyset'
 
 _forall -> all                               := x : '\\forall' 
 _exists -> some                              := x : '\\exists'
