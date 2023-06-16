@@ -877,8 +877,8 @@ _of -> of                                    := x : x
 _from -> from                                := x : x
 _to -> to                                    := x : x
 
-bigop -> bigoperator [_over] math [_of] math            := x, y, z : 
-bigop -> bigoperator [_from] math [_to] math [_of] math := x, y, z, w : 
+bigop -> bigoperator [_over] math [_of] math            := x, y, z : x + '_{' + y + '} ' + z
+bigop -> bigoperator [_from] math [_to] math [_of] math := x, y, z, w : x + '_{' + y + '}^{' + z '} ' + w
 
 math -> mathElem math                        := x, y : x + ' ' + y
 mathRest -> mathElem                         := x : x
