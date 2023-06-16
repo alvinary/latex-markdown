@@ -792,8 +792,8 @@ subsectionMark -> ###                        := x : x
 doubleStar -> **                             := x : x
 wiggle -> ~                                  := x : x
 
-leftCitation -> [.                           := x : x
-rightCitation -> .]                          := x : x 
+leftCite -> [.                               := x : x
+rightCite -> .]                              := x : x 
 
 title -> [titleMark] line                    := x : title(x)
 section -> [sectionMark] line                := x : section(x)
@@ -808,7 +808,7 @@ line -> texttoken [break]                    := x : x
 text -> text [newline] text                  := x, y : x + NEWLINE + y
 text -> text citation text                   := x, y, z : x + y + z
 
-citation -> [leftCitation] text [rightCitation]   := x : citation(x)
+citation -> [leftCite] text [rightCite]      := x : citation(x)
 
 paragraph -> text [break]                    := x : x + BREAK
 
@@ -827,6 +827,18 @@ frame -> [break] content                     := x : frame(x)
 frames -> frame                              := x : x
 frames -> frame [thinbar] frames             := x, xs : x + BREAK + xs
 
+-- math environment macros
+
+_lbrace -> {'{'}                             := x : '\\lbrace' 
+_rbrace -> {'}'}                             := x : '\\rbrace'
+_rangle -> <                                 := x : '\\rangle'
+_langle -> >                                 := x : '\\langle'
+
+equals -> =                                  := x : x
+notequal -> !=                               := x : '\\neq'
+_geq -> <=                                   := x : '\\ge'
+_leq -> >=                                   := x : '\\le'
+
 mhat -> letter [hat]                    := x : '\\hat{' + x + '}'
 mbar -> letter [bar]                    := x : '\\bar{' + x + '}'
 mtilde -> letter [tilde]                := x : '\\tilde{' + x + '}'
@@ -834,12 +846,18 @@ mcheck -> letter [check]                := x : '\\check{' + x + '}'
 mring -> letter [ring]                  := x : '\\mathring{' + x + '}'
 mvector -> letter [vector]              := x : '\\vec{' + x + '}'
 
-_not -> not                                  := x : x
-_notin -> [_not] in                          := x : '\\notin'
+lettermod -> mhat                       := x : x
+lettermod -> mbar                       := x : x
+lettermod -> mtilde                     := x : x
+lettermod -> mcheck                     := x : x
+lettermod -> mring                      := x : x
+lettermod -> mvector                    := x : x
 
+_not -> not                                  := x : '\\neg'
+_notin -> [_not] in &&15                     := x : '\\notin'
 
 _in -> in                                    := x : '\\in'
-_empty -> {'{}'}                                 := x : '\\emptyset'
+_empty -> {'{}'}                             := x : '\\emptyset'
 
 _forall -> all                               := x : '\\forall' 
 _exists -> some                              := x : '\\exists'
@@ -850,14 +868,27 @@ _lvert -> |                                  := x : '\\lvert'
 _rvert -> |                                  := x : '\\rvert'
 _vert -> |                                   := x : '\\vert'
 
-cardinal -> _lvert expression _rvert         := x, y, z : x + y + z
+bigoperator -> sum                           := x : '\\sum'
+bigoperator -> product                       := x : '\\prod'
+bigoperator -> integral                      := x : '\\int'
 
-expression -> set                            := x : x
-expression -> fol                            := x : x
-expression -> operation                      := x : x
+_over -> over                                := x : x
+_of -> of                                    := x : x
+_from -> from                                := x : x
+_to -> to                                    := x : x
 
-inlineExpression -> [leftEq] expression [rightEq]  := x : '$' + x + '$' 
-blockExpression  -> [break] equation [break]       := x : beginEnd('equation', [x]) 
+bigop -> bigoperator [_over] math [_of] math            := x, y, z : 
+bigop -> bigoperator [_from] math [_to] math [_of] math := x, y, z, w : 
+
+math -> mathElem math                        := x, y : x + ' ' + y
+mathRest -> mathElem                         := x : x
+
+_cross -> x                                  := x : '\\times'
+
+cardinal -> _lvert math _rvert               := x, y, z : x + y + z
+
+inlineMath -> [leftEq] math [rightEq]        := x : '$' + x + '$' 
+blockMath  -> [break] math [break]           := x : beginEnd('equation', [x]) 
 '''
 
 # Text preprocessing
