@@ -1235,3 +1235,6 @@ mathTests = ['( a b over b a ) equals 1',
 ]
     
 print(toBeamer(basicExample))
+
+for t in mathTests[1:]:
+    print(toMath(t))
