@@ -1127,6 +1127,19 @@ def toBeamer(markdown):
     else:
         for span in parse.readable:
             print(span)
+            
+identity = lambda x : x
+            
+def toMath(markdown):
+    tokens = preprocessMath(markdown)
+    grammar = parserFromGrammar(mathDsl, tag=identity)
+    parse = grammar.parse(tokens)
+    values = grammar.value(tokens)
+    if values:
+        return values.pop(0)
+    else:
+        for span in parse.readable:
+            print(span)
         
 basicExample = '''
 
