@@ -959,6 +959,8 @@ math -> mathRest                             := x : x
 * Remove empty lines
 '''
 
+DELIMITERS = '( ) { } [ ] < >'.split()
+
 def preprocess(text):
     
     text = text.replace('\n', f' {EXPLICIT_NEWLINE} ')
@@ -987,6 +989,25 @@ def preprocess(text):
             currentText += pretoken
     
     return tokens
+    
+def preprocessMath(markdown):
+
+    text = markdown
+    
+    for d in DELIMITERS:
+        text = text.replace(d, f' {d} ')
+        
+    while '  ' in text:
+        text = text.replace('  ', ' ')
+        
+    # Recover empty set
+    text = text.replace('{ }', '{}')
+    
+    # Recover binary relations
+    text = text.replace('> =', '>=')
+    text = text.replace('< =', '<=')
+    
+    return text.split()
 
 testText = '''# Common Words for Kitchen Items
 
