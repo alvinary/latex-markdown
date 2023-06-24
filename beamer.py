@@ -1228,11 +1228,10 @@ You can always do stuff wrong
 _________________________________________
 '''
 
-mathTests = ['( ab over ba ) equals 1',
-    'for all x : x not in {}',
-    'sum from 1 to n of f(x)',
+mathTests = ['( a b over b a ) equals 1',
+    'all x : x not in ø',
+    'sum from a to n of f(x)',
     'sum over { x : g(x) in S } of h(x, g(x))',
-    ''
 ]
     
 print(toBeamer(basicExample))
