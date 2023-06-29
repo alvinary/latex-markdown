@@ -10,6 +10,8 @@ TAB = '\t'
 SPACE = ' '
 COMMENT = '--'
 UNORDERED = 10.0 # Default precedence
+RULE_ARROW = "->"
+
 
 # Constants
 
