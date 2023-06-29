@@ -9,7 +9,7 @@ NEWLINE = '\n'
 TAB = '\t'
 SPACE = ' '
 COMMENT = '--'
-UNORDERED = 10.0 # Default precedence
+DEFAULT_PRECEDENCE = 10.0 # Default precedence
 RULE_ARROW = "->"
 
 
