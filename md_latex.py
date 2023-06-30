@@ -17,14 +17,13 @@ class LatexMarkdown:
             return token 
         else:
             return TEXT_TOKEN
-        
+
 
 class toBeamer(LatexMarkdown):
 
-    def get_latex(self, markdown):
-        rules = Rules()
+    def get_latex(self, markdown = "2 + 5"):
+        grammar = Rules().parser_from_grammar(BeamerDSL)
         tokens = self.preprocess(markdown)
-        grammar = rules.parser_from_grammar(BeamerDSL)
         parse = grammar.parse(tokens)
         tokenized_tokens = self.get_tokenized_tokens(tokens)
         values = grammar.value(tokenized_tokens)
@@ -105,86 +104,6 @@ class Node:
         self.items = list()
         self.ignore_items = set()
 
-
-def tokensToRules(tokens, name):
-    '''
-       Input a sequence of tokens and a rule
-       name and return the corresponding rule.
-    '''
-
-    if tokens[1] == LBRACE and tokens[-1] == RBRACE:
-        rules = []
-        head = tokens[0]
-        members = tokens[2:-1]  # ignore '{' and '}'
-        members = [s.strip()
-                   for s in ''.join(members).split(',')]  # Remove commas
-        for leaf in members[1:]:
-            rules += unaryRule(head, leaf, name)
-        return rules
-
-    if len(tokens) == 2:
-        head, branch = tuple(tokens)
-        return unaryRule(head, branch, name)
-
-    if len(tokens) == 3:
-        head, left, right = tuple(tokens)
-        return binaryRule(head, left, right, name)
-
-    if len(tokens) > 3:
-        return naryRule(tokens, name)
-
-
-def binaryRule(head, left, right, name):
-    return [((left, right), (head, name))]
-
-
-def unaryRule(head, branch, name):
-    return [(branch, (head, name))]
-
-
-def naryRule(tokens, name):
-
-    rules = []
-
-    head = tokens.pop(0)
-    left = tokens.pop(0)
-    size = len(tokens)
-
-    while tokens:
-
-        auxiliaryRight = f"{name}[{size - len(tokens)}]"
-
-        if len(tokens) == 1:
-
-            right = tokens.pop(0)
-            newRules = binaryRule(head, left, right, auxiliaryRight)
-            rules += newRules
-
-        else:
-            newRules = binaryRule(head, left, auxiliaryRight, auxiliaryRight)
-            rules += newRules
-            head = auxiliaryRight
-            left = tokens.pop(0)
-
-    return rules
-
-
-
-
-def checkSilent(token):
-    if token[0] == "[" and token[-1] == "]":
-        return token[1:-1], True
-    else:
-        return token, False
-
-
-def isUnary(rhs):
-    return not isinstance(rhs, tuple)
-
-
-def isBinary(rhs):
-    return isinstance(rhs, tuple) and len(rhs) == 2
-
 '''
 Argument accumulators
 
@@ -248,9 +167,6 @@ def semantics(grammar, triggers):
             actions[actionName] = (head, semanticAction, argumentAction)
 
     return actions
-
-
-justToken = lambda x: TOKEN
 
 
 
@@ -423,13 +339,3 @@ resultItems = beginEnd('itemize', '\n'.join([item(f'This is item {str(i)}') for 
 
 assert resultTitle == testTitle
 assert resultItems == testItems
-
-    
-
-    
-
-            
-
-            
-
-        

@@ -1,4 +1,10 @@
-BeamerDSL = f'''
+BeamerDSL = [
+    ('titleMark', ["#"], 'x : x'),
+    ('sectionMark', ["##"], 'x : x'),
+    ('subsectionMark', ["###"], 'x : x'),
+]
+
+f'''
 := &&
 
 newline -> {EXPLICIT_NEWLINE}                := x : x
