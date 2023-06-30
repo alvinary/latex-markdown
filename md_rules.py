@@ -5,21 +5,22 @@ from collections import defaultdict
 INVENTORY = lambda: defaultdict(lambda: set())
 
 class Rule:
-    def __init__(self, parser, label, parts, semantics, precedence):
-        self.parser = parser
-        self.name = self.parser.fresh_name()
+    def __init__(self, name, label, parts, semantics, precedence):
+        self.name = name
         self.label = label
         self.parts = parts
         self.semantics = semantics
         self.precedence = precedence
         self.text = self.as_string()
+        self.evaluation_symbol = ""
+        self.precedence_symbol = ""
 
     def as_string(self):
         return f"{self.precedence} : {self.label} {RULE_ARROW} {' '.join(self.parts)} {self.parser.evaluation_symbol {self.semantics}"
 
-    def from_line(line):
+    def from_line(name, line):
 
-        marker = self.parser.precedence_symbol
+        marker = self.evaluation_symbol
 
         # Get precedence
 
@@ -39,7 +40,7 @@ class Rule:
 
         assert self.parser.evaluation_symbol in line
 
-        syntax = line.split(self.parser.evaluation_symbol).pop(0)
+        syntax = line.split(self.evaluation_symbol).pop(0)
         syntax = [t for t in syntax.split() if not t.startsWith(marker) and t != RULE_ARROW]
         
         label = syntax.pop(0)
@@ -48,9 +49,9 @@ class Rule:
         # Get semantics
 
 
-        semantics = line.split(self.parser.evaluation_symbol).pop(1)
+        semantics = line.split(self.evaluation_symbol).pop(1)
 
-        return Rule(parser, label, parts, semantics, precedence)
+        return Rule(name, parser, label, parts, semantics, precedence)
 
 class Rules:
 
