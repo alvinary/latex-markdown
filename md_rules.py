@@ -29,8 +29,8 @@ class Rule:
             precedence = [p for p in parts if p.startsWith(marker)]
             assert len(precedence) == 1
 
-            precedence = precendence.pop()
-            precedence = precendence.replace(marker, "")
+            precedence = precedence.pop()
+            precedence = precedence.replace(marker, "")
             precedence = float(precedence)
 
         else:
