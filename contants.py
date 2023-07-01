@@ -1,19 +1,13 @@
 import re
+from collections import defaultdict
 
-PUNCTUATION = {';', '->', '!=', '=', '(', ')', ',', '<'}
-TOKEN = 'token label'
 MUTE = 'mute'
-LBRACE = '{'
-RBRACE = '}'
-NEWLINE = '\n'
-TAB = '\t'
-SPACE = ' '
-COMMENT = '--'
 DEFAULT_PRECEDENCE = 10.0 # Default precedence
-RULE_ARROW = "->"
+TAGGED = 'tagged'
+INVENTORY = lambda: defaultdict(lambda: set())
+IDENTITY = lambda x : x
 
-
-# Constants
+# Markdown constants
 
 BEGIN = '\\begin'
 END = '\\end'
@@ -25,6 +19,8 @@ BACKSLASH = '\\'
 
 NEWLINE = '\n'
 BREAK = '\n\n'
+TAB = '\t'
+SPACE = ' '
 
 UNDERSCORE = '_'
 THIN_BAR = '_' * 66
@@ -34,7 +30,7 @@ SECTION = '##'
 SUBSECTION = '###'
 SHORT_THICK_BAR = '=='
 THICK_BAR = '=' * 44
-DOUBLE = '  '
+DOUBLE_SPACE = '  '
 EXPLICIT_TAB = '@TAB@'
 EXPLICIT_NEWLINE = '@NEWLINE@'
 DOUBLE_STAR = '**'

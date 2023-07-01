@@ -1,7 +1,4 @@
-
-from collections import defaultdict
-
-INVENTORY = lambda: defaultdict(lambda: set())
+from contants import *
 
 class Parse:
 
@@ -9,79 +6,80 @@ class Parse:
         self.parser = parser
         self.tokens = tokens
         self.unvisited = set()
-        self.endAt = INVENTORY()
-        self.beginAt = INVENTORY()
+        self.end_at = INVENTORY()
+        self.begin_at = INVENTORY()
         self.spans = INVENTORY()
         self.readable = set()
+        self.values = {}
 
     def execute(self):
 
-        for index, token in enumerate(self.tokens):
-            tokenLabel = self.parser.tag(token)
-            self.addToken(index, token, tokenLabel)
-            self.spans[index, index].add(
-                ((tokenLabel, index, index, token), ))
+        for index, tagged_token in enumerate(self.tokens):
+            token, token_label = tagged_token
+            span_data = token_label, index, index, TAGGED
+            self.values[span_data] = token
+            self.add_span(span_data)
 
         while self.unvisited:
             current = self.unvisited.pop()
-            label, begin, end, action = current
+            _, begin, end, _ = current
             self.trigger(current)
 
-            left = set(self.endAt[begin - 1])
-            for other in left:
+            left_candidates = set(self.end_at[begin - 1])
+            for other in left_candidates:
                 self.triggerPair(other, current)
 
-            right = set(self.beginAt[end + 1])
-            for other in right:
+            right_candidates = set(self.begin_at[end + 1])
+            for other in right_candidates:
                 self.triggerPair(current, other)
 
         self.prune()
 
         return self
+    
+    def evaluate(self):
+        pass
 
     def trigger(self, branch):
-        branchLabel, begin, end, _ = branch
-        if branchLabel in self.parser.grammar.keys():
-            for pair in self.parser.grammar[branchLabel]:
-                label, action = pair
-                head = (label, begin, end, action)
-                self.addSpan(label, begin, end, action)
-                self.spans[begin, end].add((head, branch))
+        branch_label, begin, end, _ = branch
+        same_as = self.parser.grammar.same_as[branch_label]
+        for grammar_rule in same_as:
+            name, label, _, _, _ = grammar_rule
+            head = (label, begin, end, name)
+            self.add_span(label, begin, end, name)
+            self.spans[begin, end].add((head, branch))
 
-    def triggerPair(self, left, right):
-        lLabel = left[0]
-        rLabel = right[0]
-        begin = left[1]
-        end = right[2]
-        if (lLabel, rLabel) in self.parser.grammar.keys():
-            for pair in self.parser.grammar[(lLabel, rLabel)]:
-                label, action = pair
-                head = label, begin, end, action
-                self.addSpan(*head)
-                self.spans[begin, end].add((head, left, right))
+    def triggerPair(self, left_part, right_part):
+        left_label, begin, _, _ = left_part
+        right_label, _, end, _ = right_part
+        begin_with = self.parser.begin_with[left_label]
+        end_with = self.parser.end_with[right_label]
+        for grammar_rule in begin_with & end_with:
+            name, label, _, _, _ = grammar_rule
+            new_span = (label, begin, end, name)
+            self.add_span(label, begin, end, name)
+            self.spans[begin, end].add((new_span, left_part, right_part))
 
-    def addSpan(self, label, begin, end, action):
-        spanData = (label, begin, end, action)
-        self.endAt[end].add(spanData)
-        self.beginAt[begin].add(spanData)
+    def add_span(self, label, begin, end, name):
+        spanData = (label, begin, end, name)
+        self.end_at[end].add(spanData)
+        self.begin_at[begin].add(spanData)
         self.unvisited.add(spanData)
+        # These are used in self.show()
         spanContent = tuple(self.tokens[begin:end + 1])
-        self.readable.add((label, spanContent))
-
-    def addToken(self, index, token, tokenLabel):
-        self.addSpan(tokenLabel, index, index, token)
+        self.readable.add((begin, end, label, spanContent))
 
     def compare(self, left, right):
-        leftLabel, i, j, leftName = left
-        rightLabel, k, l, rightName = right
-        leftPrecedence = self.parser.precedence[leftName]
-        rightPrecedence = self.parser.precedence[rightName]
+        left_label, i, j, left_name = left
+        right_label, k, l, right_name = right
+        left_precedence = self.parser.precedence_map[left_name]
+        right_precedence = self.parser.precedence_map[right_name]
+        spans_overlap = left_label == right_label and i == k and j == l
 
-        if leftLabel == rightLabel and i == k and j == l and leftPrecedence != rightPrecedence:
-            if leftPrecedence < rightPrecedence:
-                return left
-            if rightPrecedence < leftPrecedence:
-                return right
+        if spans_overlap and left_precedence < right_precedence:
+            return left
+        elif spans_overlap and right_precedence < left_precedence:
+            return right
         else:
             return False
 
@@ -110,6 +108,10 @@ class Parse:
             for j in range(i):
                 yield (sequence[i], sequence[j])
             
-    def showSpans(self):
-        for span in self.readable:
-            print(span)
+    def show(self):
+        for span in sorted(self.readable):
+            begin, end, label, tokens = span
+            begin = str(begin)
+            end = str(end)
+            print(f"[{begin} : {end}] {label} : {' '.join(tokens) }")
+
