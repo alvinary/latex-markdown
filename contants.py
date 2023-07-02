@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 
 MUTE = 'mute'
-DEFAULT_PRECEDENCE = 10.0 # Default precedence
+DEFAULT_PRECEDENCE = 10 # Default precedence
 TAGGED = 'tagged'
 INVENTORY = lambda: defaultdict(lambda: set())
 IDENTITY = lambda x : x
