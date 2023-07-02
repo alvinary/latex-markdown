@@ -41,6 +41,7 @@ class Rules:
         binary_lines = []
         name, label, parts, semantics, precedence = grammar_line
         remaining_parts = list(parts)
+        size = int(len(remaining_parts))
 
         if len(parts) <= 2: # The input grammar line is already binary
             binary_lines.append(grammar_line)
