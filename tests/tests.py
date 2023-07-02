@@ -1,5 +1,6 @@
 import logging
 from md_latex import toBeamer, toMath
+from md_rules import Rules
 from examples import *
 
 class Tests:
@@ -12,19 +13,23 @@ class Tests:
         logging.info("Testing toMath")
         toMath().get_latex()
 
+    def test_binarize(self):
+        logging.info("Testing Rules.binarize_line()")
+
+        rules = Rules()
+
+        result_lines = []
+
+        for line in sample_lines:
+            result_lines += rules.binarize_line(line)
+        
+        for line in result_lines:
+            print(*line)
+
 
 if __name__ == "__main__":
-    Tests.test_beamer()
-    Tests.test_math()
-
-
-mathTests = ['( a b over b a ) equals 1',
-    'all x : x not in ø',
-    'sum from a to n of f(x)',
-    'sum over { x : g(x) in S } of h(x, g(x))',
-]
+    # Tests.test_beamer()
+    # Tests.test_math()
+    tests = Tests()
+    tests.test_binarize()
     
-print(toBeamer(basicExample))
-
-for t in mathTests[1:]:
-    print(toMath(t))
