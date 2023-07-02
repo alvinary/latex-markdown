@@ -198,9 +198,6 @@ def whitespaceTokenizer(string, specialCharacters=defaultSpecial):
     return string.split()
 
 
-inventory = lambda: defaultdict(lambda: set())
-
-
 # Handle generic latex macros
 
 def squareArgs(square):
