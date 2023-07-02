@@ -1,3 +1,5 @@
+from contants import *
+
 BeamerDSL = [
     ('titleMark', ["#"], 'x : x'),
     ('sectionMark', ["##"], 'x : x'),
