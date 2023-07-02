@@ -200,8 +200,8 @@ def whitespaceTokenizer(string, specialCharacters=defaultSpecial):
 
 # Handle generic latex macros
 
-def squareArgs(square):
-    if square:
+def squareArgs(squares):
+    if squares:
         return f'{LEFT_SQUARE}{", ".join(squares)}{RIGHT_SQUARE}'
     else:
         return ''
