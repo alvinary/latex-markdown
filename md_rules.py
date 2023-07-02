@@ -59,7 +59,7 @@ class Rules:
                     left_part = remaining_parts.pop(0)
                     right_part = f"{name}[{size - len(remaining_parts)}]"
 
-                    new_line = (current_name, current_label, [left_part, right_part], current_precedence, current_semantics)
+                    new_line = (current_name, current_label, (left_part, right_part), current_precedence, current_semantics)
                     binary_lines.append(new_line)
 
                     current_name = str(right_part)
@@ -70,7 +70,7 @@ class Rules:
                 if len(remaining_parts) == 2:
                     left_part = remaining_parts.pop(0)
                     right_part = remaining_parts.pop(0)
-                    new_line = (current_name, current_label, [left_part, right_part], current_precedence, current_semantics)
+                    new_line = (current_name, current_label, (left_part, right_part), current_precedence, current_semantics)
                     binary_lines.append(new_line)
 
         return binary_lines

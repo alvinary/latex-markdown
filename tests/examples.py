@@ -115,10 +115,11 @@ Both items are types of appliances
 '''
 
 sample_lines = [
-            ('product', 'number', ['number', 'times', 'number'], 15, lambda x, _, z: x * z),
-            ('sum', 'number', ['number', 'plus', 'number'], 10, lambda x, _, z: x + z),
-            ('negative', 'number', ['minus', 'number'], 20, lambda x, y : -y),
-            ('substraction', 'number', ['number', 'minus', 'number'], 10, lambda x, _, z : x - z)
+            ('product', 'number', ('number', 'times', 'number'), 15, lambda x, _, z: x * z),
+            ('sum', 'number', ('number', 'plus', 'number'), 10, lambda x, _, z: x + z),
+            ('negative', 'number', ('minus', 'number'), 20, lambda _, y : -y),
+            ('substraction', 'number', ('number', 'minus', 'number'), 10, lambda x, _, z : x - z),
+            ('five aguments', 'foo', ('bar', 'barfoo', 'foobar', 'barbar', 'foofoo'), 10, lambda x, y, z, w, u : [x, y, z, w, u])
         ]
 
 math_tests = ['( a b over b a ) equals 1',
