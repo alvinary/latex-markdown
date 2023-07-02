@@ -200,9 +200,6 @@ def whitespaceTokenizer(string, specialCharacters=defaultSpecial):
 
 inventory = lambda: defaultdict(lambda: set())
 
-whitespaceRules = tokensToRules(['TAB', TAB], 'tab') + tokensToRules(
-    ['NEWLINE', NEWLINE], 'newline') + tokensToRules(['SPACE', SPACE], 'space')
-
 
 # Handle generic latex macros
 
