@@ -9,7 +9,7 @@ class Rules:
         self.end_with = INVENTORY()
         self.same_as = INVENTORY()
         self.precedence_map = {}
-        self.actions_Map = {}
+        self.actions_map = {}
 
     def build(self, grammar):
         
