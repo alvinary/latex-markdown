@@ -113,3 +113,16 @@ Both items are types of appliances
 
 
 '''
+
+sample_lines = [
+            ('product', 'number', ['number', 'times', 'number'], 15, lambda x, _, z: x * z),
+            ('sum', 'number', ['number', 'plus', 'number'], 10, lambda x, _, z: x + z),
+            ('negative', 'number', ['minus', 'number'], 20, lambda x, y : -y),
+            ('substraction', 'number', ['number', 'minus', 'number'], 10, lambda x, _, z : x - z)
+        ]
+
+math_tests = ['( a b over b a ) equals 1',
+    'all x : x not in ø',
+    'sum from a to n of f(x)',
+    'sum over { x : g(x) in S } of h(x, g(x))',
+]
