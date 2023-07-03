@@ -74,10 +74,3 @@ class Rules:
                     binary_lines.append(new_line)
 
         return binary_lines
-    
-    def is_silent(self, label_name):
-        if label_name[0] == "[" and label_name[-1] == "]":
-            return label_name[1:-1], True
-        else:
-            return label_name, False
-        
