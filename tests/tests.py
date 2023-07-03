@@ -76,6 +76,7 @@ class TestParse:
         whole_span = ('number', 0, 12, 'negative')
         parse.set_value(whole_span)
         value = parse.values[whole_span]
+        print(value)
         assert value == 3
 
 if __name__ == "__main__":
