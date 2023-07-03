@@ -39,6 +39,63 @@ class Parse:
     
     def evaluate(self):
         pass
+        
+    def set_value(self, spans):
+ 
+        if spans[0] in self.values:  # Value is already stored
+            return
+
+        is_leaf = len(spans) == 1
+        is_unary = len(spans) == 2
+        is_binary = len(spans) == 3
+        
+        # Check if all dependencies already have a value
+
+        if is_leaf:
+            leaf = spans[0]
+            check = True  # Because leaves already have a value
+
+        if is_unary:
+            span, branch = spans
+            check = branch in self.values
+
+        if is_binary:
+            span, left_part, right_part = spans
+            check_left = left in self.values
+            check_right = right in self.values
+            check = check_left and check_right
+            
+        # This method does nothing if 'check' is False,
+        # because that means the values for the 'part'
+        # spans on which the current span depends have
+        # not yet been evaluated
+        
+        # In Parser.evaluate(), spans are evaluated bottom-up,
+        # and since unary rules might yield new spans that
+        # can be used by further rules, every tree level
+        # is checked []
+
+        if check and is_leaf:
+            pass  # Leaves are assigned a value in the first lines of 'execute()'
+
+        if check and is_unary:
+            name, begin, end, precedence, semantics = span  # Magic number 3
+            argument = self.values[branch]
+            self.values[span] = semantics(argument)
+
+        # WRAPPEND = lambda x, y : [x] + y
+        # WRAP = lambda x, y : [x, y]
+        if check and is_binary:
+            name, begin, end, precedence, semantics = span
+            left_value = self.values[left_part]
+            right_value = self.values[right_part]
+            right_is_auxiliary = is_auxiliary(right_part) # TODO: define is_auxiliary
+            if right_is_auxiliary:
+                arguments = [left_value]
+                arguments += right_value                  # TODO: have this make sense for auxiliary rules
+            else:
+                arguments = [left_value, right_value]
+            self.values[head] = action(*arguments) # just return
 
     def trigger(self, branch):
         branch_label, begin, end, _ = branch
