@@ -7,6 +7,9 @@ TAGGED = 'tagged'
 INVENTORY = lambda: defaultdict(lambda: set())
 IDENTITY = lambda x : x
 
+WRAP = lambda x, y : [x, y]
+WRAPPEND = lambda x, y : [x] + y
+
 # Markdown constants
 
 BEGIN = '\\begin'
