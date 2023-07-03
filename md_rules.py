@@ -49,7 +49,7 @@ class Rules:
         else:
             current_label = label
             current_name = name
-            current_semantics = semantics
+            current_semantics = lambda x, y : semantics(*WRAPPEND(x, y))
             current_precedence = precedence
 
             while remaining_parts:
@@ -64,10 +64,11 @@ class Rules:
 
                     current_name = str(right_part)
                     current_label = str(right_part)
-                    current_semantics = IDENTITY
                     current_precedence = DEFAULT_PRECEDENCE
+                    current_semantics = WRAPPEND
 
                 if len(remaining_parts) == 2:
+                    current_semantics = WRAP
                     left_part = remaining_parts.pop(0)
                     right_part = remaining_parts.pop(0)
                     new_line = (current_name, current_label, (left_part, right_part), current_precedence, current_semantics)

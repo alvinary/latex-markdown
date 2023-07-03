@@ -11,6 +11,7 @@ class Parse:
         self.spans = INVENTORY()
         self.readable = set()
         self.values = {}
+        self.parts = {}
 
     def execute(self):
 
@@ -18,7 +19,8 @@ class Parse:
             token, token_label = tagged_token
             span_data = token_label, index, index, TAGGED
             self.values[span_data] = token
-            self.add_span(span_data)
+            self.add_span(*span_data)
+            self.unvisited.add(span_data)
 
         while self.unvisited:
             current = self.unvisited.pop()
@@ -36,25 +38,38 @@ class Parse:
         self.prune()
 
         return self
+        
+    def evaluate(self):
+        values = []
+        for begin, end in self.spans:
+            if begin == 0 and end == len(self.tokens) + 1:
+                finish = int(end)
+        spans = self.spans[0, finish]
+        for s in spans:
+            self.set_value[s]
+            new_value = self.values[s]
+        values.append(new_value)
     
     def set_value(self, span):
         if span in self.values:
             return self.values[span]
-        _, _, _, _, semantics = span
-        parts = self.spans[span][1:]
+        _, _, _, name = span
+        parts = self.parts[span]
         for s in parts:
             self.set_value(s)
         argument_values = [self.values[s] for s in parts]
+        semantics = self.parser.actions_map[name]
         self.values[span] = semantics(*argument_values)
 
     def trigger(self, branch):
         branch_label, begin, end, _ = branch
-        same_as = self.parser.grammar.same_as[branch_label]
+        same_as = self.parser.same_as[branch_label]
         for grammar_rule in same_as:
             name, label, _, _, _ = grammar_rule
             head = (label, begin, end, name)
             self.add_span(label, begin, end, name)
             self.spans[begin, end].add((head, branch))
+            self.parts[head] = [branch]
 
     def trigger_pair(self, left_part, right_part):
         left_label, begin, _, _ = left_part
@@ -66,19 +81,24 @@ class Parse:
             new_span = (label, begin, end, name)
             self.add_span(label, begin, end, name)
             self.spans[begin, end].add((new_span, left_part, right_part))
+            self.parts[new_span] = [left_part, right_part]
 
     def add_span(self, label, begin, end, name):
-        spanData = (label, begin, end, name)
-        self.end_at[end].add(spanData)
-        self.begin_at[begin].add(spanData)
-        self.unvisited.add(spanData)
+        span_data = (label, begin, end, name)
+        self.end_at[end].add(span_data)
+        self.begin_at[begin].add(span_data)
+        self.unvisited.add(span_data)
         # These are used in self.show()
-        spanContent = tuple(self.tokens[begin:end + 1])
-        self.readable.add((begin, end, label, spanContent))
+        span_content = tuple([token for token, tag in self.tokens[begin:end + 1]])
+        self.readable.add((begin, end, label, span_content))
 
     def compare(self, left, right):
         left_label, i, j, left_name = left
         right_label, k, l, right_name = right
+        
+        if i == j or k == l:
+            return False
+        
         left_precedence = self.parser.precedence_map[left_name]
         right_precedence = self.parser.precedence_map[right_name]
         spans_overlap = left_label == right_label and i == k and j == l
@@ -120,5 +140,5 @@ class Parse:
             begin, end, label, tokens = span
             begin = str(begin)
             end = str(end)
-            print(f"[{begin} : {end}] {label} : {' '.join(tokens) }")
+            print(f"{label} : {' '.join(tokens) } [{begin} : {end}]\n")
 

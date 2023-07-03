@@ -114,7 +114,9 @@ Both items are types of appliances
 
 '''
 
-sample_lines = [
+test_grammar = [
+            ('integer', 'number', ('digits',), 10, lambda x : int(x)),
+            ('grouping', 'number', ('lparen', 'number', 'rparen'), 25, lambda _, x, __ : x),
             ('product', 'number', ('number', 'times', 'number'), 15, lambda x, _, z: x * z),
             ('sum', 'number', ('number', 'plus', 'number'), 10, lambda x, _, z: x + z),
             ('negative', 'number', ('minus', 'number'), 20, lambda _, y : -y),

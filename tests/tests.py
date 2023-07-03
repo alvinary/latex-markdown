@@ -1,6 +1,7 @@
 import logging
 from md_latex import toBeamer, toMath
 from md_rules import Rules
+from md_parse import Parse
 from examples import *
 
 class Tests:
@@ -18,7 +19,7 @@ class TestRules:
         logging.info("Testing Rules.binarize_line()")
         rules = Rules()
         result_lines = []
-        for line in sample_lines:
+        for line in test_grammar:
             result_lines += rules.binarize_line(line)
         result_lines = set([(n, h, tuple(p), o) for (n, h, p, o, _) in result_lines])
         assert ('sum', 'number', ('number', 'sum[1]'), 10) in result_lines
@@ -31,7 +32,7 @@ class TestRules:
         
         rules = Rules()
         result_lines = []
-        for line in sample_lines:
+        for line in test_grammar:
             result_lines += rules.binarize_line(line)
         rules.build(result_lines)
 
@@ -59,6 +60,23 @@ class TestRules:
         assert 'sum' not in end_with
         assert 'sum[1]' in end_with
 
+class TestParse:
+    def test_parse(self):
+        parser = Rules()
+        result_lines = []
+        for line in test_grammar:
+            result_lines += parser.binarize_line(line)
+        parser.build(result_lines)
+        tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
+        tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
+        tagged_tokens = list(zip(tokens, tags))
+        parse = Parse(tagged_tokens, parser)
+        parse.execute()
+        parse.show()
+        whole_span = ('number', 0, 12, 'negative')
+        parse.set_value(whole_span)
+        value = parse.values[whole_span]
+        assert value == 3
 
 if __name__ == "__main__":
     # Tests.test_beamer()
@@ -66,3 +84,5 @@ if __name__ == "__main__":
     tests = TestRules()
     tests.test_binarize()
     tests.test_build()
+    test_parse = TestParse()
+    test_parse.test_parse()
