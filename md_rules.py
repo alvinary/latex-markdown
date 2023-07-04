@@ -1,5 +1,5 @@
 from md_parse import Parse
-from contants import *
+from constants import *
 
 class Rules:
 

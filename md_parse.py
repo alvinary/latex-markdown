@@ -1,4 +1,4 @@
-from contants import *
+from constants import *
 
 class Parse:
 

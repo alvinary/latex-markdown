@@ -1,5 +1,5 @@
 import logging
-from contants import *
+from constants import *
 from dsls import *
 from collections import defaultdict
 from md_rules import Rules
@@ -99,7 +99,7 @@ class toMath(LatexMarkdown):
 
 
 # These are most special characters visible in a QWERTY keyboard
-defaultSpecial = (
+special_characters = (
     '" ' +
     "< > ( ) { } [] / \\ ' ! = + - * & | % $ ^ ? @ # ~ ; : , . ").split()
 
