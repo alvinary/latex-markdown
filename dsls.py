@@ -1,65 +1,44 @@
 from contants import *
 
-BeamerDSL = [
-    ('titleMark', ["#"], 'x : x'),
-    ('sectionMark', ["##"], 'x : x'),
-    ('subsectionMark', ["###"], 'x : x'),
+latex_dsl = [
+    ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
+    ('section mark', 'section_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
+    ('subsection mark', 'subsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
+    
+    ('newlines from text', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
+    ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
+    ('double star', 'double_star', ('**',), DEFAULT_PRECEDENCE, IDENTITY),
+    ('wiggle', 'wiggle', ('~',), DEFAULT_PRECEDENCE, IDENTITY),
+    
+    ('paragraph', 'paragraph', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, y: x + y),
+    
+    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
+    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
+    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
+    
+    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
+    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
+    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
+    
+    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
+    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
+    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
+    
+    ('multiline text', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
+    ('cite in text', 'text', ('text', 'citation', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
+    ('multiline text', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
+    
+    ('left citation mark', 'left_cite', ('[.',), DEFAULT_PRECEDENCE, IDENTITY),
+    ('right citation mark', 'right_cite', ('.]',), DEFAULT_PRECEDENCE, IDENTITY),
+    ('citation', 'citation', ('left_cite', 'text', 'right_cite'), DEFAULT_PRECEDENCE, lambda _, x, __:  citation(x)),
+    
+    ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
+    ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK)
 ]
 
 f'''
-:= &&
-
-newline -> {EXPLICIT_NEWLINE}                := x : x
-
-thinbar -> {THIN_BAR}                        := x : x
-
-titleMark -> #                               := x : x 
-sectionMark -> ##                            := x : x
-subsectionMark -> ###                        := x : x
-
-doubleStar -> **                             := x : x
-wiggle -> ~                                  := x : x
-
-leftCite -> [.                               := x : x
-rightCite -> .]                              := x : x 
-
-leftEq -> _                                  := x : x
-rightEq -> _                                 := x : x
-
-title -> [titleMark] line                    := x : title(x)
-section -> [sectionMark] line                := x : section(x)
-subsection -> [subsectionMark] line          := x : subsection(x)
-
 italics -> [wiggle] text [wiggle]            := x : italics(x)
 bold -> [doubleStar] text [doubleStar]       := x : bold(x)
-
-text -> texttoken                            := x : x
-line -> texttoken [break]                    := x : x
-
-text -> text [newline] text                  := x, y : x + NEWLINE + y
-text -> text citation text                   := x, y, z : x + y + z
-
-citation -> [leftCite] text [rightCite]      := x : citation(x)
-
-paragraph -> text [break]                    := x : x + BREAK
-
-break -> newline [newline]                   := x : BREAK
-break -> [newline] break                     := x : x
-
-contentItem -> paragraph                     := x : x
-contentItem -> title                         := x : x
-contentItem -> section                       := x : x
-
-content -> contentItem content               := x, y : x + BREAK + y
-content -> contentItem                       := x : x
-
-frame -> [break] content                     := x : frame(x)
-
-frames -> frame                              := x : x
-frames -> frame [thinbar] frames             := x, xs : x + BREAK + xs
-
-inlineMath -> [leftEq] math [rightEq]        := x : '$' + x + '$' 
-blockMath  -> [break] math [break]           := x : beginEnd('equation', [x])
 '''
 
 mathDSL = '''
