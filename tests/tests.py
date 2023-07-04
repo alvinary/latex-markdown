@@ -61,23 +61,42 @@ class TestRules:
         assert 'sum[1]' in end_with
 
 class TestParse:
-    def test_parse(self):
-        parser = Rules()
-        result_lines = []
-        for line in test_grammar:
-            result_lines += parser.binarize_line(line)
-        parser.build(result_lines)
-        tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
-        tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
+
+    def get_parse(self, parser, tokens, tags):
         tagged_tokens = list(zip(tokens, tags))
         parse = Parse(tagged_tokens, parser)
         parse.execute()
         parse.show()
+        return parse
+
+    def test_parse(self):
+        
+        parser = Rules()
+        result_lines = []
+        
+        for line in test_grammar:
+            result_lines += parser.binarize_line(line)
+        parser.build(result_lines)
+        
+        tokens = "( 3 * 3 ) + ( 2 * ( 3 + 1 ) )".split()
+        tags = "lparen digits times digits rparen plus lparen digits times lparen digits plus digits rparen rparen".split()
+        parse = self.get_parse(parser, tokens, tags)
+        whole_span = ('number', 0, 14, 'sum')
+        parse.set_value(whole_span)
+        value = parse.values[whole_span]
+        print(value)
+        assert value == 17
+        
+        tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
+        tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
+        parse = self.get_parse(parser, tokens, tags)
         whole_span = ('number', 0, 12, 'negative')
         parse.set_value(whole_span)
         value = parse.values[whole_span]
         print(value)
         assert value == 3
+        
+        
 
 if __name__ == "__main__":
     # Tests.test_beamer()
