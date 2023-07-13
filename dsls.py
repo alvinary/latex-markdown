@@ -1,4 +1,4 @@
-from contants import *
+from constants import *
 
 latex_dsl = [
     ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
@@ -36,37 +36,77 @@ latex_dsl = [
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK)
 ]
 
+math_tokens = [
+    '(',
+    ')',
+    '{',
+    '}',
+    '<',
+    '>',
+    '=',
+    '!=',
+    '>=',
+    '<=',
+    'and',
+    'or',
+    'not',
+    'iff',
+    '<=>',
+    '<==>',
+    'in',
+    'to',
+    'maps',
+    ':',
+    '|'
+]
+
+math_dsl = [
+    # Core definitions
+    # Delimiters
+    ('left parenthesis', 'lparen', ('(',), DEFAULT_PRECEDENCE, lambda _: '\\left'),
+    ('right parenthesis', 'rparen', (')',), DEFAULT_PRECEDENCE, lambda _: '\\right'),
+    ('left brace', 'lbrace', ('{',), DEFAULT_PRECEDENCE, lambda _: '\\lbrace'),
+    ('right brace', 'rbrace', ('}',), DEFAULT_PRECEDENCE, lambda _: '\\rbrace'),
+    ('left angle bracket', 'langle', ('<',), DEFAULT_PRECEDENCE, lambda _: '\\langle'),
+    ('right angle bracket', 'rangle', ('>',), DEFAULT_PRECEDENCE, lambda _: '\\rangle'),
+    # Common relations
+    ('equal', 'rel', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
+    ('not equal', 'rel', ('!=',), DEFAULT_PRECEDENCE, lambda _: '\\\\neq'),
+    ('greater or equal', 'rel', ('>=',), DEFAULT_PRECEDENCE, lambda _: '\\ge'),
+    ('less or equal', 'rel', ('<=',), DEFAULT_PRECEDENCE, lambda _: '\\le'),
+    # Basic notation for sets, functions, propositional and predicate logic
+    ('and', 'op', ('and',), DEFAULT_PRECEDENCE, lambda _: '\\land'),
+    ('or', 'op', ('or',), DEFAULT_PRECEDENCE, lambda _: '\\lor'),
+    ('not', 'unary', ('not',), DEFAULT_PRECEDENCE, lambda _: '\\\\neg'),
+    ('iff', 'rel', ('iff',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
+    ('<=>', 'rel', ('<=>',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
+    ('<==>', 'rel', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
+    ('in', 'rel', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
+    ('not in', 'rel', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
+    ('maps to', 'rel', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\mapsto'),
+    # maps to via
+    # inclusion (left and right)
+    # _empty -> ø                                  := x : '\\emptyset'
+    # _dots -> :                                   := x : x
+    # _forall -> all                               := x : '\\\\forall' 
+    # _exists -> some                              := x : '\\exists'
+    # _lvert -> |                                  := x : '\\lvert'
+    # _rvert -> |                                  := x : '\\rvert'
+    # _vert -> |                                   := x : '\\vert'
+]
+
 f'''
 italics -> [wiggle] text [wiggle]            := x : italics(x)
 bold -> [doubleStar] text [doubleStar]       := x : bold(x)
 '''
 
 mathDSL = '''
-:= &
-
-_rparen -> )                                 := x : '\\right'
-_lparen -> (                                 := x : '\\left'
-_lbrace -> {'{'}                             := x : '\\lbrace' 
-_rbrace -> {'}'}                             := x : '\\rbrace'
-_rangle -> <                                 := x : '\\rangle'
-_langle -> >                                 := x : '\\langle'
-
 delimiter -> _rparen                         := x : x
 delimiter -> _lparen                         := x : x
 delimiter -> _rangle                         := x : x
 delimiter -> _langle                         := x : x
 delimiter -> _lbrace                         := x : x
 delimiter -> _rbrace                         := x : x
-
-equals -> =                                  := x : x
-notequal -> !=                               := x : '\\neq'
-_geq -> <=                                   := x : '\\ge'
-_leq -> >=                                   := x : '\\le'
-
-binaryRelation -> _leq                       := x : x
-binaryRelation -> _geq                       := x : x
-binaryRelation -> notequal                   := x : x
-binaryRelation -> equals                     := x : x
 
 LETTER -> { a, b, c, d, e, f, g, h, i }      := x : x
 LETTER -> { j, k, l, m, n, o, p, q, r }      := x : x
@@ -97,33 +137,9 @@ lettermod -> mvector                    := x : x
 
 mathName -> lettermod                   := x : x
 mathName -> letter                      := x : x
+'''
 
-_not -> not                                  := x : '\\\\neg'
-_notin -> [_not] in &15                      := x : '\\\\notin'
-
-_in -> in                                    := x : '\\in'
-_empty -> ø                                  := x : '\\emptyset'
-_dots -> :                                   := x : x
-
-_forall -> all                               := x : '\\\\forall' 
-_exists -> some                              := x : '\\exists'
-_and -> and                                  := x : '\\land'
-_or -> or                                    := x : '\\lor'
-
-_lvert -> |                                  := x : '\\lvert' 
-_rvert -> |                                  := x : '\\rvert'
-_vert -> |                                   := x : '\\vert'
-
-logic -> _not                                := x : x
-logic -> _notin                              := x : x
-logic -> _and                                := x : x
-logic -> _or                                 := x : x
-logic -> _forall                             := x : x
-logic -> _exists                             := x : x
-logic -> _dots                               := x : x
-logic -> _in                                 := x : x
-logic -> _empty                              := x : x
-
+'''
 bigoperator -> sum                           := x : '\\sum'
 bigoperator -> product                       := x : '\\prod'
 bigoperator -> integral                      := x : '\\int'
