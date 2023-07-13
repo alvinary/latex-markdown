@@ -3,13 +3,17 @@ from constants import *
 
 class Rules:
 
-    def __init__(self):
+    def __init__(self, rules=list()):
         self.rules_map = {}
         self.begin_with = INVENTORY()
         self.end_with = INVENTORY()
         self.same_as = INVENTORY()
         self.precedence_map = {}
         self.actions_map = {}
+        binary_rules = []
+        for line in rules:
+            binary_rules += self.binarize_line(line)
+        self.build(binary_rules)
 
     def build(self, grammar):
         
