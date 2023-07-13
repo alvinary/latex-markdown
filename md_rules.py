@@ -3,7 +3,7 @@ from constants import *
 
 class Rules:
 
-    def __init__(self, rules):
+    def __init__(self, rules=list()):
         self.rules_map = {}
         self.begin_with = INVENTORY()
         self.end_with = INVENTORY()
