@@ -104,14 +104,14 @@ special_characters = (
     "< > ( ) { } [] / \\ ' ! = + - * & | % $ ^ ? @ # ~ ; : , . ").split()
 
 
-def defaultTokenizer(string, specialCharacters=defaultSpecial):
-    for p in defaultSpecial:
+def default_tokenizer(string, special_tokens=SPECIAL_TOKENS):
+    for p in special_tokens:
         string = string.replace(p, f' {p} ')
     return string.split()
 
 
-def whitespaceTokenizer(string, specialCharacters=defaultSpecial):
-    for p in defaultSpecial:
+def whitespace_tokenizer(string, special_tokens=SPECIAL_TOKENS):
+    for p in special_tokens:
         string = string.replace(p, f' {p} ')
     string = " NEWLINE ".join(string.split(NEWLINE))
     string = " TAB ".join(string.split(TAB))
