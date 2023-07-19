@@ -1,5 +1,5 @@
 import logging
-from md_latex import toBeamer, toMath
+from md_latex import Beamer, Math
 from md_rules import Rules
 from md_parse import Parse
 from examples import *
@@ -53,32 +53,25 @@ class TestRules:
 
 class TestParse:
 
-    def get_parse(self, parser, tokens, tags):
-        tagged_tokens = list(zip(tokens, tags))
-        parse = Parse(tagged_tokens, parser)
-        parse.execute()
-        parse.show()
-        return parse
-
     def test_parse(self):
         parser = Rules(test_grammar)
         result_lines = []
         tokens = "( 3 * 3 ) + ( 2 * ( 3 + 1 ) )".split()
         tags = "lparen digits times digits rparen plus lparen digits times lparen digits plus digits rparen rparen".split()
-        parse = self.get_parse(parser, tokens, tags)
-        whole_span = ('number', 0, 14, 'sum')
-        parse.set_value(whole_span)
-        value = parse.values[whole_span]
-        print(value)
-        assert value == 17
+        parse = parser.get_parse(list(zip(tokens, tags)))
+        parse.show()
+        values = parse.evaluate()
+        for v in values:
+            print(v)
+        assert 17 in values
         tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
         tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
-        parse = self.get_parse(parser, tokens, tags)
-        whole_span = ('number', 0, 12, 'negative')
-        parse.set_value(whole_span)
-        value = parse.values[whole_span]
-        print(value)
-        assert value == 3
+        parse = parser.get_parse(list(zip(tokens, tags)))
+        parse.show()
+        values = parse.evaluate()
+        for v in values:
+            print(v)
+        assert 3 in values
 
 if __name__ == "__main__":
     # Tests.test_beamer()
