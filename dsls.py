@@ -86,13 +86,13 @@ math_dsl = [
     ('maps to', 'rel', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\mapsto'),
     # maps to via
     # inclusion (left and right)
-    # _empty -> ø                                  := x : '\\emptyset'
-    # _dots -> :                                   := x : x
-    # _forall -> all                               := x : '\\\\forall' 
-    # _exists -> some                              := x : '\\exists'
-    # _lvert -> |                                  := x : '\\lvert'
-    # _rvert -> |                                  := x : '\\rvert'
-    # _vert -> |                                   := x : '\\vert'
+    ('empty', 'empty', ('empty',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
+    ('empty', 'empty', ('ø',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
+    ('for all', 'forall', ('for', 'all',), DEFAULT_PRECEDENCE + 5, lambda x : '\\\\forall'),
+    ('exists', 'exists', ('exists',), DEFAULT_PRECEDENCE, lambda x : '\\exists'),
+    ('vert', 'vert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\vert'),
+    ('lvert', 'lvert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\lvert'),
+    ('rvert', 'rvert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\rvert')
 ]
 
 f'''
