@@ -15,7 +15,7 @@ class Tests:
         for example, expected_result in math_examples:
             results = math_markdown.get_latex(example)
             print('\nsource:\n', example)
-            print('\nresults:\n', ", ".join(results))
+            print('\nresults:\n', "\n".join(results))
             assert expected_result in results
 
 class TestRules:
