@@ -132,9 +132,10 @@ math_tests = ['( a b over b a ) equals 1',
 
 math_examples = [
     ('a = b', 'a = b'),
-    ('a not in A', 'a \\\\notin A'),
     ('a != b', 'a \\\\neq b'),
-    ('a in A', 'a \\in A')
+    ('a in A', 'a \\in A'),
+    ('for all x : exists y : x in A => r(x, y)', '\\forall x : \\exists y : x \\in A \\Rightarrow r ( x, y )'),
+    ('a not in A', 'a \\\\notin A'),
     # ('f : a -> b', ),
     # ('A included in B'),
     # ('A subset of B'),
