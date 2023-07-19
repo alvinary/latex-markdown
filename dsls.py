@@ -63,36 +63,47 @@ math_tokens = [
 math_dsl = [
     # Core definitions
     # Delimiters
-    ('left parenthesis', 'lparen', ('(',), DEFAULT_PRECEDENCE, lambda _: '\\left'),
-    ('right parenthesis', 'rparen', (')',), DEFAULT_PRECEDENCE, lambda _: '\\right'),
-    ('left brace', 'lbrace', ('{',), DEFAULT_PRECEDENCE, lambda _: '\\lbrace'),
-    ('right brace', 'rbrace', ('}',), DEFAULT_PRECEDENCE, lambda _: '\\rbrace'),
-    ('left angle bracket', 'langle', ('<',), DEFAULT_PRECEDENCE, lambda _: '\\langle'),
-    ('right angle bracket', 'rangle', ('>',), DEFAULT_PRECEDENCE, lambda _: '\\rangle'),
+    ('left parenthesis', 'delim', ('(',), DEFAULT_PRECEDENCE, lambda _: '\\left'),
+    ('right parenthesis', 'delim', (')',), DEFAULT_PRECEDENCE, lambda _: '\\right'),
+    ('left brace', 'delim', ('{',), DEFAULT_PRECEDENCE, lambda _: '\\lbrace'),
+    ('right brace', 'delim', ('}',), DEFAULT_PRECEDENCE, lambda _: '\\rbrace'),
+    ('left angle bracket', 'delim', ('<',), DEFAULT_PRECEDENCE, lambda _: '\\langle'),
+    ('right angle bracket', 'delim', ('>',), DEFAULT_PRECEDENCE, lambda _: '\\rangle'),
     # Common relations
-    ('equal', 'rel', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
-    ('not equal', 'rel', ('!=',), DEFAULT_PRECEDENCE, lambda _: '\\\\neq'),
-    ('greater or equal', 'rel', ('>=',), DEFAULT_PRECEDENCE, lambda _: '\\ge'),
-    ('less or equal', 'rel', ('<=',), DEFAULT_PRECEDENCE, lambda _: '\\le'),
+    ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
+    ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: '\\\\neq'),
+    ('greater or equal', 'inf', ('>=',), DEFAULT_PRECEDENCE, lambda _: '\\ge'),
+    ('less or equal', 'inf', ('<=',), DEFAULT_PRECEDENCE, lambda _: '\\le'),
     # Basic notation for sets, functions, propositional and predicate logic
-    ('and', 'op', ('and',), DEFAULT_PRECEDENCE, lambda _: '\\land'),
-    ('or', 'op', ('or',), DEFAULT_PRECEDENCE, lambda _: '\\lor'),
-    ('not', 'unary', ('not',), DEFAULT_PRECEDENCE, lambda _: '\\\\neg'),
-    ('iff', 'rel', ('iff',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
-    ('<=>', 'rel', ('<=>',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
-    ('<==>', 'rel', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
-    ('in', 'rel', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
-    ('not in', 'rel', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
-    ('maps to', 'rel', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\mapsto'),
+    ('and', 'inf', ('and',), DEFAULT_PRECEDENCE, lambda _: '\\land'),
+    ('or', 'inf', ('or',), DEFAULT_PRECEDENCE, lambda _: '\\lor'),
+    ('not', 'pref', ('not',), DEFAULT_PRECEDENCE, lambda _: '\\\\neg'),
+    ('iff', 'inf', ('iff',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
+    ('<=>', 'inf', ('<=>',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
+    ('<==>', 'inf', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
+    ('in', 'inf', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
+    ('not in', 'inf', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
+    ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\mapsto'),
     # maps to via
     # inclusion (left and right)
-    ('empty', 'empty', ('empty',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
-    ('empty', 'empty', ('ø',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
-    ('for all', 'forall', ('for', 'all',), DEFAULT_PRECEDENCE + 5, lambda x : '\\\\forall'),
-    ('exists', 'exists', ('exists',), DEFAULT_PRECEDENCE, lambda x : '\\exists'),
-    ('vert', 'vert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\vert'),
-    ('lvert', 'lvert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\lvert'),
-    ('rvert', 'rvert', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\rvert')
+    ('empty', 'elem', ('empty',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
+    ('empty', 'elem', ('ø',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
+    ('for all', 'pref', ('for', 'all',), DEFAULT_PRECEDENCE + 5, lambda x : '\\\\forall'),
+    ('exists', 'pref', ('exists',), DEFAULT_PRECEDENCE, lambda x : '\\exists'),
+    ('vert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\vert'),
+    ('lvert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\lvert'),
+    ('rvert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\rvert'),
+    # Subindices, superindices and diacritics
+    # ', ^, bar, hat, tilde
+    # Common operations
+    # R, Q, C, Z, aleph, epsilon, 
+    # Greek
+    ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE, lambda x, y : x + ' ' + y),
+    ('element', 'math', ('elem',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('infix', 'math', ('inf',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('prefix', 'math', ('pref',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('posfix', 'math', ('pos',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('delimiter', 'math', ('delim',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
 f'''
