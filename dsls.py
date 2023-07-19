@@ -57,7 +57,11 @@ math_tokens = [
     'to',
     'maps',
     ':',
-    '|'
+    '|',
+    'empty',
+    'for',
+    'all',
+    'exists'
 ]
 
 math_dsl = [
@@ -103,7 +107,8 @@ math_dsl = [
     ('infix', 'math', ('inf',), DEFAULT_PRECEDENCE, lambda x : x),
     ('prefix', 'math', ('pref',), DEFAULT_PRECEDENCE, lambda x : x),
     ('posfix', 'math', ('pos',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('delimiter', 'math', ('delim',), DEFAULT_PRECEDENCE, lambda x : x)
+    ('delimiter', 'math', ('delim',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('name', 'math', ('name',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
 f'''
