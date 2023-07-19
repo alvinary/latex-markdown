@@ -68,13 +68,21 @@ class Math(LatexMarkdown):
 
     def __init__(self):
         self.delimiters = {'(', ')', '{', '}', '[', ']', '<', '>', '|'}
+        self.math_tokens = set(math_tokens)
+
+    def tag(self, token):
+        if token in self.math_tokens:
+            return token
+        else:
+            return 'name'
 
     def get_latex(self, markdown):
         grammar = Rules(math_dsl)
         parse = grammar.get_parse(self.preprocess(markdown))
+        print("Showing parse for ", markdown, "\n")
+        parse.show()
         values = parse.evaluate()
-        for value in values:
-            print(value)
+        return list(values)
 
     def preprocess(self, text):
     
@@ -87,8 +95,11 @@ class Math(LatexMarkdown):
             
         while '  ' in text:
             text = text.replace('  ', ' ')
-        
-        return text.split()
+
+        tokens = text.split()
+        tags = [self.tag(t) for t in tokens]
+
+        return list(zip(tokens, tags))
 
 
 # These are most special characters visible in a QWERTY keyboard
