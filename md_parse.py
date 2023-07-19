@@ -41,14 +41,15 @@ class Parse:
         
     def evaluate(self):
         values = []
-        for begin, end in self.spans:
-            if begin == 0 and end == len(self.tokens) + 1:
-                finish = int(end)
-        spans = self.spans[0, finish]
-        for s in spans:
-            self.set_value[s]
-            new_value = self.values[s]
-        values.append(new_value)
+        begin = 0
+        finish = len(self.tokens) - 1
+        complete_spans = self.spans[begin, finish]
+        for s in complete_spans:
+            head_span = s[0]
+            self.set_value(head_span)
+            new_value = self.values[head_span]
+            values.append(new_value)
+        return values
     
     def set_value(self, span):
         if span in self.values:
