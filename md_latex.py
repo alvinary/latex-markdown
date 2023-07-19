@@ -67,8 +67,8 @@ class Beamer(LatexMarkdown):
 class Math(LatexMarkdown):
 
     def __init__(self):
-        self.delimiters = {'(', ')', '{', '}', '[', ']', '<', '>', '|'}
-        self.math_tokens = set(math_tokens)
+        self.delimiters = list(delimiters)
+        self.math_tokens = list(math_tokens)
 
     def tag(self, token):
         if token in self.math_tokens:
@@ -79,22 +79,34 @@ class Math(LatexMarkdown):
     def get_latex(self, markdown):
         grammar = Rules(math_dsl)
         parse = grammar.get_parse(self.preprocess(markdown))
-        print("Showing parse for ", markdown, "\n")
+        print("\nShowing parse for ", markdown, "\n")
         parse.show()
         values = parse.evaluate()
         return list(values)
 
     def preprocess(self, text):
     
+        # Hide tokens with delimiters
+        
+        for k in with_delimiters:
+            text = text.replace(k, with_delimiters[k])         
+        
+        # Put whitespace around delimiters
+        
         for d in self.delimiters:
             text = text.replace(d, f' {d} ')
-
-        # Recover binary relations
-        text = text.replace('> =', '>=')
-        text = text.replace('< =', '<=')
+            
+        # Recover tokens
+        
+        for k in without_delimiters:
+            text = text.replace(k, without_delimiters[k])
+        
+        # Remove double spaces
             
         while '  ' in text:
             text = text.replace('  ', ' ')
+            
+        # Split at whitespace
 
         tokens = text.split()
         tags = [self.tag(t) for t in tokens]
