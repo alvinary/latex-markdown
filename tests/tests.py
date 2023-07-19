@@ -11,7 +11,12 @@ class Tests:
 
     def test_math(self):
         logging.info("Testing toMath")
-        toMath().get_latex()
+        math_markdown = Math()
+        for example, expected_result in math_examples:
+            result = math_markdown.to_latex(example)
+            print('\nsource:\n', example)
+            print('\nresult:\n', result)
+            assert result == expected_result
 
 class TestRules:
 
