@@ -129,3 +129,15 @@ math_tests = ['( a b over b a ) equals 1',
     'sum from a to n of f(x)',
     'sum over { x : g(x) in S } of h(x, g(x))',
 ]
+
+math_examples = [
+    ('a = b', 'a = b'),
+    ('a not in A', 'a \\\\notin A'),
+    ('a != b', 'a \\\\neq b'),
+    ('a in A', 'a \\in A')
+    # ('f : a -> b', ),
+    # ('A included in B'),
+    # ('A subset of B'),
+    # ('A includes B')
+
+]

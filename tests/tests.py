@@ -13,10 +13,10 @@ class Tests:
         logging.info("Testing toMath")
         math_markdown = Math()
         for example, expected_result in math_examples:
-            result = math_markdown.to_latex(example)
+            results = math_markdown.get_latex(example)
             print('\nsource:\n', example)
-            print('\nresult:\n', result)
-            assert result == expected_result
+            print('\nresults:\n', ", ".join(results))
+            assert expected_result in results
 
 class TestRules:
 
@@ -86,3 +86,5 @@ if __name__ == "__main__":
     tests.test_build()
     test_parse = TestParse()
     test_parse.test_parse()
+    test_markdown = Tests()
+    test_markdown.test_math()
