@@ -18,8 +18,10 @@ class LatexMarkdown:
         else:
             return TEXT_TOKEN
 
+class Latex(LatexMarkdown):
+    pass
 
-class toBeamer(LatexMarkdown):
+class Beamer(LatexMarkdown):
 
     def get_latex(self, markdown = "2 + 5"):
         grammar = Rules().parser_from_grammar(BeamerDSL)
@@ -62,23 +64,17 @@ class toBeamer(LatexMarkdown):
         return tokens
 
 
-class toMath(LatexMarkdown):
+class Math(LatexMarkdown):
 
     def __init__(self):
-        self.delimiters = {'(', ')', '{', '}', '[', ']', '<', '>'}
+        self.delimiters = {'(', ')', '{', '}', '[', ']', '<', '>', '|'}
 
     def get_latex(self, markdown):
-        rules = Rules()
-        tokens = self.preprocess(markdown)
-        grammar = rules.parser_from_grammar(mathDSL)
-        parse = grammar.parse(tokens)
-        tokenized_tokens = self.get_tokenized_tokens(tokens)
-        values = grammar.value(tokenized_tokens)
-        if values:
-            return values.pop(0)
-        else:
-            for span in parse.readable:
-                print(span)
+        grammar = Rules(math_dsl)
+        parse = grammar.get_parse(self.preprocess(markdown))
+        values = parse.evaluate()
+        for value in values:
+            print(value)
 
     def preprocess(self, text):
     
@@ -87,9 +83,6 @@ class toMath(LatexMarkdown):
             
         while '  ' in text:
             text = text.replace('  ', ' ')
-            
-        # Recover empty set
-        text = text.replace('{ }', '{}')
         
         # Recover binary relations
         text = text.replace('> =', '>=')
