@@ -80,13 +80,13 @@ class Math(LatexMarkdown):
     
         for d in self.delimiters:
             text = text.replace(d, f' {d} ')
-            
-        while '  ' in text:
-            text = text.replace('  ', ' ')
-        
+
         # Recover binary relations
         text = text.replace('> =', '>=')
         text = text.replace('< =', '<=')
+            
+        while '  ' in text:
+            text = text.replace('  ', ' ')
         
         return text.split()
 
