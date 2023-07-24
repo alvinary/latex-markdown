@@ -135,6 +135,7 @@ math_examples = [
     ('a != b', 'a \\\\neq b'),
     ('a in A', 'a \\in A'),
     ('for all x : exists y : x in A => r(x, y)', '\\forall x : \\exists y : x \\in A \\Rightarrow r ( x, y )'),
+    ('sum from i = 1 to n of i', '\\sum_{i = 1}^{n} i'),
     ('a not in A', 'a \\\\notin A'),
     # ('f : a -> b', ),
     # ('A included in B'),

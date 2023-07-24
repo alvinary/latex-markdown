@@ -12,9 +12,16 @@ class Tests:
     def test_math(self):
         logging.info("Testing toMath")
         math_markdown = Math()
+
         for example, expected_result in math_examples:
-            results = math_markdown.get_latex(example)
-            print('\nsource:\n', example)
+            tagged_tokens = math_markdown.preprocess(example)
+            parse = math_markdown.parser.get_parse(tagged_tokens)
+            #for span in parse.spans[0, len(parse.tokens) - 1]:
+            #   print("\n".join([" ".join([str(s) for s in t]) for t in parse.get_dependencies(span[0])]))
+            #   print()
+            results = parse.evaluate()
+            print('\nsource:\n')
+            print(example)
             print('\nresults:\n', "\n".join(results))
             assert expected_result in results
 
