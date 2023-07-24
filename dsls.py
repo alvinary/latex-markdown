@@ -1,4 +1,5 @@
 from constants import *
+from md_macros import *
 
 latex_dsl = [
     ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
@@ -63,7 +64,13 @@ math_tokens = [
     'empty',
     'for',
     'all',
-    'exists'
+    'exists',
+    'from',
+    'over',
+    'of',
+    'sum',
+    'product',
+    'integral'
 ]
 
 with_delimiters = {
@@ -109,7 +116,7 @@ math_dsl = [
     ('<==>', 'inf', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
     ('in', 'inf', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
-    ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\mapsto'),
+    ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\mapsto'),
     # maps to via
     # inclusion (left and right)
     ('empty', 'elem', ('empty',), DEFAULT_PRECEDENCE, lambda x : '\\emptyset'),
@@ -122,6 +129,12 @@ math_dsl = [
     # Subindices, superindices and diacritics
     # ', ^, bar, hat, tilde
     # Common operations
+    ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : '\\sum'),
+    ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : '\\prod'),
+    ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : '\\int'),
+    ('op from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
+    ('inf from to', 'math', ('inf', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
+    ('op over', 'math', ('inf', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '} ' + f),
     # R, Q, C, Z, aleph, epsilon, 
     # Greek
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
