@@ -111,6 +111,19 @@ class Parse:
         else:
             return False
 
+    def get_dependencies(self, span):
+        queue = [span]
+        dependencies = set()
+        visited = set()
+        while queue:
+            current = queue.pop(0)
+            if current in self.parts:
+                parts = set(self.parts[current])
+                dependencies |= parts
+                queue += [p for p in parts if p not in visited]
+                visited |= parts
+        return list(sorted(dependencies))
+
     def prune(self):
 
         remove = set()

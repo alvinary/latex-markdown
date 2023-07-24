@@ -69,6 +69,7 @@ class Math(LatexMarkdown):
     def __init__(self):
         self.delimiters = list(delimiters)
         self.math_tokens = list(math_tokens)
+        self.parser = Rules(math_dsl)
 
     def tag(self, token):
         if token in self.math_tokens:
@@ -77,8 +78,7 @@ class Math(LatexMarkdown):
             return 'name'
 
     def get_latex(self, markdown):
-        grammar = Rules(math_dsl)
-        parse = grammar.get_parse(self.preprocess(markdown))
+        parse = self.parser.get_parse(self.preprocess(markdown))
         print("\nShowing parse for ", markdown, "\n")
         parse.show()
         values = parse.evaluate()
