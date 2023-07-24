@@ -252,6 +252,21 @@ def typewriter(text):
 def citation(reference):
     return macro('citation', [reference])
 
+# Auxiliary functions
+
+big_version = {
+    '\\cup' : '\\bigcup',
+    '\\sum' : '\\sum',
+    '\\prod' : '\\prod',
+    '\\int' : '\\int',
+    '\\cap' : '\\bigcap',
+    '\\wedge' : '\\bigwedge',
+    '\\vee' : '\\bigvee'
+}
+
+def big_operator(operator_name):
+    return big_version[operator_name]
+
 # Math
 
 # Small tests
