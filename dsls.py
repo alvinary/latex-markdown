@@ -127,6 +127,8 @@ math_dsl = [
     ('lvert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\lvert'),
     ('rvert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : '\\rvert'),
     # Subindices, superindices and diacritics
+    ('sub', 'math', ('math', '[_', 'math', '_]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : x + '_{' y '}'),
+    ('super', 'math', ('math', '[^', 'math', '^]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : '^{' y '}'),
     # ', ^, bar, hat, tilde
     # Common operations
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : '\\sum'),
