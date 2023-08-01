@@ -25,7 +25,7 @@ latex_dsl = [
     # Paragraphs, breaks and basic text
     ('paragraph', 'block', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x + BREAK),
     ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
-    ('inline text', 'text', ('text', 'inline_text'), DEFAULT_PRECEDENCE, lambda x, y : x + SPACE + y)
+    ('inline text', 'text', ('text', 'inline_text'), DEFAULT_PRECEDENCE, lambda x, y : x + SPACE + y),
     # Special symbols for titles, sections, and subsections
     ('section mark', 'section_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
     ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
