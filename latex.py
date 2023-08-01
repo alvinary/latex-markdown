@@ -52,6 +52,15 @@ class Latex(LatexMarkdown):
 
     def preprocess(self, text):
         text = text.replace(NEWLINE, EXPLICIT_NEWLINE)
+        double_newline = EXPLICIT_NEWLINE * 2
+        double_break = EXPLICIT_BREAK * 2
+        text = text.replace(double_newline, EXPLICIT_BREAK)
+        while double_break in text:
+            text = text.replace(double_break, EXPLICIT_BREAK)
+        text = text.replace(EXPLICIT_BREAK + EXPLICIT_NEWLINE, EXPLICIT_BREAK)
+        text = text.replace(EXPLICIT_NEWLINE + EXPLICIT_BREAK, EXPLICIT_BREAK)
+        while "  " in text:
+            text = text.replace("  ", " ")
         pretokens = text.split()
         tokens = []
         text = []
