@@ -1,5 +1,5 @@
 import logging
-from latex import Beamer, Math
+from latex import Beamer, Math, Latex
 from rules import Rules
 from parse import Parse
 from examples import *
