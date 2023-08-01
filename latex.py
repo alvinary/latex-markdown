@@ -6,7 +6,7 @@ from rules import Rules
 
 class LatexMarkdown:
 
-    def __init__(self, dsl, tokens, default, prepreocessor)
+    def __init__(self, dsl, tokens, default, prepreocessor):
         self.parser = Rules(dsl)
         self.special_tokens = tokens
         self.default_token = default
