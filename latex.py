@@ -33,7 +33,7 @@ class LatexMarkdown:
 
 class Latex(LatexMarkdown):
 
-    def __init__(self)
+    def __init__(self):
         self.parser = Rules(latex_dsl)
         self.special_tokens = latex_tokens
 
