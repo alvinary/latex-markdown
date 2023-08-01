@@ -13,10 +13,18 @@ class Tests:
     def test_latex(self):
         logging.info("Testing Latex class")
         latex_markdown = Latex()
-        latex_outputs = []
         for example in latex_examples:
-            latex_outputs = latex_markdown.get_latex(example)
-        print(latex_outputs)
+            tagged_tokens = latex_markdown.preprocess(example)
+            tokens = [t for (t, s) in tagged_tokens]
+            print(" ".join(tokens).replace("@", NEWLINE + "@"))
+            parse = latex_markdown.parser.get_parse(tagged_tokens)
+            #for span in parse.spans[0, len(parse.tokens) - 1]:
+            #   print("\n".join([" ".join([str(s) for s in t]) for t in parse.get_dependencies(span[0])]))
+            #   print()
+            results = parse.evaluate()
+            print('\nsource:\n')
+            print(example)
+            print('\nresults:\n', "\n".join(results))
 
     def test_math(self):
         logging.info("Testing Math class")
