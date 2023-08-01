@@ -98,7 +98,8 @@ without_delimiters = {
 }
 
 math_dsl = [
-    # Core definitions
+    # DSL-specific
+    ('Magic wand', 'math', ('[:', 'math', ':]'), DEFAULT_PRECEDENCE + 15, lambda _, x, __ : x),
     # Delimiters
     ('left parenthesis', 'delim', ('(',), DEFAULT_PRECEDENCE, lambda x: x),
     ('right parenthesis', 'delim', (')',), DEFAULT_PRECEDENCE, lambda x: x),
