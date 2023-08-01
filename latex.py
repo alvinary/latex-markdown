@@ -64,7 +64,7 @@ class Latex(LatexMarkdown):
         pretokens = text.split()
         tokens = []
         text = []
-        for pretoken in pretokens:
+        for token in pretokens:
             if token in self.special_tokens and not text:
                 tokens.append(token)
             elif token in self.special_tokens and text:
