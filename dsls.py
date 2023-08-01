@@ -1,5 +1,5 @@
 from constants import *
-from md_macros import *
+from macros import *
 
 latex_dsl = [
     ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
