@@ -6,10 +6,11 @@ from rules import Rules
 
 class LatexMarkdown:
 
-    self.parser = Rules([])
-    self.special_tokens = []
-    self.default_token = ""
-    self.preprocessor = lambda x: x
+    def __init__(self, dsl, tokens, default, prepreocessor)
+        self.parser = Rules(dsl)
+        self.special_tokens = tokens
+        self.default_token = default
+        self.preprocessor = preprocessor
     
     def tag(self, token):
         if token in self.special_tokens:
