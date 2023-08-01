@@ -157,24 +157,3 @@ class Math(LatexMarkdown):
         tags = [self.tag(t) for t in tokens]
 
         return list(zip(tokens, tags))
-
-
-# These are most special characters visible in a QWERTY keyboard
-special_characters = (
-    '" ' +
-    "< > ( ) { } [] / \\ ' ! = + - * & | % $ ^ ? @ # ~ ; : , . ").split()
-
-
-def default_tokenizer(string, special_tokens=SPECIAL_TOKENS):
-    for p in special_tokens:
-        string = string.replace(p, f' {p} ')
-    return string.split()
-
-
-def whitespace_tokenizer(string, special_tokens=SPECIAL_TOKENS):
-    for p in special_tokens:
-        string = string.replace(p, f' {p} ')
-    string = " NEWLINE ".join(string.split(NEWLINE))
-    string = " TAB ".join(string.split(TAB))
-    string = " SPACE ".join(string.split(SPACE))
-    return string.split()
