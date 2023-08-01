@@ -135,8 +135,8 @@ math_dsl = [
     # Subindices, superindices and diacritics
     ('sub', 'math', ('math', '[_', 'math', '_]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : x + '_{' + y + '}'),
     ('super', 'math', ('math', '[^', 'math', '^]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : '^{' + y + '}'),
-    ('short sub', 'math', ('math', 'sub', 'math'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : x + '_{' + y + '}'),
-    ('short super', 'math', ('math', 'sup', 'math'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : '^{' + y + '}'),
+    ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : x + '_{' + y + '}'),
+    ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : '^{' + y + '}'),
     # ', ^, bar, hat, tilde
     # Common operations
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : '\\sum'),
