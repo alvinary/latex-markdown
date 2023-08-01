@@ -6,20 +6,43 @@ from rules import Rules
 
 class LatexMarkdown:
 
-    def get_latex(self):
-        raise NotImplemented
+    self.parser = Rules([])
+    self.special_tokens = []
+    self.default_token = ""
+    self.preprocessor = lambda x: x
+    
+    def tag(self, token):
+        if token in self.special_tokens:
+            return token
+        else:
+            return self.default_token
+
+    def get_latex(self, markdown):
+        tagged_tokens = self.preprocess(text)
+        parse = self.parser.get_parse(tagged_tokens)
+        values = list(parse.evaluate())
+        return values
 
     def preprocess(self, text):
-        raise NotImplemented
-
-    def get_tokenized_tokens(self, token):
-        if token in SPECIAL_TOKENS:
-            return token 
-        else:
-            return TEXT_TOKEN
+        text = self.preprocessor(text)
+        tokens = text.split()
+        tags = [self.tag(t) for t in tokens]
+        tagged_tokens = list(zip(tokens, tags))
+        return tagged_tokens
 
 class Latex(LatexMarkdown):
-    pass
+
+    self.parser = Rules(latex_dsl)
+    self.special_tokens = latex_tokens
+
+    def get_latex(self, markdown):
+        pass
+        
+    def tag(self, token):
+        pass
+    
+    def prepreocess(self, text):
+        pass
 
 class Beamer(LatexMarkdown):
 
@@ -68,7 +91,7 @@ class Math(LatexMarkdown):
 
     def __init__(self):
         self.delimiters = list(delimiters)
-        self.math_tokens = list(math_tokens)
+        self.special_tokens = list(math_tokens)
         self.parser = Rules(math_dsl)
 
     def tag(self, token):
