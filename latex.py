@@ -70,9 +70,10 @@ class Latex(LatexMarkdown):
             elif token in self.special_tokens and text:
                 tokens.append(" ".join(text))
                 tokens.append(token)
-                text = text
+                text = []
             else:
                 text.append(token)
+            tokens.append(" ".join(text))
         tags = [self.tag(t) for t in tokens]
         tagged_tokens = list(zip(tokens, tags))
         return tagged_tokens
