@@ -36,15 +36,37 @@ class Latex(LatexMarkdown):
     def __init__(self):
         self.parser = Rules(latex_dsl)
         self.special_tokens = latex_tokens
+        self.default_token = "text"
+    
+    def tag(self, token):
+        if token in self.special_tokens:
+            return token
+        else:
+            return self.default_token
 
     def get_latex(self, markdown):
-        pass
-        
-    def tag(self, token):
-        pass
-    
-    def prepreocess(self, text):
-        pass
+        tagged_tokens = self.preprocess(text)
+        parse = self.parser.get_parse(tagged_tokens)
+        values = list(parse.evaluate())
+        return values
+
+    def preprocess(self, text):
+        text = text.replace(NEWLINE, EXPLICIT_NEWLINE)
+        pretokens = text.split()
+        tokens = []
+        text = []
+        for pretoken in pretokens:
+            if token in self.special_tokens and not text:
+                tokens.append(token)
+            elif token in self.special_tokens and text:
+                tokens.append(" ".join(text))
+                tokens.append(token)
+                text = text
+            else:
+                text.append(token)
+        tags = [self.tag(t) for t in tokens]
+        tagged_tokens = list(zip(tokens, tags))
+        return tagged_tokens
 
 class Beamer(LatexMarkdown):
 
