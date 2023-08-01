@@ -63,17 +63,17 @@ class Latex(LatexMarkdown):
             text = text.replace("  ", " ")
         pretokens = text.split()
         tokens = []
-        text = []
+        text_tokens = []
         for token in pretokens:
-            if token in self.special_tokens and not text:
+            if token in self.special_tokens and not text_tokens:
                 tokens.append(token)
-            elif token in self.special_tokens and text:
-                tokens.append(" ".join(text))
+            elif token in self.special_tokens and text_tokens:
+                tokens.append(" ".join(text_tokens))
                 tokens.append(token)
-                text = []
+                text_tokens = []
             else:
-                text.append(token)
-        tokens.append(" ".join(text))
+                text_tokens.append(token)
+        tokens.append(" ".join(text_tokens))
         tags = [self.tag(t) for t in tokens]
         tagged_tokens = list(zip(tokens, tags))
         return tagged_tokens
