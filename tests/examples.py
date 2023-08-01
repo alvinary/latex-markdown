@@ -1,28 +1,3 @@
-basicExample = '''
-
-# A super long example
-
-## Anatomy of a Serial Procrastinator
-
-Pee poo pee pee poo. Ala ala momola
-soco choco me eme asasaa lllaaa aaaa
-ssldsdl . asdad. asdasdadasd.
-
-asaskasaksdasdasd
-
-## asmakdjasdlkajsdla
-
-asdasd sadasdas vksjadlkq dkqjdc asdkj KAJ DS
-sadasd as dad asdadad.
-
-adasda ddasd a.
-
-adasdadasd. asdasfasf.af fafafaf.
-afsfaf. fafafafa.
-
-aaaa.
-'''        
-        
 example = '''
 
 # BEAMER MARKDOWN
@@ -85,35 +60,6 @@ You can always do stuff wrong
 _________________________________________
 '''
 
-testText = '''# Common Words for Kitchen Items
-
-____________
-
-## Kitchen Items
-
-If you are standing in a kitchen, you may find one or several of these items:
-
-* A big plastic box that humms and has a door
-
-* A small plastic box with a round door or
-a lid that can be opened from above, with a strange cylinder with holes
-
-== Note ======
-
-The plastic things are all connected to a power supply, do not fiddle with them haphazardly
-
-=======
-
-_____________________
-
-* The first item is called A FRIDGE
-* The second item is a WASHING MACHINE
-
-Both items are types of appliances
-
-
-'''
-
 test_grammar = [
             ('integer', 'number', ('digits',), 10, lambda x : int(x)),
             ('grouping', 'number', ('lparen', 'number', 'rparen'), 25, lambda _, x, __ : x),
@@ -123,6 +69,23 @@ test_grammar = [
             ('substraction', 'number', ('number', 'minus', 'number'), 10, lambda x, _, z : x - z),
             ('five aguments', 'foo', ('bar', 'barfoo', 'foobar', 'barbar', 'foofoo'), 10, lambda x, y, z, w, u : [x, y, z, w, u])
         ]
+
+latex_examples = [
+        '''
+        # Why sections are better suited for a single numeral
+
+        There are many sections, and a single title. So titles can have a less
+        typable syntax without interferring too much.
+
+        ## How about subsections?
+
+        Subsections are written with double hashes/ double numerals.
+
+        ## Some other subsection
+
+        This is some other subsection.
+        '''
+]
 
 math_tests = ['( a b over b a ) equals 1',
     'all x : x not in ø',
