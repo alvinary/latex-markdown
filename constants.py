@@ -40,10 +40,5 @@ EXPLICIT_BREAK = ' @BREAK@ '
 DOUBLE_STAR = '**'
 WIGGLE = '~'
 
-SPECIAL_TOKENS = [STAR, TITLE, SECTION, SUBSECTION, THICK_BAR, SHORT_THICK_BAR, UNDERSCORE, THIN_BAR, EXPLICIT_NEWLINE, EXPLICIT_TAB, DOUBLE_STAR, WIGGLE]
-
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
-
-TEXT_TOKEN = 'texttoken'
-SPECIAL_TOKEN = 'specialtoken'
