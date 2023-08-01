@@ -1,10 +1,11 @@
 import logging
-from md_latex import Beamer, Math
-from md_rules import Rules
-from md_parse import Parse
+from latex import Beamer, Math
+from rules import Rules
+from parse import Parse
 from examples import *
 
 class Tests:
+    
     def test_beamer(self):
         logging.info("Testing toBeamer")
         toBeamer().get_latex()
