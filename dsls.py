@@ -19,6 +19,7 @@ latex_dsl = [
     # document contents and some more trailing whitespace
     ('document', 'document', ('break', 'content', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
     # Types of content
+    ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
     ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
     # Blocks for images, tables, equations, and so on
