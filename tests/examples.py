@@ -140,6 +140,7 @@ math_examples = [
     ('sum over i in A of f sub i (x)', '\\sum_{i \\in A} f_{i} ( x )'),
     ('sum over i in A of f sub i (x sub i sup 2)', '\\sum_{i \\in A} f_{i} ( x_{i}^{2} )'),
     ('sum over i in A of f sup i (x sup i sub 2)', '\\sum_{i \\in A} f^{i} ( x^{i}_{2} )'),
+    ('a [: not in :] A', 'a \\\\notin A'),
     ('a not in A', 'a \\\\notin A'),
     # ('f : a -> b', ),
     # ('A included in B'),
