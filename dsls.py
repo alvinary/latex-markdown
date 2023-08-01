@@ -11,7 +11,8 @@ latex_tokens = [
     "~",
     "[.",
     ".]",
-    EXPLICIT_NEWLINE
+    EXPLICIT_NEWLINE,
+    EXPLICIT_BREAK
 ]
 
 latex_dsl = [
@@ -23,6 +24,9 @@ latex_dsl = [
     ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
     # Blocks for images, tables, equations, and so on
+    # Whitespace
+    ('break from text', 'break', (EXPLICIT_BREAK,), DEFAULT_PRECEDENCE, IDENTITY),
+    ('newline from text', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
     # Paragraphs, breaks and basic text
     ('paragraph', 'block', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x + BREAK),
     ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
@@ -35,7 +39,6 @@ latex_dsl = [
     ('section', 'text', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x) + BREAK),
     ('subsection', 'text', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x) + BREAK),
     # Citations
-    ('newlines from text', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
     # Formatted text
     ('double star', 'double_star', ('**',), DEFAULT_PRECEDENCE, IDENTITY),
