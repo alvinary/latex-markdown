@@ -102,8 +102,6 @@ class Math(LatexMarkdown):
 
     def get_latex(self, markdown):
         parse = self.parser.get_parse(self.preprocess(markdown))
-        print("\nShowing parse for ", markdown, "\n")
-        parse.show()
         values = parse.evaluate()
         return list(values)
 
