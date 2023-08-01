@@ -7,11 +7,19 @@ from examples import *
 class Tests:
     
     def test_beamer(self):
-        logging.info("Testing toBeamer")
+        logging.info("Testing Beamer class")
         toBeamer().get_latex()
 
+    def test_latex(self):
+        logging.info("Testing Latex class")
+        latex_markdown = Latex()
+        latex_outputs = []
+        for example in latex_examples:
+            latex_outputs = latex_markdown.get_latex(example)
+        print(latex_outputs)
+
     def test_math(self):
-        logging.info("Testing toMath")
+        logging.info("Testing Math class")
         math_markdown = Math()
 
         for example, expected_result in math_examples:
@@ -95,4 +103,6 @@ if __name__ == "__main__":
     test_parse = TestParse()
     test_parse.test_parse()
     test_markdown = Tests()
+    test_markdown.test_latex()
     test_markdown.test_math()
+    
