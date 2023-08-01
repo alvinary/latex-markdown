@@ -97,7 +97,7 @@ class Math(LatexMarkdown):
         self.parser = Rules(math_dsl)
 
     def tag(self, token):
-        if token in self.math_tokens:
+        if token in self.special_tokens:
             return token
         else:
             return 'name'
