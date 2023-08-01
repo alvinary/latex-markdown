@@ -1,4 +1,4 @@
-from md_parse import Parse
+from parse import Parse
 from constants import *
 
 class Rules:
