@@ -73,7 +73,7 @@ class Latex(LatexMarkdown):
                 text = []
             else:
                 text.append(token)
-            tokens.append(" ".join(text))
+        tokens.append(" ".join(text))
         tags = [self.tag(t) for t in tokens]
         tagged_tokens = list(zip(tokens, tags))
         return tagged_tokens
