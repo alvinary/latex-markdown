@@ -2,6 +2,7 @@ import logging
 from latex import Beamer, Math, Latex
 from rules import Rules
 from parse import Parse
+from constants import NEWLINE
 from examples import *
 
 class Tests:
