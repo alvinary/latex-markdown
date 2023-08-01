@@ -133,22 +133,3 @@ def whitespace_tokenizer(string, special_tokens=SPECIAL_TOKENS):
     string = " TAB ".join(string.split(TAB))
     string = " SPACE ".join(string.split(SPACE))
     return string.split()
-
-# Math
-
-# Small tests
-
-testTitle = '\\title'
-
-testItems = '''\\begin{itemize}
-  \\item This is item 1
-  \\item This is item 2
-  \\item This is item 3
-\\end{itemize}'''
-
-resultTitle = singleMacro('title')
-
-resultItems = beginEnd('itemize', '\n'.join([item(f'This is item {str(i)}') for i in [1, 2, 3]]))
-
-assert resultTitle == testTitle
-assert resultItems == testItems
