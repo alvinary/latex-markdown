@@ -6,6 +6,7 @@ latex_tokens = [
     "##",
     "###",
     THIN_BAR,
+    "*",
     "**",
     "~",
     "[.",
@@ -14,37 +15,36 @@ latex_tokens = [
 ]
 
 latex_dsl = [
-    ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
-    ('section mark', 'section_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
-    ('subsection mark', 'subsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
-    
+    # A latex document is some trailing whitespace followed by the
+    # document contents and some more trailing whitespace
+    ('document', 'document', ('break', 'content', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    # Types of content
+    ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
+    ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
+    # Blocks for images, tables, equations, and so on
+    # Paragraphs, breaks and basic text
+    ('paragraph', 'block', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x + BREAK),
+    ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
+    ('inline text', 'text', ('text', 'inline_text'), DEFAULT_PRECEDENCE, lambda x, y : x + SPACE + y)
+    # Special symbols for titles, sections, and subsections
+    ('section mark', 'section_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
+    ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
+    ('subsubsection', 'subsubsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
+    # Document hierarchy
+    ('section', 'text', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x) + BREAK),
+    ('subsection', 'text', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x) + BREAK),
+    # Citations
     ('newlines from text', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
+    # Formatted text
     ('double star', 'double_star', ('**',), DEFAULT_PRECEDENCE, IDENTITY),
     ('wiggle', 'wiggle', ('~',), DEFAULT_PRECEDENCE, IDENTITY),
-    
-    ('paragraph', 'paragraph', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, y: x + y),
-    
-    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
-    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
-    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
-    
-    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
-    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
-    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
-    
-    ('title', 'thin_bar', ('title_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: title(x)),
-    ('section', 'thin_bar', ('section_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x : section(x)),
-    ('subsection', 'thin_bar', ('subsection_mark', 'text'), DEFAULT_PRECEDENCE, lambda _, x: subsection(x)),
-    
-    ('multiline text', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
-    ('cite in text', 'text', ('text', 'citation', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
-    ('multiline text', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, y, z: x + y + z),
-    
+    # todo: Make equations inline text
+    ('inline citation', 'inline_text', ('citation',), DEFAULT_PRECEDENCE, lambda x : x), # todo: call relevant function
+    # Images, citations, tables, indices, and references
     ('left citation mark', 'left_cite', ('[.',), DEFAULT_PRECEDENCE, IDENTITY),
     ('right citation mark', 'right_cite', ('.]',), DEFAULT_PRECEDENCE, IDENTITY),
     ('citation', 'citation', ('left_cite', 'text', 'right_cite'), DEFAULT_PRECEDENCE, lambda _, x, __:  citation(x)),
-    
     ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK)
 ]
