@@ -2,7 +2,7 @@ import logging
 from constants import *
 from dsls import *
 from collections import defaultdict
-from md_rules import Rules
+from rules import Rules
 
 class LatexMarkdown:
 
