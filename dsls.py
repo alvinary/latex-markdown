@@ -1,6 +1,18 @@
 from constants import *
 from macros import *
 
+latex_tokens = [
+    "#",
+    "##",
+    "###",
+    THIN_BAR,
+    "**",
+    "~",
+    "[.",
+    ".]",
+    EXPLICIT_NEWLINE
+]
+
 latex_dsl = [
     ('title mark', 'title_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
     ('section mark', 'section_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
