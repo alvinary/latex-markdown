@@ -105,6 +105,7 @@ math_examples = [
     ('sum over i in A of f sup i (x sup i sub 2)', '\\sum_{i \\in A} f^{i} ( x^{i}_{2} )'),
     ('a [: not in :] A', 'a \\\\notin A'),
     ('a not in A', 'a \\\\notin A'),
+    ('for all x in R . exists y in R . xy = 1', '\\forall x \\in \\R. \\exists y \\in \\R . xy = 1'), 
     # ('f : a -> b', ),
     # ('A included in B'),
     # ('A subset of B'),
