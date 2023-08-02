@@ -21,10 +21,10 @@ latex_dsl = [
     # A latex document is some trailing whitespace followed by the
     # document contents and some more trailing whitespace
     ('document', 'document', ('begin', 'content', 'end'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
-    ('newline whitespace', 'whitespace', ('newline',), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
-    ('break whitespace', 'whitespace', ('break',), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
-    ('begin', 'begin', (BEGIN_DOCUMENT,), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
-    ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('newline whitespace', 'whitespace', ('newline',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('break whitespace', 'whitespace', ('break',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('begin', 'begin', (BEGIN_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x, : x),
+    ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x : x),
     # Types of content
     ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
     ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
