@@ -51,6 +51,7 @@ class Latex(LatexMarkdown):
         return values
 
     def preprocess(self, text):
+        text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"
         text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
         pretokens = text.split()
         tokens = []
@@ -83,6 +84,8 @@ class Latex(LatexMarkdown):
             else:   
                 text_tokens.append(token)
         tokens.append(" ".join(text_tokens))
+        if "" in tokens:
+            tokens.remove("")
         tags = [self.tag(t) for t in tokens]
         tagged_tokens = list(zip(tokens, tags))
         return tagged_tokens
