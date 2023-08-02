@@ -93,6 +93,8 @@ math_tokens = [
     '[_',
     '^]',
     '[^',
+    'notin',
+    'C', 'R', 'Q', 'Z', 'N'
 ]
 
 with_delimiters = {
@@ -138,6 +140,7 @@ math_dsl = [
     ('==>', 'inf', ('==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longrightarrow'),
     ('<==>', 'inf', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
     ('in', 'inf', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
+    ('notin', 'math', ('notin',), DEFAULT_PRECEDENCE, lambda _, __: '\\\\notin'),
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\mapsto'),
     # maps to via
@@ -162,7 +165,12 @@ math_dsl = [
     ('op from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('inf from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
-    # R, Q, C, Z, aleph, epsilon, 
+    # R, Q, C, Z, aleph, epsilon,
+    ('reals', 'name', ('R',), DEFAULT_PRECEDENCE, lambda x : '\\R'),
+    ('complex', 'name', ('C',), DEFAULT_PRECEDENCE, lambda x : '\\Complex'),
+    ('rationals', 'name', ('Q',), DEFAULT_PRECEDENCE, lambda x : '\\Q'),
+    ('integers', 'name', ('Z',), DEFAULT_PRECEDENCE, lambda x : '\\Z'),
+    ('naturals', 'name', ('N',), DEFAULT_PRECEDENCE, lambda x : '\\N'),
     # Greek
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
     ('element', 'math', ('elem',), DEFAULT_PRECEDENCE - 5, lambda x : x),
