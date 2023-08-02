@@ -51,27 +51,36 @@ class Latex(LatexMarkdown):
         return values
 
     def preprocess(self, text):
-        text = text.replace(NEWLINE, EXPLICIT_NEWLINE)
-        double_newline = EXPLICIT_NEWLINE * 2
-        double_break = EXPLICIT_BREAK * 2
-        text = text.replace(double_newline, EXPLICIT_BREAK)
-        while double_break in text:
-            text = text.replace(double_break, EXPLICIT_BREAK)
-        text = text.replace(EXPLICIT_BREAK + EXPLICIT_NEWLINE, EXPLICIT_BREAK)
-        text = text.replace(EXPLICIT_NEWLINE + EXPLICIT_BREAK, EXPLICIT_BREAK)
-        while "  " in text:
-            text = text.replace("  ", " ")
+        text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
         pretokens = text.split()
         tokens = []
         text_tokens = []
+        newline_tokens = []
         for token in pretokens:
-            if token in self.special_tokens and not text_tokens:
+            is_newline = token == EXPLICIT_NEWLINE
+            is_special = token  in self.special_tokens
+            text_empty = not text_tokens
+            is_break = len(newline_tokens) > 1
+            if not is_newline and is_break:
+                tokens.append(EXPLICIT_BREAK)
+                newline_tokens = []
+            elif not is_newline and newline_tokens:
+                tokens.append(EXPLICIT_NEWLINE)
+                newline_tokens = []
+            if is_special and not is_newline and text_empty:
                 tokens.append(token)
-            elif token in self.special_tokens and text_tokens:
+            elif is_special and not is_newline and text_tokens:
                 tokens.append(" ".join(text_tokens))
                 tokens.append(token)
                 text_tokens = []
-            else:
+            elif is_newline and text_tokens:
+                tokens.append(" ".join(text_tokens))
+                newline_tokens.append(token)
+                text_tokens = []
+            elif is_newline and text_empty:
+                newline_tokens.append(token)
+                
+            else:   
                 text_tokens.append(token)
         tokens.append(" ".join(text_tokens))
         tags = [self.tag(t) for t in tokens]
