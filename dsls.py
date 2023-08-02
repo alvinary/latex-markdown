@@ -12,21 +12,27 @@ latex_tokens = [
     "[.",
     ".]",
     EXPLICIT_NEWLINE,
-    EXPLICIT_BREAK
+    EXPLICIT_BREAK,
+    BEGIN_DOCUMENT,
+    END_DOCUMENT
 ]
 
 latex_dsl = [
     # A latex document is some trailing whitespace followed by the
     # document contents and some more trailing whitespace
-    ('document', 'document', ('break', 'content', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('document', 'document', ('begin', 'content', 'end'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('newline whitespace', 'whitespace', ('newline',), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('break whitespace', 'whitespace', ('break',), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('begin', 'begin', (BEGIN_DOCUMENT,), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
     # Types of content
     ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
     ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
     # Blocks for images, tables, equations, and so on
     # Whitespace
-    ('break from text', 'break', (EXPLICIT_BREAK,), DEFAULT_PRECEDENCE, IDENTITY),
-    ('newline from text', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
+    ('break token', 'break', (EXPLICIT_BREAK,), DEFAULT_PRECEDENCE, IDENTITY),
+    ('newline token', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
     # Paragraphs, breaks and basic text
     ('paragraph', 'block', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x + BREAK),
     ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
@@ -36,8 +42,8 @@ latex_dsl = [
     ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
     ('subsubsection', 'subsubsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
     # Document hierarchy
-    ('section', 'text', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x) + BREAK),
-    ('subsection', 'text', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x) + BREAK),
+    ('section', 'block', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x) + BREAK),
+    ('subsection', 'block', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x) + BREAK),
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
     # Formatted text
@@ -133,14 +139,14 @@ math_dsl = [
     # Basic notation for sets, functions, propositional and predicate logic
     ('and', 'inf', ('and',), DEFAULT_PRECEDENCE, lambda _: '\\land'),
     ('or', 'inf', ('or',), DEFAULT_PRECEDENCE, lambda _: '\\lor'),
-    ('not', 'pref', ('not',), DEFAULT_PRECEDENCE, lambda _: '\\\\neg'),
+    ('not', 'inf', ('not',), DEFAULT_PRECEDENCE, lambda _: '\\\\neg'),
     ('iff', 'inf', ('iff',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
     ('<=>', 'inf', ('<=>',), DEFAULT_PRECEDENCE, lambda _: '\\Leftrightarrow'),
     ('=>', 'inf', ('=>',), DEFAULT_PRECEDENCE, lambda _: '\\Rightarrow'),
     ('==>', 'inf', ('==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longrightarrow'),
     ('<==>', 'inf', ('<==>',), DEFAULT_PRECEDENCE, lambda _: '\\Longleftrightarrow'),
     ('in', 'inf', ('in',), DEFAULT_PRECEDENCE, lambda x: '\\in'),
-    ('notin', 'math', ('notin',), DEFAULT_PRECEDENCE, lambda _, __: '\\\\notin'),
+    ('notin', 'inf', ('notin',), DEFAULT_PRECEDENCE, lambda _, __: '\\\\notin'),
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\\\notin'),
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: '\\mapsto'),
     # maps to via
