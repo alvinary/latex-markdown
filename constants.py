@@ -35,10 +35,12 @@ SHORT_THICK_BAR = '=='
 THICK_BAR = '=' * 44
 DOUBLE_SPACE = '  '
 EXPLICIT_TAB = ' @TAB@ '
-EXPLICIT_NEWLINE = ' @NEWLINE@ '
-EXPLICIT_BREAK = ' @BREAK@ '
+EXPLICIT_NEWLINE = '@NEWLINE@'
+EXPLICIT_BREAK = ' @BREAK@'
 DOUBLE_STAR = '**'
 WIGGLE = '~'
+BEGIN_DOCUMENT = '@_BEGIN_@'
+END_DOCUMENT = '@_END_@'
 
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
