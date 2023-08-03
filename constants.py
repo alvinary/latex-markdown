@@ -44,3 +44,18 @@ END_DOCUMENT = '@_END_@'
 
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
+
+PUNCTUATION = [
+        ".",
+        ")",
+        "(",
+        "]",
+        "[",
+        "{",
+        "}",
+        "-",
+        "_",
+        ",",
+        ":",
+        ";"
+        ]
