@@ -161,7 +161,7 @@ math_examples = [
     ('a = b', 'a = b'),
     ('a != b', 'a \\\\neq b'),
     ('a in A', 'a \\in A'),
-    ('for all x : exists y : x in A => r(x, y)', '\\forall x : \\exists y : x \\in A \\Rightarrow r ( x, y )'),
+    ('for all x : exists y : x in A => r(x, y)', '\\forall x : \\exists y : x \\in A \\Rightarrow r ( x , y )'),
     ('sum from i = 1 to n of i', '\\sum_{i = 1}^{n} i'),
     ('sum over t in T of f (t)', '\\sum_{t \\in T} f ( t )'),
     ('sum over i in A of f sub i (x)', '\\sum_{i \\in A} f_{i} ( x )'),
