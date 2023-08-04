@@ -85,7 +85,7 @@ We said ~v~ is an eigenvector of ~T~ if
 
 	~ Tx = kx ~
 	
-for some ~k~ in ~|K~.
+for some ~k~ in ~K~.
 
 So if ~Tx = kx~ and ~Ty = k'y~, if ~x~ and ~y~ are distinct,
 and ~y != qx~, then ~k'~ and ~k~ cannot be equal, and the
@@ -148,7 +148,9 @@ latex_examples = [
 
         This is some other subsection.
         ''',
-        math_placeholders_testcase
+        math_placeholders_testcase,
+        math_testcase
+
 ]
 
 math_tests = ['( a b over b a ) equals 1',
