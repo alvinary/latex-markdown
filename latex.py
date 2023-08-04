@@ -53,6 +53,8 @@ class Latex(LatexMarkdown):
     def preprocess(self, text):
         text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"
         text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
+        for punctuation_token in punctuation:
+            text = text.replace(punctuation_token, f" {punctuation_token} ")
         pretokens = text.split()
         tokens = []
         text_tokens = []
@@ -79,8 +81,7 @@ class Latex(LatexMarkdown):
                 newline_tokens.append(token)
                 text_tokens = []
             elif is_newline and text_empty:
-                newline_tokens.append(token)
-                
+                newline_tokens.append(token)                
             else:   
                 text_tokens.append(token)
         tokens.append(" ".join(text_tokens))
