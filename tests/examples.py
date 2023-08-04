@@ -60,6 +60,69 @@ You can always do stuff wrong
 _________________________________________
 '''
 
+math_placeholders_testcase = '''
+It is easy to prove that eigenspaces are disjoint.
+We say $$$$ is an eigenvector of $$$$ if
+
+	$$$$
+
+for some $$$$ in $$$$.
+
+So if $$$$ and $$$$, $$$$ and $$$$ are distinct,
+and $$$$, then $$$$ and $$$$ cannot be equal, and
+the two vectors cannot be elements of the same
+eigenspace.
+
+Note if $$$$ then $$$$, and in that case the two
+vectors belong to the same eigenspace.
+'''
+
+# Usa un testcase de verdad
+
+math_testcase = '''
+It is easy to prove that eigenspaces are disjoint.
+We said ~v~ is an eigenvector of ~T~ if
+
+	Tx = kx
+	
+for some k in |K.
+
+So if Tx = kx and Ty = k'y, if x and y are distinct,
+and y != qx, then k' and k cannot be equal, and the
+two vectors cannot be elements of the same eigenspace.
+
+Note if y + qx then T(y) = T(qx) = k(qx) = ky, and the
+two vectors do belong to the same eigenspace and have
+the same eigenvalue. So 'scaled versions' of the same
+vector belong to the same eigenspace.
+'''
+
+beamer_testcase = '''
+## The typed abstract machine
+
+* A JVM state consists of a heap and a stack frame. Each
+  frame contains a program counter, an operand stack and
+  a register map.
+* A typed state contains a stack type ~st~ and a register
+  type ~rt~
+* The typed abstract machine is defined by rules of the form
+
+	from
+		P[i] = instr
+		constraints
+	infer
+		i |- st, rt => st', rt'
+
+_________________________________________________
+
+## Sample rules
+
+     from 
+_______________________________________
+i |- int :: int st, rt => int :: st, rt
+
+'''
+
 test_grammar = [
             ('integer', 'number', ('digits',), 10, lambda x : int(x)),
             ('grouping', 'number', ('lparen', 'number', 'rparen'), 25, lambda _, x, __ : x),
@@ -84,7 +147,8 @@ latex_examples = [
         ## Some other subsection
 
         This is some other subsection.
-        '''
+        ''',
+        math_placeholders_testcase
 ]
 
 math_tests = ['( a b over b a ) equals 1',
