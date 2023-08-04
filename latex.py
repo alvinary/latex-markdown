@@ -63,6 +63,12 @@ class Latex(LatexMarkdown):
         math_mode = False
         tagged_tokens = []
         for token in pretokens:
+            
+            is_newline = token == EXPLICIT_NEWLINE
+            is_special = token  in self.special_tokens
+            text_empty = not text_tokens
+            is_break = len(newline_tokens) > 1
+            
             if token == BEGIN_MATH and not math_tokens:
                 math_mode = not math_mode
                 tokens.append(" ".join(text_tokens))
@@ -75,33 +81,29 @@ class Latex(LatexMarkdown):
                 tokens += tagged_math_tokens
                 tokens.append(BEGIN_MATH)
                 math_tokens = []
-            elif not math_mode:
-                is_newline = token == EXPLICIT_NEWLINE
-                is_special = token  in self.special_tokens
-                text_empty = not text_tokens
-                is_break = len(newline_tokens) > 1
-                if not is_newline and is_break:
-                    tokens.append(EXPLICIT_BREAK)
-                    newline_tokens = []
-                elif not is_newline and newline_tokens:
-                    tokens.append(EXPLICIT_NEWLINE)
-                    newline_tokens = []
-                if is_special and not is_newline and text_empty:
-                    tokens.append(token)
-                elif is_special and not is_newline and text_tokens:
-                    tokens.append(" ".join(text_tokens))
-                    tokens.append(token)
-                    text_tokens = []
-                elif is_newline and text_tokens:
-                    tokens.append(" ".join(text_tokens))
-                    newline_tokens.append(token)
-                    text_tokens = []
-                elif is_newline and text_empty:
-                    newline_tokens.append(token)                
-                else:   
-                    text_tokens.append(token)
             elif math_mode and token != BEGIN_MATH:
                 math_tokens.append(token)
+            elif not math_mode and not is_newline and is_break:
+                tokens.append(EXPLICIT_BREAK)
+                newline_tokens = []
+            elif not is_newline and newline_tokens:
+                tokens.append(EXPLICIT_NEWLINE)
+                newline_tokens = []
+            if is_special and not is_newline and text_empty:
+                tokens.append(token)
+            elif is_special and not is_newline and text_tokens:
+                tokens.append(" ".join(text_tokens))
+                tokens.append(token)
+                text_tokens = []
+            elif is_newline and text_tokens:
+                tokens.append(" ".join(text_tokens))
+                newline_tokens.append(token)
+                text_tokens = []
+            elif is_newline and text_empty:
+                newline_tokens.append(token)                
+            else:   
+                text_tokens.append(token)
+
         if text_tokens:
             tokens.append(" ".join(text_tokens))
         if "" in tokens:
