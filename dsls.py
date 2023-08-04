@@ -49,14 +49,18 @@ latex_dsl = [
     # Formatted text
     ('double star', 'double_star', ('**',), DEFAULT_PRECEDENCE, IDENTITY),
     ('wiggle', 'wiggle', ('~',), DEFAULT_PRECEDENCE, IDENTITY),
-    # todo: Make equations inline text
     ('inline citation', 'inline_text', ('citation',), DEFAULT_PRECEDENCE, lambda x : x), # todo: call relevant function
     # Images, citations, tables, indices, and references
     ('left citation mark', 'left_cite', ('[.',), DEFAULT_PRECEDENCE, IDENTITY),
     ('right citation mark', 'right_cite', ('.]',), DEFAULT_PRECEDENCE, IDENTITY),
     ('citation', 'citation', ('left_cite', 'text', 'right_cite'), DEFAULT_PRECEDENCE, lambda _, x, __:  citation(x)),
     ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
-    ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK)
+    ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK),
+    # Math
+    ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
+    ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE),
+    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
 delimiters = ['(', ')', '{', '}', '[', ']', '<', '>', '|']
