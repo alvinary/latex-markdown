@@ -11,6 +11,7 @@ latex_tokens = [
     "~",
     "[.",
     ".]",
+    "~",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -57,6 +58,8 @@ latex_dsl = [
     ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK),
     # Math
+    ('begin math', 'begin_math', ('~',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('begin math', 'end_math', ('~',), DEFAULT_PRECEDENCE, lambda x : x),
     ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : x),
