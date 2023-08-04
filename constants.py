@@ -41,6 +41,8 @@ DOUBLE_STAR = '**'
 WIGGLE = '~'
 BEGIN_DOCUMENT = '@_BEGIN_@'
 END_DOCUMENT = '@_END_@'
+BEGIN_MATH = '~'
+END_MATH = '~'
 
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
