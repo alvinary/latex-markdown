@@ -1,7 +1,7 @@
 from constants import *
 from macros import *
 
-latex_tokens = [
+latex_tokens = set([
     "#",
     "##",
     "###",
@@ -16,7 +16,7 @@ latex_tokens = [
     END_DOCUMENT,
     BEGIN_MATH,
     END_MATH
-]
+])
 
 latex_dsl = [
     # A latex document is some trailing whitespace followed by the
@@ -68,7 +68,7 @@ latex_dsl = [
 
 delimiters = ['(', ')', '{', '}', '[', ']', '<', '>', '|']
 
-math_tokens = [
+math_tokens = set([
     '(',
     ')',
     '{',
@@ -109,7 +109,7 @@ math_tokens = [
     'notin',
     'C', 'R', 'Q', 'Z', 'N',
     '+'
-]
+])
 
 with_delimiters = {
     '=>' : '=@-',
