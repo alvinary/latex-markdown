@@ -8,14 +8,14 @@ latex_tokens = [
     THIN_BAR,
     "*",
     "**",
-    "~",
     "[.",
     ".]",
-    "~",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
-    END_DOCUMENT
+    END_DOCUMENT,
+    BEGIN_MATH,
+    END_MATH
 ]
 
 latex_dsl = [
@@ -58,8 +58,8 @@ latex_dsl = [
     ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK),
     # Math
-    ('begin math', 'begin_math', ('~',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('begin math', 'end_math', ('~',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : x),
+    ('begin math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : x),
     ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : x),
@@ -107,7 +107,8 @@ math_tokens = [
     '^]',
     '[^',
     'notin',
-    'C', 'R', 'Q', 'Z', 'N'
+    'C', 'R', 'Q', 'Z', 'N',
+    '+'
 ]
 
 with_delimiters = {
@@ -184,6 +185,8 @@ math_dsl = [
     ('rationals', 'name', ('Q',), DEFAULT_PRECEDENCE, lambda x : '\\Q'),
     ('integers', 'name', ('Z',), DEFAULT_PRECEDENCE, lambda x : '\\Z'),
     ('naturals', 'name', ('N',), DEFAULT_PRECEDENCE, lambda x : '\\N'),
+    # Common operations
+    ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     # Greek
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
     ('element', 'math', ('elem',), DEFAULT_PRECEDENCE - 5, lambda x : x),
