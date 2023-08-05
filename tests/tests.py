@@ -17,12 +17,9 @@ class Tests:
         for example in latex_examples:
             tagged_tokens = latex_markdown.preprocess(example)
             tokens = [t for (t, s) in tagged_tokens]
-            print(" ".join(tokens).replace("@", NEWLINE + "@"))
             parse = latex_markdown.parser.get_parse(tagged_tokens)
-            #for span in parse.spans[0, len(parse.tokens) - 1]:
-            #   print("\n".join([" ".join([str(s) for s in t]) for t in parse.get_dependencies(span[0])]))
-            #   print()
             results = parse.evaluate()
+            #parse.show()
             print('\nsource:\n')
             print(example)
             print('\nresults:\n', "\n".join(results))
@@ -34,9 +31,6 @@ class Tests:
         for example, expected_result in math_examples:
             tagged_tokens = math_markdown.preprocess(example)
             parse = math_markdown.parser.get_parse(tagged_tokens)
-            #for span in parse.spans[0, len(parse.tokens) - 1]:
-            #   print("\n".join([" ".join([str(s) for s in t]) for t in parse.get_dependencies(span[0])]))
-            #   print()
             results = parse.evaluate()
             print('\nsource:\n')
             print(example)
@@ -89,7 +83,6 @@ class TestParse:
         tokens = "( 3 * 3 ) + ( 2 * ( 3 + 1 ) )".split()
         tags = "lparen digits times digits rparen plus lparen digits times lparen digits plus digits rparen rparen".split()
         parse = parser.get_parse(list(zip(tokens, tags)))
-        parse.show()
         values = parse.evaluate()
         for v in values:
             print(v)
@@ -97,7 +90,6 @@ class TestParse:
         tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
         tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
         parse = parser.get_parse(list(zip(tokens, tags)))
-        parse.show()
         values = parse.evaluate()
         for v in values:
             print(v)

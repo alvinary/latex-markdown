@@ -83,11 +83,11 @@ math_testcase = '''
 It is easy to prove that eigenspaces are disjoint.
 We said ~v~ is an eigenvector of ~T~ if
 
-	~ Tx = kx ~
+	Tx = kx
 	
 for some ~k~ in ~K~.
 
-So if ~Tx = kx~ and ~Ty = k'y~, if ~x~ and ~y~ are distinct,
+So if ~Tx = kx~ and ~Ty = k'y~, ~x~ and ~y~ are distinct,
 and ~y != qx~, then ~k'~ and ~k~ cannot be equal, and the
 two vectors cannot be elements of the same eigenspace.
 
