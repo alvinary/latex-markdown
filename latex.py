@@ -74,7 +74,7 @@ class Latex(LatexMarkdown):
                 tokens.append(" ".join(text_tokens))
                 tokens.append(BEGIN_MATH)
                 text_tokens = []
-            elif token == BEGIN_MATH and formula_tokens:
+            elif token == END_MATH and formula_tokens:
                 math_mode = not math_mode
                 math_text = " ".join(formula_tokens)
                 tagged_formula_tokens = self.math_parser.preprocess(math_text)
@@ -103,9 +103,12 @@ class Latex(LatexMarkdown):
                 newline_tokens.append(token)                
             else:   
                 text_tokens.append(token)
-
+                
         if text_tokens:
             tokens.append(" ".join(text_tokens))
+            
+        if tokens[-1] != END_DOCUMENT:
+            tokens.append(END_DOCUMENT)
         # Alternate between latex and math tags using the
         # same delimiter-based criterion
         tagged_tokens = []
