@@ -19,7 +19,7 @@ class LatexMarkdown:
             return self.default_token
 
     def get_latex(self, markdown):
-        tagged_tokens = self.preprocess(text)
+        tagged_tokens = self.preprocess(markdown)
         parse = self.parser.get_parse(tagged_tokens)
         values = list(parse.evaluate())
         return values
@@ -46,9 +46,10 @@ class Latex(LatexMarkdown):
             return self.default_token
 
     def get_latex(self, markdown):
-        tagged_tokens = self.preprocess(text)
+        tagged_tokens = self.preprocess(markdown)
         parse = self.parser.get_parse(tagged_tokens)
         values = list(parse.evaluate())
+        values = [self.postprocess(v) for v in values]
         return values
 
     def preprocess(self, text):
@@ -119,6 +120,13 @@ class Latex(LatexMarkdown):
                 tagged_tokens.append((token, self.tag(token)))
         # print('TAGGED TOKENS:', '\n'.join([str(s) for s in tagged_tokens]))
         return tagged_tokens
+        
+    def postprocess(self, text):
+        while '  ' in text:
+            text = text.replace('  ', ' ')
+        for p in PUNCTUATION:
+            text = text.replace(" {punctuation}" ,"{punctuation}")
+        return text
 
 class Beamer(LatexMarkdown):
 
