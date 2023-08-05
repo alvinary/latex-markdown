@@ -59,7 +59,7 @@ class Latex(LatexMarkdown):
         tokens = []
         text_tokens = []
         newline_tokens = []
-        math_tokens = []
+        formula_tokens = []
         math_mode = False
         tagged_tokens = []
         for token in pretokens:
@@ -69,27 +69,27 @@ class Latex(LatexMarkdown):
             text_empty = not text_tokens
             is_break = len(newline_tokens) > 1
             
-            if token == BEGIN_MATH and not math_tokens:
+            if token == BEGIN_MATH and not formula_tokens:
                 math_mode = not math_mode
                 tokens.append(" ".join(text_tokens))
                 tokens.append(BEGIN_MATH)
                 text_tokens = []
-            elif token == BEGIN_MATH and math_tokens:
+            elif token == BEGIN_MATH and formula_tokens:
                 math_mode = not math_mode
-                math_text = " ".join(math_tokens)
-                tagged_math_tokens = self.math_parser.preprocess(math_text)
-                tokens += tagged_math_tokens
+                math_text = " ".join(formula_tokens)
+                tagged_formula_tokens = self.math_parser.preprocess(math_text)
+                tokens += tagged_formula_tokens
                 tokens.append(BEGIN_MATH)
-                math_tokens = []
+                formula_tokens = []
             elif math_mode and token != BEGIN_MATH:
-                math_tokens.append(token)
+                formula_tokens.append(token)
             elif not math_mode and not is_newline and is_break:
                 tokens.append(EXPLICIT_BREAK)
                 newline_tokens = []
             elif not is_newline and newline_tokens:
                 tokens.append(EXPLICIT_NEWLINE)
                 newline_tokens = []
-            if is_special and not is_newline and text_empty:
+            elif is_special and not is_newline and text_empty:
                 tokens.append(token)
             elif is_special and not is_newline and text_tokens:
                 tokens.append(" ".join(text_tokens))
@@ -106,8 +106,6 @@ class Latex(LatexMarkdown):
 
         if text_tokens:
             tokens.append(" ".join(text_tokens))
-        if "" in tokens:
-            tokens.remove("")
         # Alternate between latex and math tags using the
         # same delimiter-based criterion
         tagged_tokens = []
