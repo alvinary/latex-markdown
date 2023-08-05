@@ -38,6 +38,7 @@ latex_dsl = [
     ('paragraph', 'block', ('text', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x + BREAK),
     ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
     ('inline text', 'text', ('text', 'inline_text'), DEFAULT_PRECEDENCE, lambda x, y : x + SPACE + y),
+    ('text and text', 'text', ('text', 'text'), DEFAULT_PRECEDENCE, lambda x, y : x + ' ' + SPACE + y),
     # Special symbols for titles, sections, and subsections
     ('section mark', 'section_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
     ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
@@ -58,11 +59,11 @@ latex_dsl = [
     ('basic break', 'break', ('newline', 'newline'), DEFAULT_PRECEDENCE, lambda _, __ : BREAK),
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK),
     # Math
-    ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : x),
-    ('begin math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : x),
-    ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
+    ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
+    ('begin math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
+    ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : beginEnd('equation', [x])),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
-    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
