@@ -72,7 +72,7 @@ latex_dsl = [
 delimiters = ['(', ')', '{', '}', '[', ']', '<', '>', '|']
 
 math_tokens = set([
-    '(', ')', '{', '}', '<', '>',
+    '(', ')', '{', '}', '<', '>', '(|', '|)',
     '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
@@ -123,6 +123,8 @@ math_dsl = [
     ('right brace', 'delim', ('}',), DEFAULT_PRECEDENCE, lambda _: r'\rbrace'),
     ('left angle bracket', 'delim', ('<',), DEFAULT_PRECEDENCE, lambda _: r'\langle'),
     ('right angle bracket', 'delim', ('>',), DEFAULT_PRECEDENCE, lambda _: r'\rangle'),
+    ('left vertical bar', 'delim', ('(|',), DEFAULT_PRECEDENCE, lambda _: r'\lvert'),
+    ('right vertical bar', 'delim', ('|)',), DEFAULT_PRECEDENCE, lambda _: r'\rvert'),
     # Common relations
     ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
     ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),
