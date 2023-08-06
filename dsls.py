@@ -72,7 +72,7 @@ latex_dsl = [
 delimiters = ['(', ')', '{', '}', '[', ']', '<', '>', '|']
 
 math_tokens = set([
-    '(', ')', '{', '}', '<', '>', '(|', '|)',
+    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]',
     '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
@@ -154,10 +154,10 @@ math_dsl = [
     ('exists', 'pref', ('exists',), DEFAULT_PRECEDENCE, lambda x : r'\exists'),
     ('vert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : r'\vert'),
     # Subindices, superindices and diacritics
-    ('sub', 'math', ('math', '[_', 'math', '_]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : x + '_{' + y + '}'),
-    ('super', 'math', ('math', '[^', 'math', '^]'), DEFAULT_PRECEDENCE, lambda x, _, y, __ : x + '^{' + y + '}'),
-    ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : x + '_{' + y + '}'),
-    ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 4, lambda x, _, y : x + '^{' + y + '}'),
+    ('sub', 'math', ('math', 'sub', '[:', 'math', ':]'), DEFAULT_PRECEDENCE + 10, lambda x, _,__, y, ___ : x + '_{' + y + '}'),
+    ('super', 'math', ('math', 'sup', '[:', 'math', ':]'), DEFAULT_PRECEDENCE + 10, lambda x, _, __, y, ___ : x + '^{' + y + '}'),
+    ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '_{' + y + '}'),
+    ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '^{' + y + '}'),
     # ', ^, bar, hat, tilde, vector
     ('vector', 'name', ('name', 'vector'), DEFAULT_PRECEDENCE, lambda x, _ : r'\vec{x}'),
     ('hat', 'name', ('name', 'hat'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{x}'),
