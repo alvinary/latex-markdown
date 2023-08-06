@@ -28,7 +28,9 @@ latex_dsl = [
     ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x : x),
     # Types of content
     ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x), # todo: make this unique
+    ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x),
+    # ToDo: test if 'begin document' could be the first 'blocks' element,
+    # so that not every block is 'blocks', and there are less valid parses
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
     # Blocks for images, tables, equations, and so on
     # Whitespace
@@ -61,7 +63,7 @@ latex_dsl = [
     # Math
     ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
     ('begin math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
-    ('math block', 'block', ('math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : beginEnd('equation', [x])),
+    ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : beginEnd('equation', [x])),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)

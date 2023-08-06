@@ -69,12 +69,25 @@ class Latex(LatexMarkdown):
             is_special = token  in self.special_tokens
             text_empty = not text_tokens
             is_break = len(newline_tokens) > 1
+            one_newline = len(newline_tokens) == 1
             
+            if not is_newline and is_break:
+                tokens.append(EXPLICIT_BREAK)
+                newline_tokens = []
+            elif not is_newline and one_newline:
+                tokens.append(EXPLICIT_NEWLINE)
+                newline_tokens = []
+            
+            # Begin math
             if token == BEGIN_MATH and not formula_tokens:
                 math_mode = not math_mode
                 tokens.append(" ".join(text_tokens))
                 tokens.append(BEGIN_MATH)
                 text_tokens = []
+            # Adding math
+            elif math_mode and not is_newline and token != END_MATH:
+                formula_tokens.append(token)
+            # Finish math
             elif token == END_MATH and formula_tokens:
                 math_mode = not math_mode
                 math_text = " ".join(formula_tokens)
@@ -82,16 +95,10 @@ class Latex(LatexMarkdown):
                 tokens += tagged_formula_tokens
                 tokens.append(BEGIN_MATH)
                 formula_tokens = []
-            elif math_mode and token != BEGIN_MATH:
-                formula_tokens.append(token)
-            elif not math_mode and not is_newline and is_break:
-                tokens.append(EXPLICIT_BREAK)
-                newline_tokens = []
-            elif not is_newline and newline_tokens:
-                tokens.append(EXPLICIT_NEWLINE)
-                newline_tokens = []
+            # Special token, having no text tokens stored
             elif is_special and not is_newline and text_empty:
                 tokens.append(token)
+            # Special token, having text tokens stored
             elif is_special and not is_newline and text_tokens:
                 tokens.append(" ".join(text_tokens))
                 tokens.append(token)
