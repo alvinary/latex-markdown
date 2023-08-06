@@ -83,7 +83,7 @@ math_testcase = '''
 It is easy to prove that eigenspaces are disjoint.
 We said ~v~ is an eigenvector of ~T~ if
 
-	Tx = kx
+	~ Tx = kx ~
 	
 for some ~k~ in ~K~.
 
@@ -95,6 +95,21 @@ Note if ~y + qx~ then ~T(y) = T(qx) = k(qx) = ky~, and the
 two vectors do belong to the same eigenspace and have
 the same eigenvalue. So 'scaled versions' of the same
 vector belong to the same eigenspace.
+'''
+
+stats_testcase = '''
+This is the conceptual diagram with the generalization
+of Bayes theorem from last class: ~pi(theta/X) alpha l(theta) dot pi(theta)~
+'''
+
+typographically_demanding = '''
+
+The absolute value of both sides gives
+
+	~ | epsilon sub n + 1 | = fraction ( | f''(xi sub n) | over 2 | f' ( x sub n | ) dot epsilon sub n sup 2  ~
+	
+and this shows something.
+
 '''
 
 beamer_testcase = '''
@@ -149,8 +164,9 @@ latex_examples = [
         This is some other subsection.
         ''',
         math_placeholders_testcase,
-        math_testcase
-
+        math_testcase,
+        stats_testcase,
+        typographically_demanding
 ]
 
 math_tests = ['( a b over b a ) equals 1',
