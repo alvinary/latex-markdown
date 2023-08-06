@@ -18,11 +18,19 @@ class Tests:
             tagged_tokens = latex_markdown.preprocess(example)
             tokens = [t for (t, s) in tagged_tokens]
             parse = latex_markdown.parser.get_parse(tagged_tokens)
-            results = parse.evaluate()
-            #parse.show()
+            #print('Tokens:')
+            #print(" :: ".join([str(t) for t in parse.tokens]))
+            #print()
+            results = latex_markdown.get_latex(example)
+            parse.show()
+            #print()
             print('\nsource:\n')
             print(example)
-            print('\nresults:\n', "\n".join(results))
+            print('\nresults:\n')
+            for result in results:
+                print(result)
+                print('')
+            print()
 
     def test_math(self):
         logging.info("Testing Math class")
@@ -34,7 +42,10 @@ class Tests:
             results = parse.evaluate()
             print('\nsource:\n')
             print(example)
-            print('\nresults:\n', "\n".join(results))
+            print('\nresults:\n')
+            for result in results:
+                print(result)
+                print('')
             assert expected_result in results
 
 class TestRules:
