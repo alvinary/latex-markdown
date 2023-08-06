@@ -95,6 +95,8 @@ math_tokens = set([
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde'
 ])
 
+split_tokens = [('[ :', '[:'), (': ]', ':]')]
+
 with_delimiters = {
     '=>' : '=@-',
     '<=>' : '-@=@-',
