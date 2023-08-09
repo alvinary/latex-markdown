@@ -20,9 +20,6 @@ latex_tokens = set([
     END_MATH
 ])
 
-latex_with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(latex_tokens) if set(t) & SPECIAL_CHARACTERS}
-latex_without_special = {(v, k) for (k, v) in latex_with_special.items()}
-
 latex_dsl = [
     # A latex document is some trailing whitespace followed by the
     # document contents and some more trailing whitespace
@@ -72,7 +69,7 @@ latex_dsl = [
     ('end math block', 'end_math_block', (']~',), DEFAULT_PRECEDENCE, lambda x : x),
     ('default math block', 'block', ('begin_math_block', 'math', 'end_math_block', 'break'), DEFAULT_PRECEDENCE + 10, lambda ___, x, _, __ : beginEnd('equation', [x])),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
-    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$ ' + x + ' $'),
+    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
@@ -100,7 +97,7 @@ math_tokens = set([
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde'
 ])
 
-with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if set(t) & SPECIAL_CHARACTERS}
+with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if set(t) & SPECIAL_CHARACTERS and len(t) > 1}
 without_special = {v : k for (k, v) in with_special.items()}
 
 math_dsl = [
