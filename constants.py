@@ -47,17 +47,4 @@ END_MATH = '~'
 underscores = re.compile('_____[_]+')
 thickBar = re.compile('=====[=]+')
 
-PUNCTUATION = [
-        ".",
-        ")",
-        "(",
-        "]",
-        "[",
-        "{",
-        "}",
-        "-",
-        "_",
-        ",",
-        ":",
-        ";"
-        ]
+SPECIAL_CHARACTERS = set(['(', ')', '{', '}', '[', ']', '<', '>', '|', ",", ":", ";", "."])

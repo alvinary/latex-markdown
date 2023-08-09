@@ -131,8 +131,8 @@ class Latex(LatexMarkdown):
     def postprocess(self, text):
         while '  ' in text:
             text = text.replace('  ', ' ')
-        for p in PUNCTUATION:
-            text = text.replace(" {punctuation}" ,"{punctuation}")
+        for s in SPECIAL_CHARACTERS:
+            text = text.replace(" {s}" ,"{s}")
         return text
 
 class Beamer(LatexMarkdown):
@@ -181,7 +181,7 @@ class Beamer(LatexMarkdown):
 class Math(LatexMarkdown):
 
     def __init__(self):
-        self.delimiters = list(delimiters)
+        self.special_characters = list(SPECIAL_CHARACTERS)
         self.special_tokens = list(math_tokens)
         self.parser = Rules(math_dsl)
 
@@ -197,26 +197,21 @@ class Math(LatexMarkdown):
         return list(values)
 
     def preprocess(self, text):
-
-        # Put whitespace around punctuation
-
-        for punctuation_token in PUNCTUATION:
-            text = text.replace(punctuation_token, f" {punctuation_token} ")
     
         # Hide tokens with delimiters
         
-        for k in with_delimiters:
-            text = text.replace(k, with_delimiters[k])         
+        for k in with_special:
+            text = text.replace(k, with_special[k])         
         
-        # Put whitespace around delimiters
+        # Put whitespace around special characters
         
-        for d in self.delimiters:
+        for d in self.special_characters:
             text = text.replace(d, f' {d} ')
             
         # Recover tokens
         
-        for k in without_delimiters:
-            text = text.replace(k, without_delimiters[k])
+        for k in without_special:
+            text = text.replace(k, without_special[k])
         
         # Remove double spaces
             

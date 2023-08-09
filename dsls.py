@@ -10,6 +10,8 @@ latex_tokens = set([
     "**",
     "[.",
     ".]",
+    "~[",
+    "]~",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -17,6 +19,9 @@ latex_tokens = set([
     BEGIN_MATH,
     END_MATH
 ])
+
+latex_with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(latex_tokens) if set(t) & SPECIAL_CHARACTERS}
+latex_without_special = {(v, k) for (k, v) in latex_with_special.items()}
 
 latex_dsl = [
     # A latex document is some trailing whitespace followed by the
@@ -28,7 +33,7 @@ latex_dsl = [
     ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x : x),
     # Types of content
     ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('single block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x),
     # ToDo: test if 'begin document' could be the first 'blocks' element,
     # so that not every block is 'blocks', and there are less valid parses
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
@@ -62,14 +67,14 @@ latex_dsl = [
     ('long break', 'break', ('break', 'newline'), DEFAULT_PRECEDENCE, lambda _, __: BREAK),
     # Math
     ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
-    ('begin math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
-    ('math block', 'block', ('latex_math', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : beginEnd('equation', [x])),
+    ('end math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
+    ('begin math block', 'begin_math_block', ('~[',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('end math block', 'end_math_block', (']~',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('default math block', 'block', ('begin_math_block', 'math', 'end_math_block', 'break'), DEFAULT_PRECEDENCE + 10, lambda ___, x, _, __ : beginEnd('equation', [x])),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
-    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
+    ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$ ' + x + ' $'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
-
-delimiters = ['(', ')', '{', '}', '[', ']', '<', '>', '|']
 
 math_tokens = set([
     '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]',
@@ -95,25 +100,8 @@ math_tokens = set([
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde'
 ])
 
-split_tokens = [('[ :', '[:'), (': ]', ':]')]
-
-with_delimiters = {
-    '=>' : '=@-',
-    '<=>' : '-@=@-',
-    '==>' : '==@-',
-    '<==>' : '-@==@-',
-    '>=' : '-%=',
-    '<=' : '%-='
-}
-
-without_delimiters = {
-    '=@-' : '=>',
-    '-@=@-' : '<=>',
-    '==@-' : '==>',
-    '-@==@-' : '<==>',
-    '-%=' : '>=',
-    '%-=' : '<='
-}
+with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if set(t) & SPECIAL_CHARACTERS}
+without_special = {v : k for (k, v) in with_special.items()}
 
 math_dsl = [
     # DSL-specific
