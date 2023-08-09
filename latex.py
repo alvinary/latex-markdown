@@ -223,12 +223,6 @@ class Math(LatexMarkdown):
         while '  ' in text:
             text = text.replace('  ', ' ')
             
-        # Rejoin tokens split when putting whitespace around punctuation
-        
-        for spaced, spaceless in split_tokens:
-            text = text.replace(spaced, spaceless)
-        
-            
         # Split at whitespace
 
         tokens = text.split()
