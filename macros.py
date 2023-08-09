@@ -34,9 +34,9 @@ def end(name):
     return f'{END}{LEFT_CURLY}{name}{RIGHT_CURLY}'
 
 def beginEnd(name, content, squares=[], curly=[]):
-    _begin = begin(name)
+    _begin = begin(name) + BREAK
     _args = squareArgs(squares) + curlyArgs(curly)
-    _content = indent(content)
+    _content = indent(content) + BREAK
     _end = end(name)
     listing = [_begin, _args, _content, _end]
     if '' in listing:
@@ -65,7 +65,7 @@ def beamerDocument(_titleframe, content):
     _author = author(_author)
     _date = date(_date)
     _titleFrame = titleFrame()
-    content = beginEnd('document', content)
+    content = beginEnd('document', [content])
     return BREAK.join([_class, _titleFrame, titleFrame(), content])
 
 def box(subtitle, text):
@@ -75,6 +75,7 @@ def box(subtitle, text):
 
 def document(documentClass, content):
     _documentClass = macro('documentclass', [documentClass])
+    _packages = macro('usepackage', ['amsmath'])
     _documentContent = beginEnd('document', content)
     return f"{_documentClass}{BREAK}{_documentContent}"
     
