@@ -73,7 +73,7 @@ latex_dsl = [
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
-math_tokens = set([
+math_tokens = [
     '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]',
     '=', '!=',
     '>=','<=',
@@ -95,9 +95,13 @@ math_tokens = set([
     'pi', 'theta', 'alpha', 'epsilon', 'xi',
     'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde'
-])
+]
 
-with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if set(t) & SPECIAL_CHARACTERS and len(t) > 1}
+clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=',
+    '=>', '<=>','<==>', '->', '|=', '|-',
+    '_]', '[_', '^]', '[^'}
+
+with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if t in clash_tokens}
 without_special = {v : k for (k, v) in with_special.items()}
 
 math_dsl = [

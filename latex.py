@@ -126,6 +126,8 @@ class Latex(LatexMarkdown):
             
         if tokens[-1] != END_DOCUMENT:
             tokens.append(END_DOCUMENT)
+            
+        tokens = [t for t in tokens if t]
         # Alternate between latex and math tags using the
         # same delimiter-based criterion
         tagged_tokens = []
@@ -232,8 +234,7 @@ class Math(LatexMarkdown):
         # Split at whitespace
 
         tokens = text.split()
-        if "" in tokens:
-            tokens.remove("", -1)
+        tokens = [t for t in tokens if t]
         tags = [self.tag(t) for t in tokens]
 
         return list(zip(tokens, tags))
