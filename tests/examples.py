@@ -102,11 +102,11 @@ This is the conceptual diagram with the generalization
 of Bayes theorem from last class: ~pi(theta/X) alpha l(theta) dot pi(theta)~
 '''
 
-typographically_demanding = '''
+syntactically_demanding = '''
 
 The absolute value of both sides gives
 
-~[ | epsilon sub [: n + 1 :] | = fraction ( | f''(xi sub n) | over 2 | f' ( x sub n ) | ) dot epsilon sub n sup 2 ]~
+~ (| epsilon sub [: n + 1 :] |) = fraction ( (| f'' (xi sub n) |) ) over ( 2 (| f' ( x sub n ) |) ) dot epsilon sub n sup 2 ~
 	
 and this shows something.
 
@@ -166,7 +166,7 @@ latex_examples = [
         math_placeholders_testcase,
         math_testcase,
         stats_testcase,
-        typographically_demanding
+        syntactically_demanding
 ]
 
 math_tests = ['( a b over b a ) equals 1',
