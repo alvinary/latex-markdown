@@ -30,6 +30,15 @@ class LatexMarkdown:
         tags = [self.tag(t) for t in tokens]
         tagged_tokens = list(zip(tokens, tags))
         return tagged_tokens
+        
+    def postprocess(self, text):
+        while '  ' in text:
+            text = text.replace('  ', ' ')
+        for s in RIGHT:
+            text = text.replace(" {s}" ,"{s}")
+        for s in LEFT:
+            text = text.replace("{s} " ,"{s}")
+        return text
 
 class Latex(LatexMarkdown):
 
@@ -131,8 +140,10 @@ class Latex(LatexMarkdown):
     def postprocess(self, text):
         while '  ' in text:
             text = text.replace('  ', ' ')
-        for s in SPECIAL_CHARACTERS:
+        for s in RIGHT:
             text = text.replace(" {s}" ,"{s}")
+        for s in LEFT:
+            text = text.replace("{s} " ,"{s}")
         return text
 
 class Beamer(LatexMarkdown):
@@ -221,6 +232,17 @@ class Math(LatexMarkdown):
         # Split at whitespace
 
         tokens = text.split()
+        if "" in tokens:
+            tokens.remove("", -1)
         tags = [self.tag(t) for t in tokens]
 
         return list(zip(tokens, tags))
+    
+    def postprocess(self, text):
+        while '  ' in text:
+            text = text.replace('  ', ' ')
+        for s in RIGHT:
+            text = text.replace(" {s}" ,"{s}")
+        for s in LEFT:
+            text = text.replace("{s} " ,"{s}")
+        return text
