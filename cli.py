@@ -41,7 +41,7 @@ def textfile_input(input_file):
     text = ""
     with open(input_file) as current_file:
             for line in current_file:
-                text = f"{text}\n{line}"
+                text = f"{text}{line}"
     return text
     
         
