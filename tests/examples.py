@@ -83,8 +83,8 @@ math_testcase = '''
 It is easy to prove that eigenspaces are disjoint.
 We said ~v~ is an eigenvector of ~T~ if
 
-~[ Tx = kx ]~
-	
+~ Tx = kx ~ 
+
 for some ~k~ in ~K~.
 
 So if ~Tx = kx~ and ~Ty = k'y~, ~x~ and ~y~ are distinct,
@@ -104,10 +104,10 @@ of Bayes theorem from last class: ~pi(theta/X) alpha l(theta) dot pi(theta)~
 
 syntactically_demanding = '''
 
-The absolute value of both sides gives
+The absolute value of both sides gives 
 
 ~ (| epsilon sub [: n + 1 :] |) = fraction ( (| f'' (xi sub n) |) ) over ( 2 (| f' ( x sub n ) |) ) dot epsilon sub n sup 2 ~
-	
+
 and this shows something.
 
 '''

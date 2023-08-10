@@ -65,7 +65,7 @@ class Latex(LatexMarkdown):
         text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"
         text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
         text = text.replace(BEGIN_MATH, f" {BEGIN_MATH} ")
-        pretokens = text.split()
+        pretokens = [t.strip() for t in text.split()]
         tokens = []
         text_tokens = []
         newline_tokens = []

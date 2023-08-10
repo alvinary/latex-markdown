@@ -10,8 +10,6 @@ latex_tokens = set([
     "**",
     "[.",
     ".]",
-    "~[",
-    "]~",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -65,9 +63,7 @@ latex_dsl = [
     # Math
     ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
     ('end math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
-    ('begin math block', 'begin_math_block', ('~[',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('end math block', 'end_math_block', (']~',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('default math block', 'block', ('begin_math_block', 'math', 'end_math_block', 'break'), DEFAULT_PRECEDENCE + 10, lambda ___, x, _, __ : beginEnd('equation', [x])),
+    ('default math block', 'block', ('begin_math', 'math', 'end_math', 'break'), DEFAULT_PRECEDENCE, lambda ___, x, _, __ : beginEnd('equation', x)),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
