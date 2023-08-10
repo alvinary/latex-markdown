@@ -10,6 +10,7 @@ latex_tokens = set([
     "**",
     "[.",
     ".]",
+    "--",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -41,6 +42,7 @@ latex_dsl = [
     ('text lines', 'text', ('text', 'newline', 'text'), DEFAULT_PRECEDENCE, lambda x, _, y : x + NEWLINE + y), # todo: make this right associative
     ('inline text', 'text', ('text', 'inline_text'), DEFAULT_PRECEDENCE, lambda x, y : x + SPACE + y),
     ('text and text', 'text', ('text', 'text'), DEFAULT_PRECEDENCE, lambda x, y : x + ' ' + SPACE + y),
+    ('blank', 'block', ('--', 'break'), DEFAULT_PRECEDENCE, lambda _, __ : r'\bigbreak'),
     # Special symbols for titles, sections, and subsections
     ('section mark', 'section_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
     ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
