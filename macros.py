@@ -65,7 +65,7 @@ def beamerDocument(_titleframe, content):
     _author = author(_author)
     _date = date(_date)
     _titleFrame = titleFrame()
-    content = beginEnd('document', [content])
+    content = beginEnd('document', content)
     return BREAK.join([_class, _titleFrame, titleFrame(), content])
 
 def box(subtitle, text):
