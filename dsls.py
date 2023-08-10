@@ -50,6 +50,7 @@ latex_dsl = [
     # Document hierarchy
     ('section', 'block', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x)),
     ('subsection', 'block', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x)),
+    ('subsubsection', 'block', ('subsubsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsubsection(x)),
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
     # Formatted text
@@ -65,7 +66,7 @@ latex_dsl = [
     # Math
     ('begin math', 'begin_math', (BEGIN_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
     ('end math', 'end_math', (END_MATH,), DEFAULT_PRECEDENCE, lambda x : '$'),
-    ('default math block', 'block', ('begin_math', 'math', 'end_math', 'break'), DEFAULT_PRECEDENCE, lambda ___, x, _, __ : beginEnd('equation', x)),
+    ('default math block', 'block', ('begin_math', 'math', 'end_math', 'break'), DEFAULT_PRECEDENCE, lambda ___, x, _, __ : '\[ ' + x + ' \]'),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
@@ -92,7 +93,8 @@ math_tokens = [
     '+', 'dot', 'times',
     'pi', 'theta', 'alpha', 'epsilon', 'xi',
     'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi',
-    'vector', 'hat', 'check', 'bar', 'ring', 'tilde'
+    'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
+    'subset', 'superset', 'strict'
 ]
 
 clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=',
@@ -134,7 +136,16 @@ math_dsl = [
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: 'r\mapsto'),
     ('maps to', 'inf', ('->',), DEFAULT_PRECEDENCE + 5, lambda _, __: r'\rightarrow'),
     # maps to via
-    # inclusion (left and right)
+    # Set inclusions
+    ('subset', 'inf', ('subset', 'of'), DEFAULT_PRECEDENCE + 2, lambda _, __ : r'\subseteq'),
+    ('superset', 'inf', ('superset', 'of'), DEFAULT_PRECEDENCE + 2, lambda _, __ : r'\supseteq'),
+    ('strict subset', 'inf', ('strict', 'subset', 'of'), DEFAULT_PRECEDENCE + 5, lambda _, __, ___ : r'\subseteq'),
+    ('strict superset', 'inf', ('strict', 'superset', 'of'), DEFAULT_PRECEDENCE + 5, lambda _, __, ___ : r'\supseteq'),
+    ('not subset', 'inf', ('not', 'subset', 'of'), DEFAULT_PRECEDENCE + 10, lambda _, __, ___ : r'\nsubseteq'),
+    ('not superset', 'inf', ('not', 'superset', 'of'), DEFAULT_PRECEDENCE + 10, lambda _, __, ___ : r'\nsupseteq'),
+    ('not strict subset', 'inf', ('not','strict',  'subset', 'of'), DEFAULT_PRECEDENCE + 15, lambda _, __, ___, ____ : r'\nsubset'),
+    ('not strict superset', 'inf', ('not','strict',  'superset', 'of'), DEFAULT_PRECEDENCE + 15, lambda _, __, ___, ____ : r'\nsupset'),
+    # Quantifiers, empty set and cardinal
     ('empty', 'elem', ('empty',), DEFAULT_PRECEDENCE, lambda x : r'\emptyset'),
     ('empty', 'elem', ('ø',), DEFAULT_PRECEDENCE, lambda x : r'\emptyset'),
     ('for all', 'math', ('for', 'all',), DEFAULT_PRECEDENCE + 5, lambda _, __ : r'\forall'),
