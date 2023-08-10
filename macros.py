@@ -97,6 +97,9 @@ def section(sectionTitle):
 def subsection(subsectionTitle):
     return macro('subsection', [subsectionTitle])
 
+def subsubsection(subsubsectionTitle):
+    return macro('subsubsection', [subsubsectionTitle])
+
 def item(text, bullet=''):
     return f'{BACKSLASH}item{bullet} {text}'
 
