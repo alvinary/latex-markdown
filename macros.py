@@ -34,9 +34,9 @@ def end(name):
     return f'{END}{LEFT_CURLY}{name}{RIGHT_CURLY}'
 
 def beginEnd(name, content, squares=[], curly=[]):
-    _begin = begin(name) + BREAK
+    _begin = begin(name)
     _args = squareArgs(squares) + curlyArgs(curly)
-    _content = indent(content) + BREAK
+    _content = indent(content)
     _end = end(name)
     listing = [_begin, _args, _content, _end]
     if '' in listing:
