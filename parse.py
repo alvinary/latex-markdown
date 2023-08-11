@@ -156,3 +156,31 @@ class Parse:
             end = str(end)
             print(f"{label} : {' '.join(tokens) } [{begin} : {end}]\n")
 
+    def report(self):
+        uncovered_spans = []
+        is_parsed = {i : False for i in range(len(self.tokens))}
+        for span in sorted(self.readable):
+            begin, end, _, __ = span
+            for j in range(begin, end+1):
+                is_parsed[j] = True
+        begin_unparsed = False
+        end_unparsed = False
+        middle = False
+        for i in range(len(self.tokens)):
+            if not is_parsed[i] and not middle:
+                begin_unparsed = i
+                middle = True
+            if is_parsed[i] and middle:
+                end_unparsed = i
+                middle = False
+                uncovered_spans.append((begin_unparsed, end_unparsed))   
+        for i, j in uncovered_spans:
+            uncovered = " ".join([t for t, s in self.tokens[i:j+1]])
+            context = " ".join([t for t, s in self.tokens[max(0, i - 5): min(j + 5, len(self.tokens))]])
+            print()
+            print("Uncovered span '", uncovered, "'")
+            print()
+            print("in context '", context, "'")
+            print()
+
+
