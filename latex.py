@@ -39,6 +39,7 @@ class LatexMarkdown:
         for s in LEFT:
             text = text.replace("{s} " ,"{s}")
         return text
+        
 
 class Latex(LatexMarkdown):
 
@@ -47,6 +48,7 @@ class Latex(LatexMarkdown):
         self.special_tokens = latex_tokens
         self.default_token = "text"
         self.math_parser = Math()
+        self.parse = False
     
     def tag(self, token):
         if token in self.special_tokens:
@@ -56,8 +58,8 @@ class Latex(LatexMarkdown):
 
     def get_latex(self, markdown):
         tagged_tokens = self.preprocess(markdown)
-        parse = self.parser.get_parse(tagged_tokens)
-        values = list(parse.evaluate())
+        self.parse = self.parser.get_parse(tagged_tokens)
+        values = list(self.parse.evaluate())
         values = [self.postprocess(v) for v in values]
         return values
 
@@ -65,6 +67,8 @@ class Latex(LatexMarkdown):
         text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"
         text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
         text = text.replace(BEGIN_MATH, f" {BEGIN_MATH} ")
+        while '  ' in text:
+            text = text.replace('  ', ' ')
         pretokens = [t.strip() for t in text.split()]
         tokens = []
         text_tokens = []
@@ -147,6 +151,7 @@ class Latex(LatexMarkdown):
         for s in LEFT:
             text = text.replace("{s} " ,"{s}")
         return text
+
 
 class Beamer(LatexMarkdown):
 
