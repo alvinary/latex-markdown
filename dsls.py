@@ -184,7 +184,7 @@ math_dsl = [
     ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     ('dot', 'inf', ('dot',), DEFAULT_PRECEDENCE, lambda x : r'\cdot'),
     ('times', 'inf', ('times',), DEFAULT_PRECEDENCE, lambda x : r'\times'),
-    ('large fraction', 'math', ('fraction', '(', 'math', 'over', 'math', ')'), DEFAULT_PRECEDENCE, lambda _, __, x, ___, y, ____ : r'\frac{ ' + x + ' }{ ' + y + ' }'),
+    ('large fraction', 'math', ('fraction', '(', 'math', ')', 'over', '(', 'math', ')'), DEFAULT_PRECEDENCE, lambda _, _0, x, _1, _2, _3, y, _4 : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     ('small fraction', 'math', ('name', 'over', 'name'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     # Greek
     ('pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\pi'),
