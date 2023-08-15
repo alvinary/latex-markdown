@@ -12,6 +12,7 @@ class Parse:
         self.readable = set()
         self.values = {}
         self.parts = {}
+        self.uncovered_spans = []
 
     def execute(self):
 
@@ -157,4 +158,34 @@ class Parse:
             print(f"{label} : {' '.join(tokens) } [{begin} : {end}]\n")
 
     def report(self):
-        pass
+        is_parsed = [False for i in range(len(self.tokens))]
+        for span in sorted(self.readable):
+            begin, end, _, _ = span
+            if end - begin > 5:
+                for j in range(int(begin), int(end)+1):
+                    is_parsed[j] = True
+        within_span = False
+        begin_at = False
+        end_at = False
+        uncovered = []
+        for index, flag in enumerate(is_parsed):
+            if flag == True and within_span:
+                end_at = index
+                within_span = False
+                uncovered.append((begin_at, end_at))
+            if flag == True and not within_span:
+                pass
+            if flag == False and within_span:
+                pass
+            if flag == False and not within_span:
+                begin_at = index
+                within_span = True
+        for begin, end in uncovered:
+            span_text = " ".join([t for t, s in self.tokens[begin:end+1]])
+            span_context = " ".join([t for t, s in self.tokens[max(0, begin-5):min(end+6, len(self.tokens))]])
+            print(f"The span from {begin} to {end} is not covered.")
+            print("The span reads: ")
+            print(span_text)
+            print("And is in context:")
+            print(span_context)
+            print()
