@@ -116,6 +116,10 @@ math_dsl = [
     ('right angle bracket', 'delim', ('>',), DEFAULT_PRECEDENCE, lambda _: r'\rangle'),
     ('left vertical bar', 'delim', ('(|',), DEFAULT_PRECEDENCE, lambda _: r'\lvert'),
     ('right vertical bar', 'delim', ('|)',), DEFAULT_PRECEDENCE, lambda _: r'\rvert'),
+    # Grouping 
+    ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
+    ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
+    ('square brackets', 'math', ('[', 'math', ']'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
     # Common relations
     ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
     ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),
