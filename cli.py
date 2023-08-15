@@ -43,7 +43,6 @@ def textfile_input(input_file):
             for line in current_file:
                 text = f"{text}{line}"
     return text
-    
         
 if __name__ == '__main__':
     
@@ -63,6 +62,8 @@ if __name__ == '__main__':
     if not results:
         print("The contents of the file could not be parsed.")
         print("Check for errors.")
+        print()
+        cli.latex_parser.parse.report()
     else:
         for r in results:
            print(r, "\n")
