@@ -118,7 +118,7 @@ math_dsl = [
     ('right vertical bar', 'delim', ('|)',), DEFAULT_PRECEDENCE, lambda _: r'\rvert'),
     # Grouping 
     ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
-    ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
+    ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : r'\lvert ' + y + r' \rvert'),
     ('square brackets', 'math', ('[', 'math', ']'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
     # Common relations
     ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
