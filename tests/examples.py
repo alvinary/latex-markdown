@@ -87,9 +87,13 @@ We said ~v~ is an eigenvector of ~T~ if
 
 for some ~k~ in ~K~.
 
+--
+
 So if ~Tx = kx~ and ~Ty = k'y~, ~x~ and ~y~ are distinct,
 and ~y != qx~, then ~k'~ and ~k~ cannot be equal, and the
 two vectors cannot be elements of the same eigenspace.
+
+--
 
 Note if ~y + qx~ then ~T(y) = T(qx) = k(qx) = ky~, and the
 two vectors do belong to the same eigenspace and have
@@ -106,7 +110,7 @@ syntactically_demanding = '''
 
 The absolute value of both sides gives 
 
-~ (| epsilon sub [: n + 1 :] |) = fraction ( (| f'' (xi sub n) |) ) over ( 2 (| f' ( x sub n ) |) ) dot epsilon sub n sup 2 ~
+~ | epsilon sub [: n + 1 :] | = fraction ( | f'' (xi sub n) | ) over ( 2 | f' ( x sub n ) | ) dot epsilon sub n sup 2 ~
 
 and this shows something.
 
