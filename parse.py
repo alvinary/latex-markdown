@@ -177,7 +177,7 @@ class Parse:
         is_parsed = [False for i in range(len(self.tokens))]
         span_parse = self.unfold_parse(span)
         for span in sorted(span):
-            begin, end, _, _ = span
+            _, begin, end, _ = span
             if end - begin > 5:
                 for j in range(int(begin), int(end)+1):
                     is_parsed[j] = True
