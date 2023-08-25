@@ -157,9 +157,26 @@ class Parse:
             end = str(end)
             print(f"{label} : {' '.join(tokens) } [{begin} : {end}]\n")
 
-    def report(self):
+    def unfold_parse(self, span):
+        head_span = [span]
+        parts = self.parts[span]
+        is_unary = len(parts) == 1
+        is_binary = len(parts) == 2
+        if is_binary:
+            left = parts[0]
+            right = parts[1]
+            left_spans = self.unfold_parse(left)
+            right_spans = self.unfold_parse(right)
+            return head_span + left_spans + right_spans
+        if is_unary:
+            branch = parts[0]
+            branch_spans = self.unfold_parse(branch)
+            return head_span + branch_spans
+
+    def report_span(self, span):
         is_parsed = [False for i in range(len(self.tokens))]
-        for span in sorted(self.readable):
+        span_parse = self.unfold_parse(span)
+        for span in sorted(span):
             begin, end, _, _ = span
             if end - begin > 5:
                 for j in range(int(begin), int(end)+1):
