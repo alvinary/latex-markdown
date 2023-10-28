@@ -98,8 +98,8 @@ class TestParse:
         for v in values:
             print(v)
         assert 17 in values
-        tokens = "- ( - ( 1 + 3 ) * 5 + 17 )".split()
-        tags = "minus lparen minus lparen digits plus digits rparen times digits plus digits rparen".split()
+        tokens = "- ( - ( ( 1 + 3 ) * 5 ) + 17 )".split()
+        tags = "minus lparen minus lparen lparen digits plus digits rparen times digits rparen plus digits rparen".split()
         parse = parser.get_parse(list(zip(tokens, tags)))
         values = parse.evaluate()
         for v in values:
