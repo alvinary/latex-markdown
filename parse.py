@@ -5,7 +5,7 @@ class Parse:
     def __init__(self, tokens, parser):
         self.parser = parser
         self.tokens = tokens
-        self.unvisited = set()
+        self.unvisited = []
         self.end_at = INVENTORY()
         self.begin_at = INVENTORY()
         self.spans = INVENTORY()
@@ -13,6 +13,7 @@ class Parse:
         self.values = {}
         self.parts = {}
         self.uncovered_spans = []
+        self.considered = set()
 
     def execute(self):
 
@@ -21,22 +22,30 @@ class Parse:
             span_data = token_label, index, index, TAGGED
             self.values[span_data] = token
             self.add_span(*span_data)
-            self.unvisited.add(span_data)
+            self.unvisited.append(span_data)
+            
+        sorted(self.unvisited)
 
         while self.unvisited:
             current = self.unvisited.pop()
             _, begin, end, _ = current
+            
+            # Check unary rule parses
             self.trigger(current)
 
+            # Check for left matches
             left_candidates = set(self.end_at[begin - 1])
             for other in left_candidates:
                 self.trigger_pair(other, current)
 
+            # Check for right matches
             right_candidates = set(self.begin_at[end + 1])
             for other in right_candidates:
                 self.trigger_pair(current, other)
+                
+            sorted(self.unvisited)
 
-        self.prune()
+        # self.prune()
 
         return self
         
@@ -58,6 +67,7 @@ class Parse:
         _, _, _, name = span
         parts = self.parts[span]
         for s in parts:
+            _, i, j, _ = s
             self.set_value(s)
         argument_values = [self.values[s] for s in parts]
         semantics = self.parser.actions_map[name]
@@ -89,7 +99,9 @@ class Parse:
         span_data = (label, begin, end, name)
         self.end_at[end].add(span_data)
         self.begin_at[begin].add(span_data)
-        self.unvisited.add(span_data)
+        if span_data not in self.considered:
+            self.considered.add(span_data)
+            self.unvisited.append(span_data)
         # These are used in self.show()
         span_content = tuple([token for token, tag in self.tokens[begin:end + 1]])
         self.readable.add((begin, end, label, span_content))
@@ -155,7 +167,6 @@ class Parse:
             begin, end, label, tokens = span
             begin = str(begin)
             end = str(end)
-            print(f"{label} : {' '.join(tokens) } [{begin} : {end}]\n")
 
     def unfold_parse(self, span):
         head_span = [span]
