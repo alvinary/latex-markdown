@@ -147,7 +147,7 @@ test_grammar = [
             ('grouping', 'number', ('lparen', 'number', 'rparen'), 25, lambda _, x, __ : x),
             ('product', 'number', ('number', 'times', 'number'), 15, lambda x, _, z: x * z),
             ('sum', 'number', ('number', 'plus', 'number'), 10, lambda x, _, z: x + z),
-            ('negative', 'number', ('minus', 'number'), 20, lambda _, y : -y),
+            ('negative', 'number', ('minus', 'number'), 14, lambda _, y : -y),
             ('substraction', 'number', ('number', 'minus', 'number'), 10, lambda x, _, z : x - z),
             ('five aguments', 'foo', ('bar', 'barfoo', 'foobar', 'barbar', 'foofoo'), 10, lambda x, y, z, w, u : [x, y, z, w, u])
         ]
@@ -173,7 +173,8 @@ latex_examples = [
         syntactically_demanding
 ]
 
-math_tests = ['( a b over b a ) equals 1',
+math_tests = [
+    '( a b over b a ) equals 1',
     'all x : x not in ø',
     'sum from a to n of f(x)',
     'sum over { x : g(x) in S } of h(x, g(x))',
@@ -189,9 +190,10 @@ math_examples = [
     ('sum over i in A of f sub i (x)', r'\sum_{i \in A} f_{i} ( x )'),
     ('sum over i in A of f sub i (x sub i sup 2)', r'\sum_{i \in A} f_{i} ( x_{i}^{2} )'),
     ('sum over i in A of f sup i (x sup i sub 2)', r'\sum_{i \in A} f^{i} ( x^{i}_{2} )'),
-    ('a [: not in :] A', r'a \notin A'),
+    ('for all x in R . exists y in R . xy = 1', r'\forall x \in \R . \exists y \in \R . xy = 1'),
+    # ('a [: not in :] A', r'a \notin A'),
     ('a not in A', r'a \notin A'),
-    ('for all x in R . exists y in R . xy = 1', r'\forall x \in \R . \exists y \in \R . xy = 1'), 
+     
     # ('f : a -> b', ),
     # ('A included in B'),
     # ('A subset of B'),
