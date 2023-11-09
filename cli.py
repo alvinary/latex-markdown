@@ -63,7 +63,6 @@ if __name__ == '__main__':
         print("The contents of the file could not be parsed.")
         print("Check for errors.")
         print()
-        cli.latex_parser.parse.report()
     else:
         for r in results:
            print(r, "\n")
