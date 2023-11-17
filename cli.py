@@ -68,6 +68,7 @@ if __name__ == '__main__':
         print()
         for r in reports:
             print(r)
+            print('')
     else:
         for r in results:
            print(r, "\n")
