@@ -10,6 +10,22 @@ IDENTITY = lambda x : x
 WRAP = lambda x, y : [x, y]
 WRAPPEND = lambda x, y : [x] + y
 
+def show_concat(args):
+    return ", ".join(args)
+
+def get_try(sem, error_text):
+
+    def current_try(*args):
+        try:
+            return sem(*args)
+        except Exception:
+            text = f"\nFailed to execute rule '{error_text}'."
+            text = text + "\nArguments were:"
+            text = text + f"\n{show_concat(args)}"
+            raise Exception(text)
+        
+    return lambda *args: current_try(*args)
+
 # Markdown constants
 
 BEGIN = '\\begin'
@@ -36,7 +52,7 @@ THICK_BAR = '=' * 44
 DOUBLE_SPACE = '  '
 EXPLICIT_TAB = ' @TAB@ '
 EXPLICIT_NEWLINE = '@NEWLINE@'
-EXPLICIT_BREAK = ' @BREAK@'
+EXPLICIT_BREAK = '@BREAK@'
 DOUBLE_STAR = '**'
 WIGGLE = '~'
 BEGIN_DOCUMENT = '@_BEGIN_@'

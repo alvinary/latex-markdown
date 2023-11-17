@@ -54,6 +54,7 @@ class Rules:
             current_label = label
             current_name = name
             current_semantics = lambda x, y : semantics(*WRAPPEND(x, y))
+            current_semantics = get_try(current_semantics, current_label)
             current_precedence = precedence
 
             while remaining_parts:
@@ -68,11 +69,11 @@ class Rules:
 
                     current_name = str(right_part)
                     current_label = str(right_part)
-                    current_precedence = DEFAULT_PRECEDENCE
-                    current_semantics = WRAPPEND
+                    current_precedence = DEFAULT_PRECEDENCE                    
+                    current_semantics = get_try(WRAPPEND, current_name)
 
                 if len(remaining_parts) == 2:
-                    current_semantics = WRAP
+                    current_semantics = get_try(WRAP, current_name)
                     left_part = remaining_parts.pop(0)
                     right_part = remaining_parts.pop(0)
                     new_line = (current_name, current_label, (left_part, right_part), current_precedence, current_semantics)

@@ -197,10 +197,13 @@ class Parse:
         
     def report(self, n=1, cutoff=150):
         # TODO: show only last cutoff characters
+        # TODO: prevent segments from getting out of range
         reports = []
         for _, begin, end, _ in self.n_initial_segments():
             tokens = [t[0] for t in self.tokens[:end]]
+            next_tokens = [t[0] + f' ({t[1]}) ' for t in self.tokens[end:end+5]]
             tokens_text = " ".join(tokens)
-            reports.append(tokens_text)
+            next_text = " ".join(next_tokens)
+            reports.append(tokens_text + " << SEGMENT END << " + next_text)
         return reports
         
