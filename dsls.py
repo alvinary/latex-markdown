@@ -54,9 +54,9 @@ latex_dsl = [
     ('subsubsection', 'block', ('subsubsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsubsection(x)),
     # Listings
     ('itemize', 'block', ('items',), DEFAULT_PRECEDENCE, lambda x : itemize(x)),
-    ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, y : item(x)),
-    ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE, lambda x, _, z : item(x) + '\n\n' + z),
-    ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : x),
+    ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
+    ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE, lambda x, y, z : x + y + z),
+    ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
     # TODO: do this with iterator concatenation to avoid copying and pasting a thousand times the same list
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
@@ -124,9 +124,9 @@ math_dsl = [
     ('left vertical bar', 'delim', ('(|',), DEFAULT_PRECEDENCE, lambda _: r'\lvert'),
     ('right vertical bar', 'delim', ('|)',), DEFAULT_PRECEDENCE, lambda _: r'\rvert'),
     # Grouping 
-    ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
-    ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : r'\lvert ' + y + r' \rvert'),
-    ('square brackets', 'math', ('[', 'math', ']'), DEFAULT_PRECEDENCE + 5, lambda x, y, z : x + y + z),
+    ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, w : x + y + w),
+    ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, ww : r'\lvert ' + y + r' \rvert'),
+    ('square brackets', 'math', ('[', 'math', ']'), DEFAULT_PRECEDENCE + 5, lambda x, y, www : x + y + www),
     # Common relations
     ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
     ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),

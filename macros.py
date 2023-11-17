@@ -104,8 +104,8 @@ def item(text, bullet=''):
     return f'{BACKSLASH}item{bullet} {text}'
 
 def itemize(items, bullet=''):
-    bulletPoints = indent(BREAK.join(items))
-    return beginEnd('itemize', [bulletPoints])
+    bulletPoints = indent(items)
+    return beginEnd('itemize', bulletPoints)
 
 def bold(text):
     return macro('textbf', [text])
