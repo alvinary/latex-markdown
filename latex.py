@@ -148,9 +148,9 @@ class Latex(LatexMarkdown):
         while '  ' in text:
             text = text.replace('  ', ' ')
         for s in RIGHT:
-            text = text.replace(" {s}" ,"{s}")
+            text = text.replace(f" {s}" ,f"{s}")
         for s in LEFT:
-            text = text.replace("{s} " ,"{s}")
+            text = text.replace(f"{s} " ,f"{s}")
         return text
 
 
