@@ -61,7 +61,8 @@ class Latex(LatexMarkdown):
         self.parse = self.parser.get_parse(tagged_tokens)
         values = list(self.parse.evaluate())
         values = [self.postprocess(v) for v in values]
-        return values
+        reports = self.parse.report()
+        return values, reports
 
     def preprocess(self, text):
         text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"

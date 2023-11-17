@@ -57,12 +57,17 @@ if __name__ == '__main__':
     else:
         markdown = ""
         
-    results = cli.latex_parser.get_latex(markdown)
+    results, reports = cli.latex_parser.get_latex(markdown)
     
     if not results:
         print("The contents of the file could not be parsed.")
         print("Check for errors.")
         print()
+        print(f"These are the {len(reports)} longest initial segments that")
+        print("were parsed successfully: ")
+        print()
+        for r in reports:
+            print(r)
     else:
         for r in results:
            print(r, "\n")

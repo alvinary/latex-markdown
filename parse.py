@@ -1,5 +1,7 @@
 from constants import *
 
+# TODO: use named tuples for spans
+
 class Parse:
 
     def __init__(self, tokens, parser):
@@ -184,36 +186,21 @@ class Parse:
             branch_spans = self.unfold_parse(branch)
             return head_span + branch_spans
 
-    def report_span(self, span):
-        is_parsed = [False for i in range(len(self.tokens))]
-        span_parse = self.unfold_parse(span)
-        for span in sorted(span):
-            _, begin, end, _ = span
-            if end - begin > 5:
-                for j in range(int(begin), int(end)+1):
-                    is_parsed[j] = True
-        within_span = False
-        begin_at = False
-        end_at = False
-        uncovered = []
-        for index, flag in enumerate(is_parsed):
-            if flag == True and within_span:
-                end_at = index
-                within_span = False
-                uncovered.append((begin_at, end_at))
-            if flag == True and not within_span:
-                pass
-            if flag == False and within_span:
-                pass
-            if flag == False and not within_span:
-                begin_at = index
-                within_span = True
-        for begin, end in uncovered:
-            span_text = " ".join([t for t, s in self.tokens[begin:end+1]])
-            span_context = " ".join([t for t, s in self.tokens[max(0, begin-5):min(end+6, len(self.tokens))]])
-            print(f"The span from {begin} to {end} is not covered.")
-            print("The span reads: ")
-            print(span_text)
-            print("And is in context:")
-            print(span_context)
-            print()
+    def n_initial_segments(self, n=5, cutoff=100):
+        # Que despues sean los segmentos iniciales no cubiertos por
+        # el parse que ya mostraste
+        initial_segments = [span for span in self.begin_at[1]]
+        segment_length = lambda span: span[2] - span[1]
+        initial_segments.sort(key=segment_length)
+        initial_segments = list(reversed(initial_segments))
+        return initial_segments[:n]
+        
+    def report(self, n=1, cutoff=150):
+        # TODO: show only last cutoff characters
+        reports = []
+        for _, begin, end, _ in self.n_initial_segments():
+            tokens = [t[0] for t in self.tokens[:end]]
+            tokens_text = " ".join(tokens)
+            reports.append(tokens_text)
+        return reports
+        
