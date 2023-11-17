@@ -97,7 +97,7 @@ math_tokens = [
     '[_',
     '^]',
     '[^',
-    'C', 'R', 'Q', 'Z', 'N',
+    '|C', '|R', '|Q', '|Z', '|N',
     '+', 'dot', 'times',
     'pi', 'theta', 'alpha', 'epsilon', 'xi',
     'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi',
@@ -107,7 +107,7 @@ math_tokens = [
 
 clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=',
     '=>', '<=>','<==>', '->', '|=', '|-',
-    '_]', '[_', '^]', '[^'}
+    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N'}
 
 with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if t in clash_tokens}
 without_special = {v : k for (k, v) in with_special.items()}
@@ -183,11 +183,11 @@ math_dsl = [
     ('inf from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
     # R, Q, C, Z, aleph, epsilon,
-    ('reals', 'name', ('R',), DEFAULT_PRECEDENCE, lambda x : r'\R'),
-    ('complex', 'name', ('C',), DEFAULT_PRECEDENCE, lambda x : r'\Complex'),
-    ('rationals', 'name', ('Q',), DEFAULT_PRECEDENCE, lambda x : r'\Q'),
-    ('integers', 'name', ('Z',), DEFAULT_PRECEDENCE, lambda x : r'\Z'),
-    ('naturals', 'name', ('N',), DEFAULT_PRECEDENCE, lambda x : r'\N'),
+    ('reals', 'name', ('|R',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{R' + '}'),
+    ('complex', 'name', ('|C',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Complex' + '}'),
+    ('rationals', 'name', ('|Q',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Q' + '}'),
+    ('integers', 'name', ('|Z',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Z' + '}'),
+    ('naturals', 'name', ('|N',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{N' + '}'),
     # Common operations
     ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     ('dot', 'inf', ('dot',), DEFAULT_PRECEDENCE, lambda x : r'\cdot'),

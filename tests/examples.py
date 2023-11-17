@@ -190,7 +190,7 @@ math_examples = [
     ('sum over i in A of f sub i (x)', r'\sum_{i \in A} f_{i} ( x )'),
     ('sum over i in A of f sub i (x sub i sup 2)', r'\sum_{i \in A} f_{i} ( x_{i}^{2} )'),
     ('sum over i in A of f sup i (x sup i sub 2)', r'\sum_{i \in A} f^{i} ( x^{i}_{2} )'),
-    ('for all x in R . exists y in R . xy = 1', r'\forall x \in \R . \exists y \in \R . xy = 1'),
+    ('for all x in |R . exists y in |R . xy = 1', r'\forall x \in mathbb{R} . \exists y \in mathbb{R} . xy = 1'),
     # ('a [: not in :] A', r'a \notin A'),
     ('a not in A', r'a \notin A'),
      

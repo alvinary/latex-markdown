@@ -76,6 +76,7 @@ def box(subtitle, text):
 def document(documentClass, content):
     _documentClass = macro('documentclass', [documentClass])
     _packages = macro('usepackage', ['amsmath'])
+    _packages = _packages + "\n" + r"\usepackage{amssymb}"
     _documentContent = beginEnd('document', content)
     return f"{_documentClass}{BREAK}{_documentContent}"
     
