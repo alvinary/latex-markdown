@@ -54,9 +54,10 @@ latex_dsl = [
     ('subsubsection', 'block', ('subsubsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsubsection(x)),
     # Listings
     ('itemize', 'block', ('items',), DEFAULT_PRECEDENCE, lambda x : itemize(x)),
-    ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
-    ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE, lambda x, y, z : x + y + z),
+    
+    ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE + 10, lambda x, y, z : x + y + z),
     ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
+    ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
     # TODO: do this with iterator concatenation to avoid copying and pasting a thousand times the same list
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
