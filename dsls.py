@@ -81,7 +81,7 @@ latex_dsl = [
 ]
 
 math_tokens = [
-    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]',
+    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)',
     '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
@@ -107,7 +107,7 @@ math_tokens = [
 
 clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=',
     '=>', '<=>','<==>', '->', '|=', '|-',
-    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N'}
+    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
 
 with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if t in clash_tokens}
 without_special = {v : k for (k, v) in with_special.items()}
@@ -164,8 +164,8 @@ math_dsl = [
     ('exists', 'pref', ('exists',), DEFAULT_PRECEDENCE, lambda x : r'\exists'),
     ('vert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : r'\vert'),
     # Subindices, superindices and diacritics
-    ('sub', 'math', ('math', 'sub', '[:', 'math', ':]'), DEFAULT_PRECEDENCE + 10, lambda x, _,__, y, ___ : x + '_{' + y + '}'),
-    ('super', 'math', ('math', 'sup', '[:', 'math', ':]'), DEFAULT_PRECEDENCE + 10, lambda x, _, __, y, ___ : x + '^{' + y + '}'),
+    ('sub', 'math', ('math', 'sub', 'marked_math'), DEFAULT_PRECEDENCE + 10, lambda x, _, y : x + '_{' + y + '}'),
+    ('super', 'math', ('math', 'sup', 'marked_math'), DEFAULT_PRECEDENCE + 10, lambda x, _, y : x + '^{' + y + '}'),
     ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '_{' + y + '}'),
     ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '^{' + y + '}'),
     # ', ^, bar, hat, tilde, vector
@@ -179,9 +179,9 @@ math_dsl = [
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
     ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : r'\prod'),
     ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : r'\int'),
-    ('op from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
-    ('inf from to', 'math', ('op', 'from', 'math', 'to', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
-    ('op over', 'math', ('op', 'over', 'math', 'of', 'math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
+    ('op from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
+    ('inf from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
+    ('op over', 'math', ('op', 'over', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
     # R, Q, C, Z, aleph, epsilon,
     ('reals', 'name', ('|R',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{R' + '}'),
     ('complex', 'name', ('|C',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Complex' + '}'),
@@ -192,7 +192,7 @@ math_dsl = [
     ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     ('dot', 'inf', ('dot',), DEFAULT_PRECEDENCE, lambda x : r'\cdot'),
     ('times', 'inf', ('times',), DEFAULT_PRECEDENCE, lambda x : r'\times'),
-    ('large fraction', 'math', ('fraction', '(', 'math', ')', 'over', '(', 'math', ')'), DEFAULT_PRECEDENCE, lambda _, _0, x, _1, _2, _3, y, _4 : r'\frac{ ' + x + ' }{ ' + y + ' }'),
+    ('large fraction', 'math', ('marked_math', 'over', 'marked_math'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     ('small fraction', 'math', ('name', 'over', 'name'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     # Greek
     ('pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\pi'),
@@ -215,5 +215,7 @@ math_dsl = [
     ('prefix', 'math', ('pref',), DEFAULT_PRECEDENCE - 5, lambda x : x),
     ('posfix', 'math', ('pos',), DEFAULT_PRECEDENCE - 5, lambda x : x),
     ('delimiter', 'math', ('delim',), DEFAULT_PRECEDENCE - 5, lambda x : x),
-    ('name', 'math', ('name',), DEFAULT_PRECEDENCE - 5, lambda x : x)
+    ('name', 'math', ('name',), DEFAULT_PRECEDENCE - 5, lambda x : x),
+    ('marked math', 'marked_math', ('(-', 'math', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
+    ('short marked math', 'marked_math', ('name', ), DEFAULT_PRECEDENCE, lambda x : x)
 ]

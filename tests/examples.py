@@ -174,10 +174,10 @@ latex_examples = [
 ]
 
 math_tests = [
-    '( a b over b a ) equals 1',
+    '(- a b over b a -) equals 1',
     'all x : x not in ø',
-    'sum from a to n of f(x)',
-    'sum over { x : g(x) in S } of h(x, g(x))',
+    'sum from a to n of (- f(x) -)',
+    'sum over (- { x : g(x) in S } -) of (- h(x, g(x)) -)',
 ]
 
 math_examples = [
@@ -185,12 +185,12 @@ math_examples = [
     ('a != b', r'a \neq b'),
     ('a in A', r'a \in A'),
     ('for all x : exists y : x in A => r(x, y)', r'\forall x : \exists y : x \in A \Rightarrow r ( x , y )'),
-    ('sum from i = 1 to n of i', r'\sum_{i = 1}^{n} i'),
-    ('sum over t in T of f (t)', r'\sum_{t \in T} f ( t )'),
-    ('sum over i in A of f sub i (x)', r'\sum_{i \in A} f_{i} ( x )'),
-    ('sum over i in A of f sub i (x sub i sup 2)', r'\sum_{i \in A} f_{i} ( x_{i}^{2} )'),
-    ('sum over i in A of f sup i (x sup i sub 2)', r'\sum_{i \in A} f^{i} ( x^{i}_{2} )'),
-    ('for all x in |R . exists y in |R . xy = 1', r'\forall x \in mathbb{R} . \exists y \in mathbb{R} . xy = 1'),
+    ('sum from (- i = 1 -) to (- n -) of (- i -)', r'\sum_{i = 1}^{n} i'),
+    ('sum over (- t in T -) of (- f (t) -)', r'\sum_{t \in T} f ( t )'),
+    ('sum over (- i in A -) of (- f sub i (x) -)', r'\sum_{i \in A} f_{i} (x)'),
+    ('sum over (- i in A -) of (- f sub i (x sub i sup 2) -)', r'\sum_{i \in A} f_{i} (x_{i}^{2})'),
+    ('sum over (- i in A -) of (- f sup i (x sup i sub 2) -)', r'\sum_{i \in A} f^{i} (x^{i}_{2})'),
+    ('for all x in |R . exists y in |R . xy = 1', r'\forall x \in \mathbb{R} . \exists y \in \mathbb{R} . xy = 1'),
     # ('a [: not in :] A', r'a \notin A'),
     ('a not in A', r'a \notin A'),
      
