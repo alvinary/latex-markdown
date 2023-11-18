@@ -20,6 +20,8 @@ and this shows something.
     
     ~ sum from (- i = 1 -) to n of i ~
     
+    ~ integral from (- a -) to (- b -) of (- f(x) (- d -) over (- dx -) -) ~
+    
     ~ sum over (- t in T -) of (- f (t) -) ~
     
     ~ sum over (- i in A -) of (- f sub i (x) -) ~
