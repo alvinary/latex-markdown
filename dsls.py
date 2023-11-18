@@ -99,13 +99,13 @@ math_tokens = [
     '[^',
     '|C', '|R', '|Q', '|Z', '|N',
     '+', 'dot', 'times',
-    'pi', 'theta', 'alpha', 'epsilon', 'xi',
-    'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi',
+    'pi', 'theta', 'alpha', 'epsilon', 'xi', 'beta',
+    'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi', 'mu',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
-    'subset', 'superset', 'strict'
+    'subset', 'superset', 'strict, square, root', '-h-'
 ]
 
-clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=',
+clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-',
     '=>', '<=>','<==>', '->', '|=', '|-',
     '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
 
@@ -175,7 +175,7 @@ math_dsl = [
     ('bar', 'name', ('name', 'bar'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{x}'),
     ('ring', 'name', ('name', 'ring'), DEFAULT_PRECEDENCE, lambda x, _ : r'\mathring{x}'),
     ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{x}'),
-    # Common operations
+    # Common 'big operator' operations
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
     ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : r'\prod'),
     ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : r'\int'),
@@ -194,7 +194,11 @@ math_dsl = [
     ('times', 'inf', ('times',), DEFAULT_PRECEDENCE, lambda x : r'\times'),
     ('large fraction', 'math', ('marked_math', 'over', 'marked_math'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     ('small fraction', 'math', ('name', 'over', 'name'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
+    ('square root', 'math', ('square', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda __, _, x : r'\sqrt{ ' + x + ' }'),
+    ('nth root', 'math', ('name', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda y, _, x : r'\sqrt[' + y + ']{ ' + x + ' }'),
     # Greek
+    ('beta', 'name', ('beta',), DEFAULT_PRECEDENCE, lambda x : r'\beta'),
+    ('mu', 'name', ('mu',), DEFAULT_PRECEDENCE, lambda x : r'\mu'),
     ('pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\pi'),
     ('Pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\Pi'),
     ('theta', 'name', ('theta',), DEFAULT_PRECEDENCE, lambda x : r'\theta'),
@@ -208,6 +212,8 @@ math_dsl = [
     # Logic
     ('derives', 'inf', ('|-',), DEFAULT_PRECEDENCE, lambda x : r'\vdash'),
     ('consequence', 'inf', ('|=',), DEFAULT_PRECEDENCE, lambda x : r'\vDash'),
+    # Quantum Mechanics
+    ('reduced plank constant', 'name', ('-h-', ), DEFAULT_PRECEDENCE, lambda x : r'\hbar'),
     # Math elements
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
     ('element', 'math', ('elem',), DEFAULT_PRECEDENCE - 5, lambda x : x),
