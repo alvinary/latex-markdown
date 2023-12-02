@@ -195,12 +195,12 @@ math_dsl = [
     ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '_{' + y + '}'),
     ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '^{' + y + '}'),
     # Diactritics: ', ^, bar, hat, tilde, vector
-    ('vector', 'name', ('name', 'vector'), DEFAULT_PRECEDENCE, lambda x, _ : r'\vec{x}'),
-    ('hat', 'name', ('name', 'hat'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{x}'),
-    ('check', 'name', ('name', 'check'), DEFAULT_PRECEDENCE, lambda x, _ : r'\check{x}'),
-    ('bar', 'name', ('name', 'bar'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{x}'),
-    ('ring', 'name', ('name', 'ring'), DEFAULT_PRECEDENCE, lambda x, _ : r'\mathring{x}'),
-    ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{x}'),
+    ('vector', 'name', ('name', 'vector'), DEFAULT_PRECEDENCE, lambda x, _ : r'\vec{' + x + '}'),
+    ('hat', 'name', ('name', 'hat'), DEFAULT_PRECEDENCE, lambda x, _ : r'\hat{' + x + '}'),
+    ('check', 'name', ('name', 'check'), DEFAULT_PRECEDENCE, lambda x, _ : r'\check{' + x + '}'),
+    ('bar', 'name', ('name', 'bar'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{' + x + '}'),
+    ('ring', 'name', ('name', 'ring'), DEFAULT_PRECEDENCE, lambda x, _ : r'\mathring{' + x + '}'),
+    ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{' + x + '}'),
     # Common 'big operator' operations
     ('gradient', 'op', ('gradient',), DEFAULT_PRECEDENCE, lambda x : r'\nabla'),
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
@@ -209,6 +209,7 @@ math_dsl = [
     ('op from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('inf from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
+    ('op of', 'math', ('op', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, f : big_operator(o) + '{' + f + '} '),
     # Greek letters
     ("Alpha", "name", ("Alpha",), DEFAULT_PRECEDENCE, lambda x: "\\Alpha"),
     ("Beta", "name", ("Beta",), DEFAULT_PRECEDENCE, lambda x: "\\Beta"),
@@ -299,6 +300,9 @@ math_dsl = [
     ('consequence', 'inf', ('|=',), DEFAULT_PRECEDENCE, lambda x : r'\vDash'),
     # Quantum Mechanics
     ('reduced plank constant', 'name', ('-h-', ), DEFAULT_PRECEDENCE, lambda x : r'\hbar'),
+    #('bra', 'name', ('<', 'math', '|'), DEFAULT_PRECEDENCE, lambda _, x, __ : r'\Bra{' + x  + '|}'),
+    #('ket', 'name', ('|', 'math', '>' ), DEFAULT_PRECEDENCE, lambda _, x, __ : r'\Ket{|' + x  + '}'),
+    #('braket', 'name', ('<', 'math', '|', 'math', '>' ), DEFAULT_PRECEDENCE, lambda _, x, __, y, ___ : r'\Braket{' + x + ' | ' + y + '}'),
     # Assorted
     ('up arrow', 'name', ('raise',), DEFAULT_PRECEDENCE, lambda x: r'\upnarrow'),
     ('down arrow', 'name', ('lower',), DEFAULT_PRECEDENCE, lambda x: r'\downarrow'),
