@@ -63,10 +63,14 @@ if __name__ == '__main__':
         print("The contents of the file could not be parsed.")
         print("Check for errors.")
         print()
-        print(f"These are the {len(reports)} longest initial segments that")
-        print("were parsed successfully: ")
+        print(f"This is the longest initial segment that was parsed successfully:")
         print()
-        for r in reports:
+        for r in reports[0:1]:
+            r, s = r.split('<< SEGMENT END <<')
+            r = r.replace("@BREAK@", "\n\n")
+            r = r.replace("@_BEGIN_@", "")
+            r = r.replace("@_END_@", "")
+            r = r + '<< SEGMENT END <<' + s
             print(r)
             print('')
     else:
