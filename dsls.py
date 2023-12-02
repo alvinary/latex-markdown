@@ -115,7 +115,7 @@ Iota	Kappa	Lambda	Mu
 Nu	Xi	Omicron	Pi
 Rho	Sigma	Tau	Upsilon
 Phi	Chi	Psi	Omega
-varGamma	varDelta	varTheta	ΛΛ varLambda
+varGamma	varDelta	varTheta	 varLambda
 varXi	varPi	varSigma	varUpsilon
 varPhi	varPsi	varOmega	
 alpha	beta	gamma	delta
@@ -209,6 +209,75 @@ math_dsl = [
     ('op from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('inf from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
+    # Greek letters
+    ("Alpha", "name", ("Alpha",), DEFAULT_PRECEDENCE, lambda x: "\\Alpha"),
+    ("Beta", "name", ("Beta",), DEFAULT_PRECEDENCE, lambda x: "\\Beta"),
+    ("Gamma", "name", ("Gamma",), DEFAULT_PRECEDENCE, lambda x: "\\Gamma"),
+    ("Delta", "name", ("Delta",), DEFAULT_PRECEDENCE, lambda x: "\\Delta"),
+    ("Epsilon", "name", ("Epsilon",), DEFAULT_PRECEDENCE, lambda x: "\\Epsilon"),
+    ("Zeta", "name", ("Zeta",), DEFAULT_PRECEDENCE, lambda x: "\\Zeta"),
+    ("Eta", "name", ("Eta",), DEFAULT_PRECEDENCE, lambda x: "\\Eta"),
+    ("Theta", "name", ("Theta",), DEFAULT_PRECEDENCE, lambda x: "\\Theta"),
+    ("Iota", "name", ("Iota",), DEFAULT_PRECEDENCE, lambda x: "\\Iota"),
+    ("Kappa", "name", ("Kappa",), DEFAULT_PRECEDENCE, lambda x: "\\Kappa"),
+    ("Lambda", "name", ("Lambda",), DEFAULT_PRECEDENCE, lambda x: "\\Lambda"),
+    ("Mu", "name", ("Mu",), DEFAULT_PRECEDENCE, lambda x: "\\Mu"),
+    ("Nu", "name", ("Nu",), DEFAULT_PRECEDENCE, lambda x: "\\Nu"),
+    ("Xi", "name", ("Xi",), DEFAULT_PRECEDENCE, lambda x: "\\Xi"),
+    ("Omicron", "name", ("Omicron",), DEFAULT_PRECEDENCE, lambda x: "\\Omicron"),
+    ("Pi", "name", ("Pi",), DEFAULT_PRECEDENCE, lambda x: "\\Pi"),
+    ("Rho", "name", ("Rho",), DEFAULT_PRECEDENCE, lambda x: "\\Rho"),
+    ("Sigma", "name", ("Sigma",), DEFAULT_PRECEDENCE, lambda x: "\\Sigma"),
+    ("Tau", "name", ("Tau",), DEFAULT_PRECEDENCE, lambda x: "\\Tau"),
+    ("Upsilon", "name", ("Upsilon",), DEFAULT_PRECEDENCE, lambda x: "\\Upsilon"),
+    ("Phi", "name", ("Phi",), DEFAULT_PRECEDENCE, lambda x: "\\Phi"),
+    ("Chi", "name", ("Chi",), DEFAULT_PRECEDENCE, lambda x: "\\Chi"),
+    ("Psi", "name", ("Psi",), DEFAULT_PRECEDENCE, lambda x: "\\Psi"),
+    ("Omega", "name", ("Omega",), DEFAULT_PRECEDENCE, lambda x: "\\Omega"),
+    ("varGamma", "name", ("varGamma",), DEFAULT_PRECEDENCE, lambda x: "\\varGamma"),
+    ("varDelta", "name", ("varDelta",), DEFAULT_PRECEDENCE, lambda x: "\\varDelta"),
+    ("varTheta", "name", ("varTheta",), DEFAULT_PRECEDENCE, lambda x: "\\varTheta"),
+    ("varLambda", "name", ("varLambda",), DEFAULT_PRECEDENCE, lambda x: "\\varLambda"),
+    ("varXi", "name", ("varXi",), DEFAULT_PRECEDENCE, lambda x: "\\varXi"),
+    ("varPi", "name", ("varPi",), DEFAULT_PRECEDENCE, lambda x: "\\varPi"),
+    ("varSigma", "name", ("varSigma",), DEFAULT_PRECEDENCE, lambda x: "\\varSigma"),
+    ("varUpsilon", "name", ("varUpsilon",), DEFAULT_PRECEDENCE, lambda x: "\\varUpsilon"),
+    ("varPhi", "name", ("varPhi",), DEFAULT_PRECEDENCE, lambda x: "\\varPhi"),
+    ("varPsi", "name", ("varPsi",), DEFAULT_PRECEDENCE, lambda x: "\\varPsi"),
+    ("varOmega", "name", ("varOmega",), DEFAULT_PRECEDENCE, lambda x: "\\varOmega"),
+    ("alpha", "name", ("alpha",), DEFAULT_PRECEDENCE, lambda x: "\\alpha"),
+    ("beta", "name", ("beta",), DEFAULT_PRECEDENCE, lambda x: "\\beta"),
+    ("gamma", "name", ("gamma",), DEFAULT_PRECEDENCE, lambda x: "\\gamma"),
+    ("delta", "name", ("delta",), DEFAULT_PRECEDENCE, lambda x: "\\delta"),
+    ("epsilon", "name", ("epsilon",), DEFAULT_PRECEDENCE, lambda x: "\\epsilon"),
+    ("zeta", "name", ("zeta",), DEFAULT_PRECEDENCE, lambda x: "\\zeta"),
+    ("eta", "name", ("eta",), DEFAULT_PRECEDENCE, lambda x: "\\eta"),
+    ("theta", "name", ("theta",), DEFAULT_PRECEDENCE, lambda x: "\\theta"),
+    ("iota", "name", ("iota",), DEFAULT_PRECEDENCE, lambda x: "\\iota"),
+    ("kappa", "name", ("kappa",), DEFAULT_PRECEDENCE, lambda x: "\\kappa"),
+    ("lambda", "name", ("lambda",), DEFAULT_PRECEDENCE, lambda x: "\\lambda"),
+    ("mu", "name", ("mu",), DEFAULT_PRECEDENCE, lambda x: "\\mu"),
+    ("nu", "name", ("nu",), DEFAULT_PRECEDENCE, lambda x: "\\nu"),
+    ("xi", "name", ("xi",), DEFAULT_PRECEDENCE, lambda x: "\\xi"),
+    ("omicron", "name", ("omicron",), DEFAULT_PRECEDENCE, lambda x: "\\omicron"),
+    ("pi", "name", ("pi",), DEFAULT_PRECEDENCE, lambda x: "\\pi"),
+    ("rho", "name", ("rho",), DEFAULT_PRECEDENCE, lambda x: "\\rho"),
+    ("sigma", "name", ("sigma",), DEFAULT_PRECEDENCE, lambda x: "\\sigma"),
+    ("tau", "name", ("tau",), DEFAULT_PRECEDENCE, lambda x: "\\tau"),
+    ("upsilon", "name", ("upsilon",), DEFAULT_PRECEDENCE, lambda x: "\\upsilon"),
+    ("phi", "name", ("phi",), DEFAULT_PRECEDENCE, lambda x: "\\phi"),
+    ("chi", "name", ("chi",), DEFAULT_PRECEDENCE, lambda x: "\\chi"),
+    ("psi", "name", ("psi",), DEFAULT_PRECEDENCE, lambda x: "\\psi"),
+    ("omega", "name", ("omega",), DEFAULT_PRECEDENCE, lambda x: "\\omega"),
+    ("varepsilon", "name", ("varepsilon",), DEFAULT_PRECEDENCE, lambda x: "\\varepsilon"),
+    ("varkappa", "name", ("varkappa",), DEFAULT_PRECEDENCE, lambda x: "\\varkappa"),
+    ("vartheta", "name", ("vartheta",), DEFAULT_PRECEDENCE, lambda x: "\\vartheta"),
+    ("thetasym", "name", ("thetasym",), DEFAULT_PRECEDENCE, lambda x: "\\thetasym"),
+    ("varpi", "name", ("varpi",), DEFAULT_PRECEDENCE, lambda x: "\\varpi"),
+    ("varrho", "name", ("varrho",), DEFAULT_PRECEDENCE, lambda x: "\\varrho"),
+    ("varsigma", "name", ("varsigma",), DEFAULT_PRECEDENCE, lambda x: "\\varsigma"),
+    ("varphi", "name", ("varphi",), DEFAULT_PRECEDENCE, lambda x: "\\varphi"),
+    ("digamma", "name", ("digamma",), DEFAULT_PRECEDENCE, lambda x: "\\digamma"),    
     # Commonly used sets
     ('reals', 'name', ('|R',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{R' + '}'),
     ('complex', 'name', ('|C',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Complex' + '}'),
@@ -245,8 +314,3 @@ math_dsl = [
     ('short marked math', 'marked_math', ('name', ), DEFAULT_PRECEDENCE, lambda x : x)
 ]
 
-# Add greek letters to math dsl
-for letter_name in greek_letters:
-    name = 'name'
-    bar = '\\'
-    math_dsl.append((letter_name, name, (letter_name,), DEFAULT_PRECEDENCE, lambda _: bar + letter_name))
