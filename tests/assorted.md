@@ -4,13 +4,29 @@
 
 The absolute value of both sides gives 
 
-~ | epsilon sub (- n + 1 -) | = (- | f'' (xi sub n) | -) over (- 2 | f' ( x sub n ) | -) dot epsilon sub n sup 2 ~
+~ | xi sub (- n + 1 -) | = (- | f'' (xi sub n) | -) over (- 2 | f' ( x sub n ) | -) dot xi sub n sup 2 ~
 
 and this shows something.
 
 # Assorted
 
     ~ a = b ~
+    
+    ~ | psi > = integral of (- d sup 3 r psi(r) | r > -) ~
+    
+    ~ A hat (r) psi (r) = < r | A hat | psi > ~
+    
+    ~ f : A times B -> C ~
+    
+    ~ f (x) = x bar dot x tilde ~
+    
+    ~ ( phi -> < alpha > psi and psi -> < beta > chi ) -> (phi -> < alpha beta > chi) ~
+    
+    ~ (- partial Q -) over (- partial t -) = (- partial s -) over (- partial t -) ~
+    
+    ~ (- partial Q -) over (- partial t -) = (- partial sup (- kn + 2a + c -) f -) over (- partial t -) ~
+    
+    ~ (- d -) over (- dx -) ( (- dy -) over (- dx -) ) ~
     
     ~ a != b ~
     

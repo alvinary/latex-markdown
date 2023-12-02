@@ -105,7 +105,7 @@ math_tokens = [
     '+', 'dot', 'times',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
     'subset', 'superset', 'strict, square, root', '-h-',
-    'raise', 'lower'
+    'raise', 'lower', 'partial'
 ]
 
 greek_letters = '''
@@ -203,6 +203,7 @@ math_dsl = [
     ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{' + x + '}'),
     # Common 'big operator' operations
     ('gradient', 'op', ('gradient',), DEFAULT_PRECEDENCE, lambda x : r'\nabla'),
+    ('partial', 'name', ('partial',), DEFAULT_PRECEDENCE, lambda x : r'\partial'),
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
     ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : r'\prod'),
     ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : r'\int'),
