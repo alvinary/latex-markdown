@@ -11,6 +11,7 @@ latex_tokens = set([
     "[.",
     ".]",
     "--",
+    "```",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -54,10 +55,12 @@ latex_dsl = [
     ('subsubsection', 'block', ('subsubsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsubsection(x)),
     # Listings
     ('itemize', 'block', ('items',), DEFAULT_PRECEDENCE, lambda x : itemize(x)),
-    
     ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE + 10, lambda x, y, z : x + y + z),
     ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
     ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
+    # Code blocks
+    ('code', 'block', ('```', 'break', 'blocks', '```'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('verbatim*', x)),
+    ('code', 'block', ('```', 'break', 'block', '```'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('verbatim*', x)),
     # TODO: do this with iterator concatenation to avoid copying and pasting a thousand times the same list
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
@@ -90,7 +93,8 @@ math_tokens = [
     '|',
     'empty', 'for', 'all', 'exists',
     'from', 'over', 'of',
-    'sum', 'product', 'integral', 'fraction',
+    'sum', 'product', 'integral', 'fraction', 'gradient',
+    'infinity',
     'sup',
     'sub',
     '_]',
@@ -99,11 +103,33 @@ math_tokens = [
     '[^',
     '|C', '|R', '|Q', '|Z', '|N',
     '+', 'dot', 'times',
-    'pi', 'theta', 'alpha', 'epsilon', 'xi', 'beta',
-    'Pi', 'Theta', 'Alpha', 'Epsilon', 'Xi', 'mu',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
-    'subset', 'superset', 'strict, square, root', '-h-'
+    'subset', 'superset', 'strict, square, root', '-h-',
+    'raise', 'lower'
 ]
+
+greek_letters = '''
+Alpha	Beta	Gamma	Delta
+Epsilon	Zeta	Eta	Theta
+Iota	Kappa	Lambda	Mu
+Nu	Xi	Omicron	Pi
+Rho	Sigma	Tau	Upsilon
+Phi	Chi	Psi	Omega
+varGamma	varDelta	varTheta	ΛΛ varLambda
+varXi	varPi	varSigma	varUpsilon
+varPhi	varPsi	varOmega	
+alpha	beta	gamma	delta
+epsilon	zeta	eta	theta
+iota	kappa	lambda	mu
+nu xi	omicron	pi
+rho	sigma	tau	upsilon
+phi	chi	psi	omega
+varepsilon	varkappa	vartheta	thetasym
+varpi	varrho	varsigma	varphi
+digamma
+'''.split()
+
+math_tokens = math_tokens + greek_letters
 
 clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-',
     '=>', '<=>','<==>', '->', '|=', '|-',
@@ -163,12 +189,12 @@ math_dsl = [
     ('for all', 'math', ('for', 'all',), DEFAULT_PRECEDENCE + 5, lambda _, __ : r'\forall'),
     ('exists', 'pref', ('exists',), DEFAULT_PRECEDENCE, lambda x : r'\exists'),
     ('vert', 'delim', ('|',), DEFAULT_PRECEDENCE, lambda x : r'\vert'),
-    # Subindices, superindices and diacritics
+    # Subindices and superindices
     ('sub', 'math', ('math', 'sub', 'marked_math'), DEFAULT_PRECEDENCE + 10, lambda x, _, y : x + '_{' + y + '}'),
     ('super', 'math', ('math', 'sup', 'marked_math'), DEFAULT_PRECEDENCE + 10, lambda x, _, y : x + '^{' + y + '}'),
     ('short sub', 'math', ('math', 'sub', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '_{' + y + '}'),
     ('short super', 'math', ('math', 'sup', 'name'), DEFAULT_PRECEDENCE + 5, lambda x, _, y : x + '^{' + y + '}'),
-    # ', ^, bar, hat, tilde, vector
+    # Diactritics: ', ^, bar, hat, tilde, vector
     ('vector', 'name', ('name', 'vector'), DEFAULT_PRECEDENCE, lambda x, _ : r'\vec{x}'),
     ('hat', 'name', ('name', 'hat'), DEFAULT_PRECEDENCE, lambda x, _ : r'\bar{x}'),
     ('check', 'name', ('name', 'check'), DEFAULT_PRECEDENCE, lambda x, _ : r'\check{x}'),
@@ -176,19 +202,20 @@ math_dsl = [
     ('ring', 'name', ('name', 'ring'), DEFAULT_PRECEDENCE, lambda x, _ : r'\mathring{x}'),
     ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{x}'),
     # Common 'big operator' operations
+    ('gradient', 'op', ('gradient',), DEFAULT_PRECEDENCE, lambda x : r'\nabla'),
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
     ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : r'\prod'),
     ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : r'\int'),
     ('op from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('inf from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
-    # R, Q, C, Z, aleph, epsilon,
+    # Commonly used sets
     ('reals', 'name', ('|R',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{R' + '}'),
     ('complex', 'name', ('|C',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Complex' + '}'),
     ('rationals', 'name', ('|Q',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Q' + '}'),
     ('integers', 'name', ('|Z',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Z' + '}'),
     ('naturals', 'name', ('|N',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{N' + '}'),
-    # Common operations
+    # Commonly used operations
     ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     ('dot', 'inf', ('dot',), DEFAULT_PRECEDENCE, lambda x : r'\cdot'),
     ('times', 'inf', ('times',), DEFAULT_PRECEDENCE, lambda x : r'\times'),
@@ -196,24 +223,16 @@ math_dsl = [
     ('small fraction', 'math', ('name', 'over', 'name'), DEFAULT_PRECEDENCE, lambda x, _, y : r'\frac{ ' + x + ' }{ ' + y + ' }'),
     ('square root', 'math', ('square', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda __, _, x : r'\sqrt{ ' + x + ' }'),
     ('nth root', 'math', ('name', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda y, _, x : r'\sqrt[' + y + ']{ ' + x + ' }'),
-    # Greek
-    ('beta', 'name', ('beta',), DEFAULT_PRECEDENCE, lambda x : r'\beta'),
-    ('mu', 'name', ('mu',), DEFAULT_PRECEDENCE, lambda x : r'\mu'),
-    ('pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\pi'),
-    ('Pi', 'name', ('pi',), DEFAULT_PRECEDENCE, lambda x : r'\Pi'),
-    ('theta', 'name', ('theta',), DEFAULT_PRECEDENCE, lambda x : r'\theta'),
-    ('Theta', 'name', ('Theta',), DEFAULT_PRECEDENCE, lambda x : r'\Theta'),
-    ('alpha', 'name', ('alpha',), DEFAULT_PRECEDENCE, lambda x : r'\alpha'),
-    ('Alpha', 'name', ('Alpha',), DEFAULT_PRECEDENCE, lambda x : r'\Alpha'),
-    ('xi', 'name', ('xi',), DEFAULT_PRECEDENCE, lambda x : r'\xi'),
-    ('Xi', 'name', ('Xi',), DEFAULT_PRECEDENCE, lambda x : r'\Xi'),
-    ('epsilon', 'name', ('epsilon',), DEFAULT_PRECEDENCE, lambda x : r'\varepsilon'),
-    ('Epsilon', 'name', ('Epsilon',), DEFAULT_PRECEDENCE, lambda x : r'E'),
+    # Commonly used symbols and constants
+    ('infinity', 'name', ('infinity'), DEFAULT_PRECEDENCE, lambda x : r'\infty'),
     # Logic
     ('derives', 'inf', ('|-',), DEFAULT_PRECEDENCE, lambda x : r'\vdash'),
     ('consequence', 'inf', ('|=',), DEFAULT_PRECEDENCE, lambda x : r'\vDash'),
     # Quantum Mechanics
     ('reduced plank constant', 'name', ('-h-', ), DEFAULT_PRECEDENCE, lambda x : r'\hbar'),
+    # Assorted
+    ('up arrow', 'name', ('raise',), DEFAULT_PRECEDENCE, lambda x: r'\upnarrow'),
+    ('down arrow', 'name', ('lower',), DEFAULT_PRECEDENCE, lambda x: r'\downarrow'),
     # Math elements
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
     ('element', 'math', ('elem',), DEFAULT_PRECEDENCE - 5, lambda x : x),
@@ -225,3 +244,9 @@ math_dsl = [
     ('marked math', 'marked_math', ('(-', 'math', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('short marked math', 'marked_math', ('name', ), DEFAULT_PRECEDENCE, lambda x : x)
 ]
+
+# Add greek letters to math dsl
+for letter_name in greek_letters:
+    name = 'name'
+    bar = '\\'
+    math_dsl.append((letter_name, name, (letter_name,), DEFAULT_PRECEDENCE, lambda _: bar + letter_name))
