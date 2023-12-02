@@ -172,7 +172,7 @@ math_dsl = [
     ('notin', 'inf', ('notin',), DEFAULT_PRECEDENCE, lambda _, __: r'\notin'),
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: r'\notin'),
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: 'r\mapsto'),
-    ('maps to', 'inf', ('->',), DEFAULT_PRECEDENCE + 5, lambda _, __: r'\rightarrow'),
+    ('maps to', 'inf', ('->',), DEFAULT_PRECEDENCE + 5, lambda _ : r'\rightarrow'),
     # maps to via
     # Set inclusions
     ('subset', 'inf', ('subset', 'of'), DEFAULT_PRECEDENCE + 2, lambda _, __ : r'\subseteq'),
