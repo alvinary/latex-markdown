@@ -73,12 +73,23 @@ def box(subtitle, text):
 
 # Common latex macros
 
+default_packages_list = '''
+
+\\usepackage{amsmath}
+\\usepackage{wrapfig}
+\\usepackage{amssymb}
+\\usepackage{graphicx}
+
+'''
+
+def default_packages():
+    return default_packages_list
+
 def document(documentClass, content):
     _documentClass = macro('documentclass', [documentClass])
-    _packages = macro('usepackage', ['amsmath'])
-    _packages = _packages + "\n" + r"\usepackage{amssymb}"
+    _packages = default_packages()
     _documentContent = beginEnd('document', content)
-    return f"{_documentClass}{BREAK}{_documentContent}"
+    return f"{_documentClass}{_packages}{_documentContent}"
     
 def article(content):
     return document('article', content)
@@ -116,6 +127,21 @@ def italics(text):
 
 def typewriter(text):
     return macro('texttt', [text])
+    
+# matrices
+def matrix(lines):
+    double_dashes = '\\\\'
+    rows = f"{double_dashes}{NEWLINE}".join(lines)
+    return beginEnd('matrix', rows)
+
+# figures
+
+def figure(path, caption, position, style):
+    image_path_prefix = ''
+    caption = ''
+    position = ''
+    style = ''
+    return "{}{}{}{}"
     
 # bibtex
 
