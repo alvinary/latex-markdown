@@ -84,8 +84,8 @@ latex_dsl = [
 ]
 
 math_tokens = [
-    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)',
-    '=', '!=',
+    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].',
+    '=', '!=', '-',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
     'in', 'to', 'maps', '->', 'notin',
@@ -131,7 +131,7 @@ digamma
 
 math_tokens = math_tokens + greek_letters
 
-clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-',
+clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '[.', '.]', '[', ']',
     '=>', '<=>','<==>', '->', '|=', '|-',
     '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
 
@@ -316,6 +316,15 @@ math_dsl = [
     ('delimiter', 'math', ('delim',), DEFAULT_PRECEDENCE - 5, lambda x : x),
     ('name', 'math', ('name',), DEFAULT_PRECEDENCE - 5, lambda x : x),
     ('marked math', 'marked_math', ('(-', 'math', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
-    ('short marked math', 'marked_math', ('name', ), DEFAULT_PRECEDENCE, lambda x : x)
+    ('short marked math', 'marked_math', ('name', ), DEFAULT_PRECEDENCE, lambda x : x),
+    # Matrices
+    ('short matrix cell', 'matrix_cell', ('name',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('long matrix cell', 'matrix_cell', ('marked_math',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('matrix cell append', 'matrix_cells', ('matrix_cell', 'matrix_cells'), DEFAULT_PRECEDENCE, lambda x, _, y : x + ' & ' + y),
+    ('matrix cell base', 'matrix_cells', ('matrix_cell',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('matrix line', 'matrix_line', ('[', 'matrix_cells', ']',), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
+    ('several matrix lines', 'matrix_lines', ('matrix_line', 'matrix_lines'), DEFAULT_PRECEDENCE, lambda x, y : x + y),
+    ('single matrix line', 'matrix_lines', ('matrix_line'), DEFAULT_PRECEDENCE, lambda x : [x]),
+    ('matrix', 'math', ('[.', 'matrix_lines', '.]'), DEFAULT_PRECEDENCE, lambda __, x, _ : matrix(x)),
 ]
 
