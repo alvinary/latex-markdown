@@ -12,6 +12,10 @@ latex_tokens = set([
     ".]",
     "--",
     "```",
+    ":images",
+    ":graphics",
+    ":figure",
+    ":caption",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -80,12 +84,19 @@ latex_dsl = [
     ('default math block', 'block', ('begin_math', 'math', 'end_math', 'break'), DEFAULT_PRECEDENCE, lambda ___, x, _, __ : '\[ ' + x + ' \]'),
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
-    ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x)
+    ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x),
+    # Images
+    ('image', 'block', (':graphics', 'text', 'break'), DEFAULT_PRECEDENCE, lambda x : macro('include_graphics', x)),
+    ('figure', 'block', (':figure', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : figure(x)),
+    ('figure with caption', 'block', (':figure', 'text', 'newline', ':caption', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _1, x, _2, _3, y, _4 : figure(x, caption=y)),
+    # ('figure with caption and styles', 'block', (), DEFAULT_PRECEDENCE, lambda x : x),
+    # Configuration
+    ('image path', 'block', (':images', 'text', 'break'), DEFAULT_PRECEDENCE, lambda __, x, _ : r'\graphicspath{ {' + x + '/} }')
 ]
 
 math_tokens = [
     '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].',
-    '=', '!=', '-',
+    '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
     'in', 'to', 'maps', '->', 'notin',
@@ -93,8 +104,7 @@ math_tokens = [
     '|',
     'empty', 'for', 'all', 'exists',
     'from', 'over', 'of',
-    'sum', 'product', 'integral', 'fraction', 'gradient',
-    'infinity',
+    'sum', 'product', 'integral', 'fraction', 'gradient', 'infinity',
     'sup',
     'sub',
     '_]',
@@ -102,7 +112,7 @@ math_tokens = [
     '^]',
     '[^',
     '|C', '|R', '|Q', '|Z', '|N',
-    '+', 'dot', 'times',
+    'dot', 'times',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
     'subset', 'superset', 'strict, square, root', '-h-',
     'raise', 'lower', 'partial'
@@ -295,7 +305,7 @@ math_dsl = [
     ('square root', 'math', ('square', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda __, _, x : r'\sqrt{ ' + x + ' }'),
     ('nth root', 'math', ('name', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda y, _, x : r'\sqrt[' + y + ']{ ' + x + ' }'),
     # Commonly used symbols and constants
-    ('infinity', 'name', ('infinity'), DEFAULT_PRECEDENCE, lambda x : r'\infty'),
+    ('infinity', 'math', ('infinity'), DEFAULT_PRECEDENCE, lambda x : r'\infty'),
     # Logic
     ('derives', 'inf', ('|-',), DEFAULT_PRECEDENCE, lambda x : r'\vdash'),
     ('consequence', 'inf', ('|=',), DEFAULT_PRECEDENCE, lambda x : r'\vDash'),

@@ -136,12 +136,16 @@ def matrix(lines):
 
 # figures
 
-def figure(path, caption, position, style):
-    image_path_prefix = ''
-    caption = ''
+def figure(path, caption='', styles=[]):
+    # Styles go all together, and you sort them 
+    # and then place them where they should be
+    if caption:
+        caption = macro('caption', [caption])
+    image_part = caption + NEWLINE + macro('includegraphics', [path])
     position = ''
-    style = ''
-    return "{}{}{}{}"
+    if not styles:
+        styles.append('h')
+    return beginEnd('figure', image_part, squares=styles)
     
 # bibtex
 
