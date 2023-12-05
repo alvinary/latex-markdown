@@ -1,4 +1,5 @@
 from constants import *
+import bisect
 
 # TODO: use named tuples for spans
 
@@ -24,9 +25,7 @@ class Parse:
             span_data = token_label, index, index, TAGGED
             self.values[span_data] = token
             self.add_span(*span_data)
-            self.unvisited.append(span_data)
-            
-        sorted(self.unvisited)
+            bisect.insort(self.unvisited, span_data)
 
         while self.unvisited:
             current = self.unvisited.pop()
@@ -44,8 +43,6 @@ class Parse:
             right_candidates = set(self.begin_at[end + 1])
             for other in right_candidates:
                 self.trigger_pair(current, other)
-                
-            sorted(self.unvisited)
 
         # self.prune()
 
@@ -103,7 +100,7 @@ class Parse:
         self.begin_at[begin].add(span_data)
         if span_data not in self.considered:
             self.considered.add(span_data)
-            self.unvisited.append(span_data)
+            bisect.insort(self.unvisited, span_data)
         # These are used in self.show()
         span_content = tuple([token for token, tag in self.tokens[begin:end + 1]])
         self.readable.add((begin, end, label, span_content))
@@ -128,16 +125,21 @@ class Parse:
 
     def get_dependencies(self, span):
         queue = [span]
-        dependencies = set()
+        in_dependencies = set()
+        dependencies = []
         visited = set()
         while queue:
             current = queue.pop(0)
             if current in self.parts:
                 parts = set(self.parts[current])
-                dependencies |= parts
-                queue += [p for p in parts if p not in visited]
+                unvisited_parts = parts - visited
+                in_dependencies |= parts
+                new_parts = parts - in_dependencies
+                for new in new_parts:
+                    bisect.insort(dependencies, new)
+                queue += [p for p in unvisited_parts]
                 visited |= parts
-        return list(sorted(dependencies))
+        return list(dependencies)
 
     def prune(self):
 
@@ -199,7 +201,7 @@ class Parse:
         reports = []
         for _, begin, end, _ in self.n_initial_segments():
             tokens = [t[0] for t in self.tokens[:end]]
-            tip = min(len(self.tokens), end + 5)
+            tip = min(len(self.tokens), end + 30)
             next_tokens = [t[0] + f' ({t[1]}) ' for t in self.tokens[end:tip]]
             tokens_text = " ".join(tokens)
             if len(tokens_text) > cutoff:
