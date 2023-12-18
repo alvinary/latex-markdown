@@ -68,6 +68,8 @@ class Latex(LatexMarkdown):
         text = f"{BEGIN_DOCUMENT} {text.strip()}\n\n{END_DOCUMENT}"
         text = text.replace(NEWLINE, f" {EXPLICIT_NEWLINE} ")
         text = text.replace(BEGIN_MATH, f" {BEGIN_MATH} ")
+        for special_token in ['[.', '.]']:
+            text = text.replace(special_token, f" {special_token} ")
         while '  ' in text:
             text = text.replace('  ', ' ')
         pretokens = [t.strip() for t in text.split()]
