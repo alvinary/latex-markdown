@@ -16,6 +16,8 @@ latex_tokens = set([
     ":graphics",
     ":figure",
     ":caption",
+    ":references",
+    ":setReferences",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -85,6 +87,10 @@ latex_dsl = [
     ('latex math', 'latex_math', ('begin_math', 'math', 'end_math'), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('inline math', 'inline_text', ('latex_math',), DEFAULT_PRECEDENCE, lambda x : '$' + x + '$'),
     ('dummy math test', 'inline_text', ('$$$$',), DEFAULT_PRECEDENCE, lambda x : x),
+    # Citations
+    ('citation', 'inline_text', ('[.', 'text', '.]'), DEFAULT_PRECEDENCE, lambda _, x, __: r'\citation{' + x + '}'),
+    ('bibliography', 'block', (':references', 'break'), DEFAULT_PRECEDENCE, lambda _, __ : r'\printbibliography'),
+    ('set bibliography file', 'block', (':setReferences', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : r'\addbibresource{' + x + '}'),
     # Images
     ('image', 'block', (':graphics', 'text', 'break'), DEFAULT_PRECEDENCE, lambda x : macro('include_graphics', x)),
     ('figure', 'block', (':figure', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : figure(x)),
@@ -141,7 +147,7 @@ digamma
 
 math_tokens = math_tokens + greek_letters
 
-clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '[.', '.]', '[', ']',
+clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '.[', '].', '[', ']',
     '=>', '<=>','<==>', '->', '|=', '|-',
     '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
 
@@ -315,7 +321,7 @@ math_dsl = [
     #('ket', 'name', ('|', 'math', '>' ), DEFAULT_PRECEDENCE, lambda _, x, __ : r'\Ket{|' + x  + '}'),
     #('braket', 'name', ('<', 'math', '|', 'math', '>' ), DEFAULT_PRECEDENCE, lambda _, x, __, y, ___ : r'\Braket{' + x + ' | ' + y + '}'),
     # Assorted
-    ('up arrow', 'name', ('raise',), DEFAULT_PRECEDENCE, lambda x: r'\upnarrow'),
+    ('up arrow', 'name', ('raise',), DEFAULT_PRECEDENCE, lambda x: r'\uparrow'),
     ('down arrow', 'name', ('lower',), DEFAULT_PRECEDENCE, lambda x: r'\downarrow'),
     # Math elements
     ('math', 'math', ('math', 'math'), DEFAULT_PRECEDENCE - 5, lambda x, y : x + ' ' + y),
@@ -335,6 +341,6 @@ math_dsl = [
     ('matrix line', 'matrix_line', ('[', 'matrix_cells', ']',), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
     ('several matrix lines', 'matrix_lines', ('matrix_line', 'matrix_lines'), DEFAULT_PRECEDENCE, lambda x, y : x + y),
     ('single matrix line', 'matrix_lines', ('matrix_line'), DEFAULT_PRECEDENCE, lambda x : [x]),
-    ('matrix', 'math', ('[.', 'matrix_lines', '.]'), DEFAULT_PRECEDENCE, lambda __, x, _ : matrix(x)),
+    ('matrix', 'math', ('.[', 'matrix_lines', '].'), DEFAULT_PRECEDENCE, lambda __, x, _ : matrix(x)),
 ]
 
