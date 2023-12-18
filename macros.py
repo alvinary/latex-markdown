@@ -79,6 +79,7 @@ default_packages_list = '''
 \\usepackage{wrapfig}
 \\usepackage{amssymb}
 \\usepackage{graphicx}
+\\usepackage{biblatex}
 
 '''
 
