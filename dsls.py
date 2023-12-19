@@ -102,6 +102,7 @@ latex_dsl = [
 
 math_tokens = [
     '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].',
+    '-|', '[-', '-]',
     '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
@@ -121,7 +122,7 @@ math_tokens = [
     'dot', 'times',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
     'subset', 'superset', 'strict, square, root', '-h-',
-    'raise', 'lower', 'partial'
+    'raise', 'lower', 'partial', '/'
 ]
 
 greek_letters = '''
@@ -147,7 +148,7 @@ digamma
 
 math_tokens = math_tokens + greek_letters
 
-clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '.[', '].', '[', ']',
+clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '.[', '].', '[', ']', '[-', '-]', '-|',
     '=>', '<=>','<==>', '->', '|=', '|-',
     '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
 
@@ -336,11 +337,13 @@ math_dsl = [
     # Matrices
     ('short matrix cell', 'matrix_cell', ('name',), DEFAULT_PRECEDENCE, lambda x : x),
     ('long matrix cell', 'matrix_cell', ('marked_math',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('matrix cell append', 'matrix_cells', ('matrix_cell', 'matrix_cells'), DEFAULT_PRECEDENCE, lambda x, _, y : x + ' & ' + y),
+    ('matrix cell append', 'matrix_cells', ('matrix_cell', 'matrix_cells'), DEFAULT_PRECEDENCE, lambda x, y: x + ' & ' + y),
     ('matrix cell base', 'matrix_cells', ('matrix_cell',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('matrix line', 'matrix_line', ('[', 'matrix_cells', ']',), DEFAULT_PRECEDENCE, lambda _, x, __ : x),
+    ('matrix line', 'matrix_line', ('.[', 'matrix_cells', '].'), DEFAULT_PRECEDENCE, lambda _, x, __ : [x]),
     ('several matrix lines', 'matrix_lines', ('matrix_line', 'matrix_lines'), DEFAULT_PRECEDENCE, lambda x, y : x + y),
-    ('single matrix line', 'matrix_lines', ('matrix_line'), DEFAULT_PRECEDENCE, lambda x : [x]),
-    ('matrix', 'math', ('.[', 'matrix_lines', '].'), DEFAULT_PRECEDENCE, lambda __, x, _ : matrix(x)),
+    ('single matrix line', 'matrix_lines', ('matrix_line',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('pmatrix', 'math', ('(-', 'matrix_lines', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('p', x)),
+    ('bmatrix', 'math', ('[-', 'matrix_lines', '-]'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('b', x)),
+    ('vmatrix', 'math', ('|-', 'matrix_lines', '-|'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('v', x)),
 ]
 

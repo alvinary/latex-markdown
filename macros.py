@@ -149,10 +149,10 @@ def typewriter(text):
     return macro('texttt', [text])
     
 # matrices
-def matrix(lines):
+def matrix(delim, lines):
     double_dashes = '\\\\'
     rows = f"{double_dashes}{NEWLINE}".join(lines)
-    return beginEnd('matrix', rows)
+    return beginEnd(f'{delim}matrix', rows)
 
 # figures
 
