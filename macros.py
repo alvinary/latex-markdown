@@ -38,7 +38,7 @@ def beginEnd(name, content, squares=[], curly=[]):
     _args = squareArgs(squares) + curlyArgs(curly)
     _content = indent(content)
     _end = end(name)
-    listing = [_begin, _args, '\n' + _content + '\n', _end]
+    listing = [_begin + _args, '\n' + _content + '\n', _end]
     if '' in listing:
         listing.remove('')
     return NEWLINE.join(listing)
@@ -162,6 +162,7 @@ def figure(path, caption='', styles=[]):
     if caption:
         caption = macro('caption', [caption])
     image_part = caption + NEWLINE + macro('includegraphics', [path])
+    image_part = indent(image_part)
     position = ''
     if not styles:
         styles.append('h')
