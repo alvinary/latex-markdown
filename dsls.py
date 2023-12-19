@@ -311,7 +311,7 @@ math_dsl = [
     ('square root', 'math', ('square', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda __, _, x : r'\sqrt{ ' + x + ' }'),
     ('nth root', 'math', ('name', 'root', 'marked_math'), DEFAULT_PRECEDENCE, lambda y, _, x : r'\sqrt[' + y + ']{ ' + x + ' }'),
     # Commonly used symbols and constants
-    ('infinity', 'math', ('infinity'), DEFAULT_PRECEDENCE, lambda x : r'\infty'),
+    ('infinity', 'name', ('infinity',), DEFAULT_PRECEDENCE, lambda x : r'\infty'),
     # Logic
     ('derives', 'inf', ('|-',), DEFAULT_PRECEDENCE, lambda x : r'\vdash'),
     ('consequence', 'inf', ('|=',), DEFAULT_PRECEDENCE, lambda x : r'\vDash'),
