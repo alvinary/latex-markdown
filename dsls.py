@@ -12,6 +12,7 @@ latex_tokens = set([
     ".]",
     "--",
     "```",
+    ":raw",
     ":images",
     ":graphics",
     ":figure",
@@ -29,18 +30,16 @@ latex_tokens = set([
 latex_dsl = [
     # A latex document is some trailing whitespace followed by the
     # document contents and some more trailing whitespace
-    ('document', 'document', ('begin', 'content', 'end'), DEFAULT_PRECEDENCE, lambda _, x, __ : article(x)),
+    ('document', 'document', ('blocks', 'end'), DEFAULT_PRECEDENCE, lambda x, __ : article(x)),
     ('newline whitespace', 'whitespace', ('newline',), DEFAULT_PRECEDENCE, lambda x : x),
     ('break whitespace', 'whitespace', ('break',), DEFAULT_PRECEDENCE, lambda x : x),
     ('begin', 'begin', (BEGIN_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x, : x),
     ('end', 'end', (END_DOCUMENT,), DEFAULT_PRECEDENCE, lambda x : x),
     # Types of content
-    ('blocks content', 'content', ('blocks',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('single block', 'blocks', ('block',), DEFAULT_PRECEDENCE, lambda x : x),
+    ('single block', 'blocks', ('begin', 'block',), DEFAULT_PRECEDENCE, lambda _, x : x),
     # ToDo: test if 'begin document' could be the first 'blocks' element,
     # so that not every block is 'blocks', and there are less valid parses
     ('blocks plus block', 'blocks', ('blocks', 'block'), DEFAULT_PRECEDENCE, lambda x, y : x + BREAK + y),
-    # Blocks for images, tables, equations, and so on
     # Whitespace
     ('break token', 'break', (EXPLICIT_BREAK,), DEFAULT_PRECEDENCE, IDENTITY),
     ('newline token', 'newline', (EXPLICIT_NEWLINE,), DEFAULT_PRECEDENCE, IDENTITY),
