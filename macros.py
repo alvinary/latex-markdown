@@ -16,7 +16,6 @@ def curlyArgs(curly):
 
 def indent(text, depth=2):
     lines = text.split(NEWLINE)
-    print(lines)
     lines = [' ' * depth + line for line in lines]
     return NEWLINE.join(lines)
 
