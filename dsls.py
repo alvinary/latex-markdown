@@ -158,8 +158,8 @@ math_dsl = [
     # DSL-specific
     ('Magic wand', 'math', ('[:', 'math', ':]'), DEFAULT_PRECEDENCE + 15, lambda _, x, __ : x),
     # Delimiters
-    ('left parenthesis', 'delim', ('(',), DEFAULT_PRECEDENCE, lambda x: x),
-    ('right parenthesis', 'delim', (')',), DEFAULT_PRECEDENCE, lambda x: x),
+    ('left parenthesis', 'delim', ('(',), DEFAULT_PRECEDENCE, lambda x: r'\left('),
+    ('right parenthesis', 'delim', (')',), DEFAULT_PRECEDENCE, lambda x: r'\right)'),
     ('left brace', 'delim', ('{',), DEFAULT_PRECEDENCE, lambda _: r'\lbrace'),
     ('right brace', 'delim', ('}',), DEFAULT_PRECEDENCE, lambda _: r'\rbrace'),
     ('left angle bracket', 'delim', ('<',), DEFAULT_PRECEDENCE, lambda _: r'\langle'),
