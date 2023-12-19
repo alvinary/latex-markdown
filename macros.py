@@ -16,6 +16,7 @@ def curlyArgs(curly):
 
 def indent(text, depth=2):
     lines = text.split(NEWLINE)
+    print(lines)
     lines = [' ' * depth + line for line in lines]
     return NEWLINE.join(lines)
 
@@ -160,9 +161,8 @@ def figure(path, caption='', styles=[]):
     # Styles go all together, and you sort them 
     # and then place them where they should be
     if caption:
-        caption = macro('caption', [caption])
-    image_part = caption + NEWLINE + macro('includegraphics', [path])
-    image_part = indent(image_part)
+        caption = macro('caption', [caption]) + NEWLINE
+    image_part = caption + macro('includegraphics', [path])
     position = ''
     if not styles:
         styles.append('h')

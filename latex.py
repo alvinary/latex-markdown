@@ -4,6 +4,17 @@ from dsls import *
 from collections import defaultdict
 from rules import Rules
 
+def remove_redundant_whitespace(text):
+    for s in RIGHT:
+        s_prefix = f' {s}'
+        while s_prefix in text:
+            text = text.replace(s_prefix, s)
+    for s in LEFT:
+        s_postfix = f'{s} '
+        while s_postfix in text:
+            text = text.replace(s_postfix, s)
+    return text
+
 class LatexMarkdown:
 
     def __init__(self, dsl, tokens, default, prepreocessor):
@@ -147,13 +158,7 @@ class Latex(LatexMarkdown):
         return tagged_tokens
         
     def postprocess(self, text):
-        while '  ' in text:
-            text = text.replace('  ', ' ')
-        for s in RIGHT:
-            text = text.replace(f" {s}" ,f"{s}")
-        for s in LEFT:
-            text = text.replace(f"{s} " ,f"{s}")
-        return text
+        return remove_redundant_whitespace(text)
 
 
 class Beamer(LatexMarkdown):
@@ -248,10 +253,4 @@ class Math(LatexMarkdown):
         return list(zip(tokens, tags))
     
     def postprocess(self, text):
-        while '  ' in text:
-            text = text.replace('  ', ' ')
-        for s in RIGHT:
-            text = text.replace(" {s}" ,"{s}")
-        for s in LEFT:
-            text = text.replace("{s} " ,"{s}")
-        return text
+        return remove_redundant_whitespace(text)
