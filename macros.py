@@ -80,8 +80,27 @@ default_packages_list = '''
 \\usepackage{amssymb}
 \\usepackage{graphicx}
 \\usepackage{biblatex}
+\\usepackage{listings}
+\\usepackage{xcolor}
 
-'''
+\\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\\lstdefinestyle{mystyle}{
+    backgroundcolor=\\color{backcolour},
+    basicstyle=@ttfamily@footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\\lstset{style=mystyle}
+
+'''.replace('@', '\\')
 
 def default_packages():
     return default_packages_list

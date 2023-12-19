@@ -65,8 +65,8 @@ latex_dsl = [
     ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
     ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
     # Code blocks
-    ('code', 'block', ('```', 'break', 'blocks', '```'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('verbatim*', x)),
-    ('code', 'block', ('```', 'break', 'block', '```'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('verbatim*', x)),
+    ('code', 'block', ('```', 'break', 'blocks', '```', 'break'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('lstlisting', x)),
+    ('code', 'block', ('```', 'break', 'block', '```', 'break'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('lstlisting', x)),
     # TODO: do this with iterator concatenation to avoid copying and pasting a thousand times the same list
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
