@@ -100,7 +100,7 @@ latex_dsl = [
 ]
 
 math_tokens = [
-    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].',
+    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].', '[', ']',
     '-|', '[-', '-]',
     '=', '!=',
     '>=','<=',
@@ -147,9 +147,11 @@ digamma
 
 math_tokens = math_tokens + greek_letters
 
-clash_tokens = {'(|', '|)', '[:', ':]', '>=','<=', '-h-', '.[', '].', '[', ']', '[-', '-]', '-|',
-    '=>', '<=>','<==>', '->', '|=', '|-',
-    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)'}
+clash_tokens = ['(|', '|)', '[:', ':]', '<=>', '>=','<=', '-h-', '.[', '].', '[', ']', '[-', '-]', '-|',
+    '=>', '->', '|=', '|-',
+    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)','<==>']
+    
+clash_tokens = list(reversed(sorted(clash_tokens, key=len)))
 
 with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if t in clash_tokens}
 without_special = {v : k for (k, v) in with_special.items()}
@@ -170,11 +172,6 @@ math_dsl = [
     ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, w : x + y + w),
     ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, ww : r'\lvert ' + y + r' \rvert'),
     ('square brackets', 'math', ('[', 'math', ']'), DEFAULT_PRECEDENCE + 5, lambda x, y, www : x + y + www),
-    # Common relations
-    ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
-    ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),
-    ('greater or equal', 'inf', ('>=',), DEFAULT_PRECEDENCE, lambda _: r'\ge'),
-    ('less or equal', 'inf', ('<=',), DEFAULT_PRECEDENCE, lambda _: r'\le'),
     # Basic notation for sets, functions, propositional and predicate logic
     ('and', 'inf', ('and',), DEFAULT_PRECEDENCE, lambda _: r'\land'),
     ('or', 'inf', ('or',), DEFAULT_PRECEDENCE, lambda _: r'\lor'),
@@ -189,6 +186,11 @@ math_dsl = [
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: r'\notin'),
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: 'r\mapsto'),
     ('maps to', 'inf', ('->',), DEFAULT_PRECEDENCE + 5, lambda _ : r'\rightarrow'),
+    # Common relations
+    ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
+    ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),
+    ('greater or equal', 'inf', ('>=',), DEFAULT_PRECEDENCE, lambda _: r'\ge'),
+    ('less or equal', 'inf', ('<=',), DEFAULT_PRECEDENCE, lambda _: r'\le'),
     # maps to via
     # Set inclusions
     ('subset', 'inf', ('subset', 'of'), DEFAULT_PRECEDENCE + 2, lambda _, __ : r'\subseteq'),

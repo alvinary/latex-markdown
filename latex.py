@@ -226,23 +226,23 @@ class Math(LatexMarkdown):
     
         # Hide tokens with delimiters
         
-        for k in with_special:
+        for k in clash_tokens:
             text = text.replace(k, with_special[k])         
         
         # Put whitespace around special characters
         
         for d in self.special_characters:
             text = text.replace(d, f' {d} ')
-            
-        # Recover tokens
-        
-        for k in without_special:
-            text = text.replace(k, without_special[k])
         
         # Remove double spaces
             
         while '  ' in text:
             text = text.replace('  ', ' ')
+            
+        # Recover tokens
+        
+        for k in without_special:
+            text = text.replace(k, without_special[k])
             
         # Split at whitespace
 
