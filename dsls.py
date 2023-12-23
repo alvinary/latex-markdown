@@ -10,6 +10,10 @@ latex_tokens = set([
     "**",
     "[.",
     ".]",
+    ".*",
+    "*.",
+    "_.",
+    "._",
     "--",
     "```",
     ":raw",
@@ -71,9 +75,8 @@ latex_dsl = [
     # Citations
     ('thin bar', 'thin_bar', (THIN_BAR,), DEFAULT_PRECEDENCE, IDENTITY),
     # Formatted text
-    ('double star', 'double_star', ('**',), DEFAULT_PRECEDENCE, IDENTITY),
-    ('wiggle', 'wiggle', ('~',), DEFAULT_PRECEDENCE, IDENTITY),
-    ('inline citation', 'inline_text', ('citation',), DEFAULT_PRECEDENCE, lambda x : x), # todo: call relevant function
+    ('boldface', 'text', ('*.', 'text', '.*'), DEFAULT_PRECEDENCE, lambda _, x, __: macro('textbf', [x])),
+    ('italics', 'text', ('._', 'text', '_.'), DEFAULT_PRECEDENCE, lambda _, x, __: macro('textit', [x])),
     # Images, citations, tables, indices, and references
     ('left citation mark', 'left_cite', ('[.',), DEFAULT_PRECEDENCE, IDENTITY),
     ('right citation mark', 'right_cite', ('.]',), DEFAULT_PRECEDENCE, IDENTITY),
