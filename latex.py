@@ -5,6 +5,8 @@ from collections import defaultdict
 from rules import Rules
 
 def remove_redundant_whitespace(text):
+    while r' \footnote' in text:
+        text = text.replace(r' \footnote', r'\footnote')
     for s in RIGHT:
         s_prefix = f' {s}'
         while s_prefix in text:

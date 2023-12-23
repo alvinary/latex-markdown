@@ -19,6 +19,7 @@ latex_tokens = set([
     ":caption",
     ":references",
     ":setReferences",
+    ":footnote",
     EXPLICIT_NEWLINE,
     EXPLICIT_BREAK,
     BEGIN_DOCUMENT,
@@ -94,7 +95,9 @@ latex_dsl = [
     ('image', 'block', (':graphics', 'text', 'break'), DEFAULT_PRECEDENCE, lambda x : macro('include_graphics', x)),
     ('figure', 'block', (':figure', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __ : figure(x)),
     ('figure with caption', 'block', (':figure', 'text', 'newline', ':caption', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _1, x, _2, _3, y, _4 : figure(x, caption=y)),
-    # ('figure with caption and styles', 'block', (), DEFAULT_PRECEDENCE, lambda x : x),
+    # Footnotes
+    ('footnote', 'inline_text', (':footnote', '[.', 'text', '.]'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3 : macro('footnote', [x])),
+    ('manual footnote', 'inline_text', (':footnote', '[.', 'text', '--', 'text', '.]'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, y, _4 : macro(f'footnote[{x}]', [y])),
     # Configuration
     ('image path', 'block', (':images', 'text', 'break'), DEFAULT_PRECEDENCE, lambda __, x, _ : r'\graphicspath{ {' + x + '/} }')
 ]
@@ -121,7 +124,7 @@ math_tokens = [
     'dot', 'times',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
     'subset', 'superset', 'strict, square, root', '-h-',
-    'raise', 'lower', 'partial', '/'
+    'raise', 'lower', 'partial', '/', 'wedge', 'vee'
 ]
 
 greek_letters = '''
@@ -225,6 +228,8 @@ math_dsl = [
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
     ('product', 'op', ('product',), DEFAULT_PRECEDENCE, lambda x : r'\prod'),
     ('integral', 'op', ('integral',), DEFAULT_PRECEDENCE, lambda x : r'\int'),
+    ('mass conjunction', 'op', ('wedge',), DEFAULT_PRECEDENCE, lambda x : r'\wedge'),
+    ('mass disjunction', 'op', ('vee',), DEFAULT_PRECEDENCE, lambda x : r'\vee'),
     ('op from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('inf from to', 'math', ('op', 'from', 'marked_math', 'to', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, b, ___, f : big_operator(o) + '_{' + s + '}^{' + b + '}' + f' {f}'),
     ('op over', 'math', ('op', 'over', 'marked_math', 'of', 'marked_math',), DEFAULT_PRECEDENCE + 10, lambda o, _, s, __, f : big_operator(o) + '_{' + s + '} ' + f),
