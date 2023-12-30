@@ -65,9 +65,9 @@ latex_dsl = [
     ('subsubsection', 'block', ('subsubsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsubsection(x)),
     # Listings
     ('itemize', 'block', ('items',), DEFAULT_PRECEDENCE, lambda x : itemize(x)),
-    ('items', 'items', ('single_item', 'break', 'items'), DEFAULT_PRECEDENCE + 10, lambda x, y, z : x + y + z),
-    ('single item', 'single_item', ('*', 'text',), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
-    ('items', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
+    ('items', 'items', ('single_item', '--' ,'break', 'items'), DEFAULT_PRECEDENCE, lambda x, _, y, z : x + BREAK + z),
+    ('single item', 'single_item', ('*', 'text'), DEFAULT_PRECEDENCE, lambda _, x : item(x)),
+    ('last item', 'items', ('single_item', 'break'), DEFAULT_PRECEDENCE, lambda x, _ : x),
     # Code blocks
     ('code', 'block', ('```', 'break', 'blocks', '```', 'break'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('lstlisting', x)),
     ('code', 'block', ('```', 'break', 'block', '```', 'break'), DEFAULT_PRECEDENCE, lambda _1, _2, x, _3, _4 : beginEnd('lstlisting', x)),
@@ -106,7 +106,7 @@ latex_dsl = [
 ]
 
 math_tokens = [
-    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].', '[', ']',
+    '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].', '[', ']', '--',
     '-|', '[-', '-]',
     '=', '!=',
     '>=','<=',
@@ -346,9 +346,9 @@ math_dsl = [
     # Matrices
     ('short matrix cell', 'matrix_cell', ('name',), DEFAULT_PRECEDENCE, lambda x : x),
     ('long matrix cell', 'matrix_cell', ('marked_math',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('matrix cell append', 'matrix_cells', ('matrix_cell', 'matrix_cells'), DEFAULT_PRECEDENCE, lambda x, y: x + ' & ' + y),
-    ('matrix cell base', 'matrix_cells', ('matrix_cell',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('matrix line', 'matrix_line', ('.[', 'matrix_cells', '].'), DEFAULT_PRECEDENCE, lambda _, x, __ : [x]),
+    ('matrix line head', 'matrix_initial_segment', ('.[', 'matrix_cell'), DEFAULT_PRECEDENCE, lambda _, x: x),
+    ('matrix line append', 'matrix_initial_segment', ('matrix_initial_segment', 'matrix_cell'), DEFAULT_PRECEDENCE, lambda x, y: x + ' & ' + y),
+    ('matrix line close ', 'matrix_line', ('matrix_initial_segment', '].'), DEFAULT_PRECEDENCE, lambda x, _ : [x]),
     ('several matrix lines', 'matrix_lines', ('matrix_line', 'matrix_lines'), DEFAULT_PRECEDENCE, lambda x, y : x + y),
     ('single matrix line', 'matrix_lines', ('matrix_line',), DEFAULT_PRECEDENCE, lambda x : x),
     ('pmatrix', 'math', ('(-', 'matrix_lines', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('p', x)),
