@@ -54,7 +54,7 @@ class Rules:
             current_label = label
             current_name = name
             current_semantics = lambda x, y : semantics(*WRAPPEND(x, y))
-            current_semantics = get_try(current_semantics, current_label)
+            current_semantics = get_try(current_semantics, current_name)
             current_precedence = precedence
 
             while remaining_parts:
