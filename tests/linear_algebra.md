@@ -21,3 +21,4 @@ Note if ~y + qx~ then ~T(y) = T(qx) = k(qx) = ky~, and the
 two vectors do belong to the same eigenspace and have
 the same eigenvalue. So 'scaled versions' of the same
 vector belong to the same eigenspace.
+
