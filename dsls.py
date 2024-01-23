@@ -346,9 +346,9 @@ math_dsl = [
     # Matrices
     ('short matrix cell', 'matrix_cell', ('name',), DEFAULT_PRECEDENCE, lambda x : x),
     ('long matrix cell', 'matrix_cell', ('marked_math',), DEFAULT_PRECEDENCE, lambda x : x),
-    ('matrix line head', 'matrix_initial_segment', ('.[', 'matrix_cell'), DEFAULT_PRECEDENCE, lambda _, x: x),
-    ('matrix line append', 'matrix_initial_segment', ('matrix_initial_segment', 'matrix_cell'), DEFAULT_PRECEDENCE, lambda x, y: x + ' & ' + y),
-    ('matrix line close ', 'matrix_line', ('matrix_initial_segment', '].'), DEFAULT_PRECEDENCE, lambda x, _ : [x]),
+    ('matrix line base', 'matrix_cells', ('matrix_cell', 'matrix_cells'), DEFAULT_PRECEDENCE, lambda x, y : x + ' & ' + y),
+    ('matrix line head', 'matrix_cells', ('matrix_cell'), DEFAULT_PRECEDENCE, lambda x : x),
+    ('matrix line close ', 'matrix_line', ('.[', 'matrix_cells', '].'), DEFAULT_PRECEDENCE, lambda x, _ : [x]),
     ('several matrix lines', 'matrix_lines', ('matrix_line', 'matrix_lines'), DEFAULT_PRECEDENCE, lambda x, y : x + y),
     ('single matrix line', 'matrix_lines', ('matrix_line',), DEFAULT_PRECEDENCE, lambda x : x),
     ('pmatrix', 'math', ('(-', 'matrix_lines', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('p', x)),
