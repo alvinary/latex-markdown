@@ -60,8 +60,7 @@ if __name__ == '__main__':
     results, reports = cli.latex_parser.get_latex(markdown)
     
     if not results:
-        print("The contents of the file could not be parsed.")
-        print("Check for errors.")
+        print("The contents of the file could not be parsed, please check for errors in the input file!")
         print()
         print(f"This is the longest initial segment that was parsed successfully:")
         print()
@@ -70,12 +69,11 @@ if __name__ == '__main__':
             r = r.replace("@BREAK@", "\n\n")
             r = r.replace("@_BEGIN_@", "")
             r = r.replace("@_END_@", "")
-            r = r + '<< SEGMENT END <<' + s
+            r = r + '\n<< SEGMENT END <<\n' + s
             print(r)
             print('')
     else:
         for r in results:
            print(r, "\n")
         
-    
         
