@@ -189,8 +189,6 @@ class Parse:
             return head_span + branch_spans
 
     def n_initial_segments(self, n=5, cutoff=100):
-        # Que despues sean los segmentos iniciales no cubiertos por
-        # el parse que ya mostraste
         initial_segments = [span for span in self.begin_at[1]]
         segment_length = lambda span: span[2] - span[1]
         initial_segments.sort(key=segment_length)
