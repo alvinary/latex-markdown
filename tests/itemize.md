@@ -2,9 +2,9 @@
 
 There are *. several .* items :footnote [. None of these items are nested. .]:
 
-* The first
+* The first --
 
-* The second
+* The second --
 
 * The third
 
@@ -15,7 +15,7 @@ space between the listing and the text that follows).
 This ._ should _. break if the document ends with a listing without a break, which is
 not ideal :footnote [. 55 -- Note this footnote does not respect automatic numbering. .]
 
-* *. Let's check that out .*
+* *. Let's check that out .* --
 
 * So this last one has a break after it
 
