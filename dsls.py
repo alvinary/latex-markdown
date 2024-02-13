@@ -1,6 +1,8 @@
 from constants import *
 from macros import *
 
+NEG = r"\!"
+
 latex_tokens = set([
     "#",
     "##",
@@ -58,7 +60,7 @@ latex_dsl = [
     # Special symbols for titles, sections, and subsections
     ('section mark', 'section_mark', ("#",), DEFAULT_PRECEDENCE, IDENTITY),
     ('subsection mark', 'subsection_mark', ("##",), DEFAULT_PRECEDENCE, IDENTITY),
-    ('subsubsection', 'subsubsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
+    ('subsubsection mark', 'subsubsection_mark', ("###",), DEFAULT_PRECEDENCE, IDENTITY),
     # Document hierarchy
     ('section', 'block', ('section_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : section(x)),
     ('subsection', 'block', ('subsection_mark', 'text', 'break'), DEFAULT_PRECEDENCE, lambda _, x, __  : subsection(x)),
@@ -107,7 +109,7 @@ latex_dsl = [
 
 math_tokens = [
     '(', ')', '{', '}', '<', '>', '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].', '[', ']', '--',
-    '-|', '[-', '-]',
+    '-|', '[-', '-]', '[|', '|]',
     '=', '!=',
     '>=','<=',
     '=>', 'and','or','not','iff','<=>','<==>',
@@ -115,6 +117,7 @@ math_tokens = [
     '|=', '|-',
     '|',
     'empty', 'for', 'all', 'exists',
+    'union', 'intersection',
     'from', 'over', 'of',
     'sum', 'product', 'integral', 'fraction', 'gradient', 'infinity',
     'sup',
@@ -127,7 +130,7 @@ math_tokens = [
     'dot', 'times',
     'vector', 'hat', 'check', 'bar', 'ring', 'tilde',
     'subset', 'superset', 'strict, square, root', '-h-',
-    'raise', 'lower', 'partial', '/', 'wedge', 'vee'
+    'raise', 'lower', 'partial', '/', 'wedge', 'vee', 'powerset', 'top', 'bottom'
 ]
 
 greek_letters = '''
@@ -153,10 +156,22 @@ digamma
 
 math_tokens = math_tokens + greek_letters
 
-clash_tokens = ['(|', '|)', '[:', ':]', '<=>', '>=','<=', '-h-', '.[', '].', '[', ']', '[-', '-]', '-|',
-    '=>', '->', '|=', '|-',
-    '_]', '[_', '^]', '[^', '|C', '|R', '|Q', '|Z', '|N', '(-', '-)','<==>']
-    
+clash_tokens = [
+    '(|', '|)', '[:', ':]', '(-', '-)', '.[', '].', '--',
+    '-|', '[-', '-]', '[|', '|]',
+    '=', '!=',
+    '>=','<=',
+    '=>', '<=>','<==>',
+    '->',
+    '|=', '|-',
+    '|',
+    '_]',
+    '[_',
+    '^]',
+    '[^',
+    '|C', '|R', '|Q', '|Z', '|N', '/'
+]
+
 clash_tokens = list(reversed(sorted(clash_tokens, key=len)))
 
 with_special = {t : f"@@token@@{i}" for (i, t) in enumerate(math_tokens) if t in clash_tokens}
@@ -174,6 +189,8 @@ math_dsl = [
     ('right angle bracket', 'delim', ('>',), DEFAULT_PRECEDENCE, lambda _: r'\rangle'),
     ('left vertical bar', 'delim', ('(|',), DEFAULT_PRECEDENCE, lambda _: r'\lvert'),
     ('right vertical bar', 'delim', ('|)',), DEFAULT_PRECEDENCE, lambda _: r'\rvert'),
+    ('custom rrbracket', 'delim', ('|]',), DEFAULT_PRECEDENCE + 5, lambda _ : f' ]{NEG}] '),
+    ('custom llbracket', 'delim', ('[|',), DEFAULT_PRECEDENCE + 5, lambda _ : f' [{NEG}[ '),
     # Grouping 
     ('paren', 'math', ('(', 'math', ')'), DEFAULT_PRECEDENCE + 5, lambda x, y, w : x + y + w),
     ('bars', 'math', ('(|', 'math', '|)'), DEFAULT_PRECEDENCE + 5, lambda x, y, ww : r'\lvert ' + y + r' \rvert'),
@@ -192,6 +209,9 @@ math_dsl = [
     ('not in', 'math', ('not', 'in',), DEFAULT_PRECEDENCE + 5, lambda _, __: r'\notin'),
     ('maps to', 'inf', ('maps', 'to',), DEFAULT_PRECEDENCE + 5, lambda _, __: 'r\mapsto'),
     ('maps to', 'inf', ('->',), DEFAULT_PRECEDENCE + 5, lambda _ : r'\rightarrow'),
+    ('union inf', 'inf', ('union',), DEFAULT_PRECEDENCE, lambda x : r'\cup'),
+    ('intersection inf', 'inf', ('intersection',), DEFAULT_PRECEDENCE, lambda x : r'\cap'),
+    ('powerset', 'inf', ('powerset',), DEFAULT_PRECEDENCE, lambda _ : r'\mathcal{P}'),
     # Common relations
     ('equal', 'inf', ('=',), DEFAULT_PRECEDENCE, lambda x: x),
     ('not equal', 'inf', ('!=',), DEFAULT_PRECEDENCE, lambda _: r'\neq'),
@@ -226,6 +246,8 @@ math_dsl = [
     ('ring', 'name', ('name', 'ring'), DEFAULT_PRECEDENCE, lambda x, _ : r'\mathring{' + x + '}'),
     ('tilde', 'name', ('name', 'tilde'), DEFAULT_PRECEDENCE, lambda x, _ : r'\tilde{' + x + '}'),
     # Common 'big operator' operations
+    ('union', 'op', ('union',), DEFAULT_PRECEDENCE, lambda x : r'\cup'),
+    ('intersection', 'op', ('intersection',), DEFAULT_PRECEDENCE, lambda x : r'\cap'),
     ('gradient', 'op', ('gradient',), DEFAULT_PRECEDENCE, lambda x : r'\nabla'),
     ('partial', 'name', ('partial',), DEFAULT_PRECEDENCE, lambda x : r'\partial'),
     ('sum', 'op', ('sum',), DEFAULT_PRECEDENCE, lambda x : r'\sum'),
@@ -312,6 +334,8 @@ math_dsl = [
     ('rationals', 'name', ('|Q',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Q' + '}'),
     ('integers', 'name', ('|Z',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{Z' + '}'),
     ('naturals', 'name', ('|N',), DEFAULT_PRECEDENCE, lambda x : r'\mathbb{N' + '}'),
+    ("top ", "name", ("top",), DEFAULT_PRECEDENCE, lambda x: r"\top"),
+    ("bottom ", "name", ("bot",), DEFAULT_PRECEDENCE, lambda x: r"\bot"),
     # Commonly used operations
     ('plus', 'inf', ('+',), DEFAULT_PRECEDENCE, IDENTITY),
     ('dot', 'inf', ('dot',), DEFAULT_PRECEDENCE, lambda x : r'\cdot'),
@@ -353,6 +377,6 @@ math_dsl = [
     ('single matrix line', 'matrix_lines', ('matrix_line',), DEFAULT_PRECEDENCE, lambda x : x),
     ('pmatrix', 'math', ('(-', 'matrix_lines', '-)'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('p', x)),
     ('bmatrix', 'math', ('[-', 'matrix_lines', '-]'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('b', x)),
-    ('vmatrix', 'math', ('|-', 'matrix_lines', '-|'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('v', x)),
+    ('vmatrix', 'math', ('|-', 'matrix_lines', '-|'), DEFAULT_PRECEDENCE, lambda _, x, __ : matrix('v', x))
 ]
 
