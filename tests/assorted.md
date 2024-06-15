@@ -45,8 +45,4 @@ and this shows something.
     ~ sum over (- i in A -) of (- f sub i (x sub i sup 2) -) ~
     
     ~ sum over (- i in A -) of (- f sup i (x sup i sub 2) -) ~
-    
-    ~ for all x in |R . exists y in |R . xy = 1 ~
-    
-    ~ a not in A' ~
 
