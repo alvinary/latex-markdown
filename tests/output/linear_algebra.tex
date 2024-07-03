@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+  \section{Eigenvalues and eigenvectors}
+  
+  \subsection{Linear independence}
+  
+  It is easy to prove that eigenspaces are disjoint.
+  We said $v$  is an eigenvector of $T$  if
+  
+  \[Tx = kx \]
+  
+  for some $k$  in $K$.
+  
+  \bigbreak
+  
+  So if $Tx = kx$  and $Ty = k ' y$, $x$  and $y$  are distinct,
+  and $y \neq qx$, then $k '$  and $k$  cannot be equal, and the
+  two vectors cannot be elements of the same eigenspace.
+  
+  \bigbreak
+  
+  Note if $y + qx$  then $T \left(y \right) = T \left(qx \right) = k \left(qx \right) = ky$, and the
+  two vectors do belong to the same eigenspace and have
+  the same eigenvalue. So 'scaled versions' of the same
+  vector belong to the same eigenspace.
+
+\end{document} 
+

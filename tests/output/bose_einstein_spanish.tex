@@ -1,0 +1,51 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+  \section{Condensado de Bose-Einstein}
+  
+  Si no podemos modelar un gas con la aproximación clásica
+  porque la interacción entre los fermiones y los bosones
+  tiene efectos no despreciables, y podemos considerar que
+  los únicos grados de libertad son traslacionales, entonces
+  el número de ocupación de un estado cuántico, $r$, es
+  
+  \[\langle n_{r} \rangle = \frac{1}{e^{\beta \left(\epsilon_{r} - \mu \right)} - 1} \]
+  
+  donde $\beta = \frac{1}{k_{B} T}$  y $k_{B}$  es
+  la constante de Boltzmann.
+  
+  Vale la pena notar que, como los bosones no cumplen el principio
+  de exclusion de Pauli y por lo tanto puede haber una infinidad
+  de bosones ocupando el mismo estado cuántico, esta función tiende
+  a infinito cuando el argumento de la exponencial se aproxima a cero
+  y decae rápidamente a temperaturas mayores, pues puede haber
+  infinidad de ellos en el mismo estado cuántico.
+
+\end{document} 
+
